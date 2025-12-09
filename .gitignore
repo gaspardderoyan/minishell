@@ -3,3 +3,5 @@ a.out
 obj/
 libft.a
 minishell
+.cache/
+compile_commands.json
