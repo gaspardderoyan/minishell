@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 typedef enum	e_token_type
 {
 	TOKEN_WORD,
