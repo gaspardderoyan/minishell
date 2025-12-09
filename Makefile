@@ -23,7 +23,7 @@ all: $(NAME)
 
 # Build the main executable
 $(NAME): $(OBJS) $(LIBFT) $(MLX)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
 
 # Compile the object files for main sources
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
