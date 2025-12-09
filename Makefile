@@ -22,7 +22,7 @@ OBJS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 all: $(NAME)
 
 # Build the main executable
-$(NAME): $(OBJS) $(LIBFT) $(MLX)
+$(NAME): $(OBJS) $(LIBFT) 
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
 
 # Compile the object files for main sources
