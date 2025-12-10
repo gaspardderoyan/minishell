@@ -24,3 +24,5 @@ void	token_add_back(t_token **lst, t_token *new);
 void	token_add_front(t_token **lst, t_token *new);
 int		token_size(t_token *lst);
 void	token_clear(t_token **lst);
+
+int	lexer(char *line, t_token **tokens);

@@ -49,6 +49,21 @@ int     get_word_len(char *line, int start)
     return (i - start);
 }
 
+t_token_type	id_token(char *str)
+{
+	if (*str == '|')
+		return (TOKEN_PIPE);
+	else if (*str == '>' && *(str + 1) == '>')
+		return (TOKEN_APPEND);
+	else if (*str == '>')
+		return (TOKEN_OUTPUT);
+	else if (*str == '<' && *(str + 1) == '<')
+		return (TOKEN_HEREDOC);
+	else if (*str == '<')
+		return (TOKEN_INPUT);
+	return (TOKEN_WORD);
+}
+
 int	lexer(char *line, t_token **tokens)
 {
 	int		i;
@@ -70,7 +85,7 @@ int	lexer(char *line, t_token **tokens)
 		token_str = ft_substr(line, i, len);
 		if (!token_str)
 			return (token_clear(tokens), 0);
-		token = token_new(token_str, 0);
+		token = token_new(token_str, id_token(token_str));
 		if (!token)
 			return (free(token_str), token_clear(tokens), 0);
 		token_add_back(tokens, token);
@@ -78,3 +93,4 @@ int	lexer(char *line, t_token **tokens)
 	}
 	return (1);
 }
+

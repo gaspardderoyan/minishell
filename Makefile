@@ -9,7 +9,7 @@ LIBFT= $(LIBFT_DIR)/libft.a
 
 NAME = minishell
 
-SRC_FILES = main.c
+SRC_FILES = main.c parsing/token_utils.c parsing/lexer.c
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
