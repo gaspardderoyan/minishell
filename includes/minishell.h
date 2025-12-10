@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <fcntl.h>
+# include <stdbool.h>
 # include <sys/wait.h>
 # include "libft.h"
 # include <readline/readline.h>
