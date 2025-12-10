@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:25:55 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/10 18:26:28 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:40:46 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static void	run_child_process(t_cmd *cmd, t_data *data)
 	{
 		perror("minishell");
 		free(path);
+		ft_free_array(data->env); 
+        ft_lstclear(&data->env_list, free);
 		exit(126);
 	}
 }
