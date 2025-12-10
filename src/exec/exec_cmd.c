@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:25:55 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/10 18:40:46 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:49:31 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 static void	run_child_process(t_cmd *cmd, t_data *data)
 {
-	char	*path; 
-	
+	char	*path;
+
 	path = get_full_path(cmd->args[0], data->env_list);
 	if (!path)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		ft_free_array(data->env); 
-        ft_lstclear(&data->env_list, free);
+		ft_free_array(data->env);
+		ft_lstclear(&data->env_list, free);
 		exit(127);
 	}
 	if (execve(path, cmd->args, data->env) == -1)
 	{
 		perror("minishell");
 		free(path);
-		ft_free_array(data->env); 
-        ft_lstclear(&data->env_list, free);
+		ft_free_array(data->env);
+		ft_lstclear(&data->env_list, free);
 		exit(126);
 	}
 }
