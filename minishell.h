@@ -1,4 +1,25 @@
-#include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
+/*   Updated: 2025/12/09 18:01:59 by mgregoir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <string.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include "../libft/libft.h"
 
 /* -------------------------------------------------------
    1. REDIRECTION TYPES
@@ -50,3 +71,5 @@ typedef struct s_data
 	t_list	*env_list;      // L'environnement manipulable (export/unset)
     int		last_exit_code; // Le code de retour de la dernière commande ($?)
 } t_data;
+
+#endif
