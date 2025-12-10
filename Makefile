@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iincludes -Ilibft
+CFLAGS = -Wall -Wextra -Werror -Iincludes -Ilibft -Iincludes
 
 SRC_DIR = src
 OBJ_DIR = obj

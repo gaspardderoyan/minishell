@@ -1,3 +1,7 @@
 a.out
 *.o
 obj/
+libft.a
+minishell
+.cache/
+compile_commands.json

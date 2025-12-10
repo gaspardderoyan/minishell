@@ -1,4 +1,8 @@
 #include <unistd.h>
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include "libft.h"
 
 /* -------------------------------------------------------
    1. REDIRECTION TYPES
