@@ -29,10 +29,13 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
-int	main(void)
+int	main(int ac, char **av, char **env)
 {
 	char *line; 
 	t_token *tokens = NULL;
+	(void)ac;
+	(void)av;
+	(void)env;
 
 	while (1)
 	{
