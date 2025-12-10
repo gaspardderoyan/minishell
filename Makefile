@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iincludes -Ilibft -Iincludes
+CFLAGS = -Wall -Wextra -Werror -Ilibft -Iincludes
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -23,7 +23,7 @@ all: $(NAME)
 
 # Build the main executable
 $(NAME): $(OBJS) $(LIBFT) 
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
 
 # Compile the object files for main sources
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
