@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/10 12:03:53 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/10 12:14:12 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@
 # include <string.h>
 # include <fcntl.h>
 # include <sys/wait.h>
-# include "libft/libft.h"
+# include "libft.h"
+# include <readline/readline.h>
+# include <readline/history.h>
 
 /* -------------------------------------------------------
    1. REDIRECTION TYPES
