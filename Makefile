@@ -27,7 +27,7 @@ $(NAME): $(OBJS) $(LIBFT)
 
 # Compile the object files for main sources
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR) # @ so not printed
+	@mkdir -p $(dir $@) # @ so not printed
 	$(CC) $(CFLAGS)  -c $< -o $@
 
 ################################################################################

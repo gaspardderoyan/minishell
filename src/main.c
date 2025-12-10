@@ -42,6 +42,7 @@ int	main(void)
 			// printf("line: %s\n", line);
 			lexer(line, &tokens);
 			print_tokens(tokens);
+			token_clear(&tokens);
 			add_history(line);
 		}
 	}
