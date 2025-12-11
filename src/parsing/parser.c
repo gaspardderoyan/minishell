@@ -63,24 +63,28 @@ t_cmd	*parser(t_token *tokens)
 	{
 		if (tokens->type == TOKEN_PIPE)
 		{
+			cursor->next = cmd_new();
 			cursor = cursor->next;
-			cursor = cmd_new();
 		}
 		else if (tokens->type == TOKEN_WORD)
 			cursor->args = ft_append_str(cursor->args, tokens->value);
 		else
 		{
+			if (!tokens->next)
+				exit(0);
 			if (tokens->type == TOKEN_APPEND)
-				redir = redir_new(REDIR_APPEND, tokens->value);
+				redir = redir_new(REDIR_APPEND, tokens->next->value);
 			else if (tokens->type == TOKEN_INPUT)
-				redir = redir_new(REDIR_IN, tokens->value);
+				redir = redir_new(REDIR_IN, tokens->next->value);
 			else if (tokens->type == TOKEN_OUTPUT)
-				redir = redir_new(REDIR_OUT, tokens->value);
+				redir = redir_new(REDIR_OUT, tokens->next->value);
 			else if (tokens->type == TOKEN_HEREDOC)
-				redir = redir_new(REDIR_HEREDOC, tokens->value);
+				redir = redir_new(REDIR_HEREDOC, tokens->next->value);
 			if (!redir)
 				exit(0);
 			redir_add_back(&cursor->redirs, redir);
+			if (tokens->next)
+				tokens = tokens->next;
 		}
 		tokens = tokens->next;
 	}
