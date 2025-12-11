@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/11 17:01:21 by gderoyan          #+#    #+#             */
+/*   Updated: 2025/12/11 17:01:21 by gderoyan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "lexer.h"
 
@@ -45,7 +57,6 @@ int	main(int ac, char **av, char **env)
 		{
 			add_history(line);
 			lexer(line, &tokens);
-			print_tokens(tokens);
 			expander(tokens, data.env);
 			print_tokens(tokens);
 			// TODO: parser

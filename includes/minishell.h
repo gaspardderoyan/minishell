@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/10 12:14:12 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/11 17:09:08 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,16 @@ typedef struct s_data
 	t_list	*env_list;      // L'environnement manipulable (export/unset)
     int		last_exit_code; // Le code de retour de la dernière commande ($?)
 } t_data;
+
+
+t_cmd	*cmd_new(void);
+t_cmd	*cmd_last(t_cmd *lst);
+void	cmd_add_back(t_cmd **lst, t_cmd *new);
+void	cmd_clear(t_cmd **lst);
+
+t_redir	*redir_new(t_redir_type type, char *filename);
+t_redir	*redir_last(t_redir *lst);
+void	redir_add_back(t_redir **lst, t_redir *new);
+void	redir_clear(t_redir **lst);
 
 #endif

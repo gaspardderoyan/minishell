@@ -1,0 +1,116 @@
+/* ************************************************************************** */
+/* */
+/* :::      ::::::::   */
+/* cmd_utils.c                                        :+:      :+:    :+:   */
+/* +:+ +:+         +:+     */
+/* By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/* +#+#+#+#+#+   +#+           */
+/* Created: 2025/12/11 17:05:00 by gderoyan          #+#    #+#             */
+/* Updated: 2025/12/11 17:05:00 by gderoyan         ###   ########.fr       */
+/* */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+/*
+** Initializes a new command node.
+** Sets file descriptors to standard input/output (0/1) by default.
+** Sets PID to -1 to indicate no process started yet.
+*/
+t_cmd	*cmd_new(void)
+{
+	t_cmd	*new_node;
+
+	new_node = malloc(sizeof(t_cmd));
+	if (!new_node)
+		return (NULL);
+	new_node->args = NULL;
+	new_node->redirs = NULL;
+	new_node->next = NULL;
+	new_node->cmd_path = NULL;
+	new_node->heredoc_file = NULL;
+	new_node->pid = -1;
+	new_node->fd_in = 0;
+	new_node->fd_out = 1;
+	new_node->pipefd[0] = -1;
+	new_node->pipefd[1] = -1;
+	return (new_node);
+}
+
+t_cmd	*cmd_last(t_cmd *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}
+
+void	cmd_add_back(t_cmd **lst, t_cmd *new)
+{
+	t_cmd	*last_node;
+
+	if (!lst || !new)
+		return ;
+	if (*lst == NULL)
+	{
+		*lst = new;
+		return ;
+	}
+	last_node = cmd_last(*lst);
+	last_node->next = new;
+}
+
+/*
+** Helper to free the char **args array.
+** If you have this in your libft, you can remove this static function
+** and call your libft version in cmd_clear.
+*/
+static void	free_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	if (!args)
+		return ;
+	while (args[i])
+	{
+		free(args[i]);
+		i++;
+	}
+	free(args);
+}
+
+/*
+** Clears the command list.
+** NOTE: You must implement redir_clear(t_redir **redirs) in redir_utils.c
+** to fully free the memory, as t_cmd contains a nested list.
+*/
+void	cmd_clear(t_cmd **lst)
+{
+	t_cmd	*temp;
+	t_redir	*r_temp;
+
+	if (!lst)
+		return ;
+	while (*lst)
+	{
+		temp = (*lst)->next;
+		if ((*lst)->args)
+			free_args((*lst)->args);
+		if ((*lst)->redirs)
+			redir_clear(&(*lst)->redirs);
+		while ((*lst)->redirs)
+		{
+			r_temp = (*lst)->redirs->next;
+			free((*lst)->redirs->filename);
+			free((*lst)->redirs);
+			(*lst)->redirs = r_temp;
+		}
+		if ((*lst)->cmd_path)
+			free((*lst)->cmd_path);
+		free(*lst);
+		*lst = temp;
+	}
+	*lst = NULL;
+}
