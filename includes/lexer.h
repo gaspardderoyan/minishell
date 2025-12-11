@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+typedef enum	e_state
+{
+	STATE_IDLE,
+	STATE_DQUOTES,
+	STATE_QUOTES
+}	t_state;
+
 typedef enum	e_token_type
 {
 	TOKEN_WORD,

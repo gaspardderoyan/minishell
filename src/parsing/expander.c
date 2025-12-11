@@ -1,25 +1,5 @@
-#include "libft.h"
 #include "minishell.h"
 #include "lexer.h"
-
-char *ft_str_replace(char *orig, char *rep, char *start, char *end)
-{
-	char	*res;
-	int		len;
-	int		offset;
-
-	len = (ft_strlen_safe(orig) - (end - start) + ft_strlen_safe(rep));
-	res = malloc(sizeof(char) * (len + 1));
-	if (!res)
-		return (NULL);
-	ft_memcpy(res, orig, start - orig);
-	offset = start - orig;
-	ft_memcpy(res + offset, rep, ft_strlen_safe(rep));
-	offset += ft_strlen_safe(rep);
-	ft_memcpy(res + offset, end, ft_strlen_safe(end));
-	res[len] = 0;
-	return (res);
-}
 
 int	get_var_len(char *str)
 {
@@ -36,34 +16,112 @@ int	get_var_len(char *str)
 	
 }
 
-// TODO: function to replace 1st $var with it's content
-char	*expand_token(char *token, char **env)
+static char	*char_append(char *s, char c)
 {
-	char	*var_name;
-	char *dollar;
-	char **splits;
-	char	*new;
-	int i;
+	char	*new_s;
+	int		len;
 
-	dollar = ft_strchr_safe(token, '$');
-	var_name = ft_substr(dollar + 1, 0, get_var_len(dollar + 1));
-	if (!var_name) // TODO: fix/improve error/memory handling
+	if (!s)
 		return (NULL);
+	len = ft_strlen(s);
+	new_s = malloc(sizeof(char) * (len + 2));
+	if (!new_s)
+		return (free(s), NULL);
+	ft_strlcpy(new_s, s, len + 1);
+	new_s[len] = c;
+	new_s[len + 1] = 0;
+	return (free(s), new_s);
+}
+
+static char	*get_env_value(char *var, char **env)
+{
+	int		i;
+	int		len;
+
 	i = 0;
+	len = ft_strlen(var);
 	while (env[i])
 	{
-		// TODO: replace by char *ft_getenv(char *var_name, char **env), using strncmp
-		splits = ft_split(env[i], '=');
-		if (strcmp(splits[0], var_name) == 0) // TODO: replace by ft_
-		{
-			new = ft_str_replace(token, splits[1], dollar, dollar + get_var_len(dollar + 1) + 1);
-			return (new);
-		}
+		if (ft_strncmp(env[i], var, len) == 0 && env[i][len] == '=')
+			return (ft_strdup(&env[i][len + 1]));
 		i++;
 	}
-	new = ft_str_replace(token, "", dollar, dollar + get_var_len(dollar + 1) + 1);
-	return (new);
+	return (ft_strdup(""));
+}
 
+/*
+** Helper: Handles variable expansion.
+** Returns updated string and advances index i past the variable name.
+*/
+static char	*handle_expansion(char *res, char *token, int *i, char **env)
+{
+	char	*var_name;
+	char	*var_val;
+	char	*temp;
+	int		len;
+
+	len = get_var_len(&token[*i + 1]);
+	if (len == 0)
+	{
+		res = char_append(res, '$');
+		return (res);
+	}
+	var_name = ft_substr(token, *i + 1, len);
+	var_val = get_env_value(var_name, env);
+	temp = res;
+	res = ft_strjoin(res, var_val);
+	free(temp);
+	free(var_name);
+	free(var_val);
+	*i += len;
+	return (res);
+}
+
+/*
+** Updates quote state and returns 1 if quote should be removed.
+** Returns 0 if the quote is inside another quote type (preserved).
+*/
+static int	is_quote_toggle(char c, t_state *state)
+{
+	if (c == '\'' && *state != STATE_DQUOTES)
+	{
+		if (*state == STATE_QUOTES)
+			*state = STATE_IDLE;
+		else
+			*state = STATE_QUOTES;
+		return (1);
+	}
+	if (c == '\"' && *state != STATE_QUOTES)
+	{
+		if (*state == STATE_DQUOTES)
+			*state = STATE_IDLE;
+		else
+			*state = STATE_DQUOTES;
+		return (1);
+	}
+	return (0);
+}
+
+char	*expand_token(char *token, char **env)
+{
+	char	*res;
+	int		i;
+	t_state	state;
+
+	i = 0;
+	state = STATE_IDLE;
+	res = ft_strdup("");
+	while (token[i])
+	{
+		if (is_quote_toggle(token[i], &state))
+			;
+		else if (token[i] == '$' && state != STATE_QUOTES)
+			res = handle_expansion(res, token, &i, env);
+		else
+			res = char_append(res, token[i]);
+		i++;
+	}
+	return (res);
 }
 
 void	expander(t_token *tokens, char **env)
@@ -72,15 +130,12 @@ void	expander(t_token *tokens, char **env)
 
 	while (tokens)
 	{
-		if (tokens->type == TOKEN_WORD && tokens->value[0] == '"' &&
-			tokens->value[ft_strlen_safe(tokens->value)- 1] == '"' &&
-			ft_strchr_safe(tokens->value, '$') != NULL)
+		if (tokens->type == TOKEN_WORD)
 		{
 			new = expand_token(tokens->value, env);
 			free(tokens->value);
 			tokens->value = new;
 		}
-		else
-			tokens = tokens->next;
+		tokens = tokens->next;
 	}
 }
