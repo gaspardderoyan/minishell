@@ -32,21 +32,24 @@ void	print_tokens(t_token *tokens)
 int	main(int ac, char **av, char **env)
 {
 	char *line; 
+	t_data	data;
 	t_token *tokens = NULL;
 	(void)ac;
 	(void)av;
-	(void)env;
+	data.env = env;
 
 	while (1)
 	{
 		line = readline("minishell> ");
 		if (line)
 		{
-			// printf("line: %s\n", line);
+			add_history(line);
 			lexer(line, &tokens);
 			print_tokens(tokens);
+			expander(tokens, data.env);
+			print_tokens(tokens);
+			// TODO: parser
 			token_clear(&tokens);
-			add_history(line);
 		}
 	}
 }

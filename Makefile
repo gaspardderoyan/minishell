@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Ilibft -Iincludes
+CFLAGS = -Wall -Wextra -Werror -Ilibft -Iincludes -g3
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -9,7 +9,7 @@ LIBFT= $(LIBFT_DIR)/libft.a
 
 NAME = minishell
 
-SRC_FILES = main.c parsing/token_utils.c parsing/lexer.c
+SRC_FILES = main.c parsing/token_utils.c parsing/lexer.c parsing/expander.c
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
