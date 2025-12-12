@@ -21,6 +21,7 @@
 # include <stdbool.h>
 # include <sys/wait.h>
 # include "libft.h"
+# include "lexer.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -70,9 +71,11 @@ typedef struct s_cmd
 typedef struct s_data
 {
 	t_cmd	*cmd_list;      // Le début de ta liste chaînée de commandes
+	t_token	*tokens;		// The tokens lists	
 	char	**env;    		// L'environnement converti pour execve
 	t_list	*env_list;      // L'environnement manipulable (export/unset)
     int		last_exit_code; // Le code de retour de la dernière commande ($?)
+	char	*line;
 } t_data;
 
 
@@ -85,5 +88,7 @@ t_redir	*redir_new(t_redir_type type, char *filename);
 t_redir	*redir_last(t_redir *lst);
 void	redir_add_back(t_redir **lst, t_redir *new);
 void	redir_clear(t_redir **lst);
+
+t_cmd	*parser(t_token *tokens);
 
 #endif

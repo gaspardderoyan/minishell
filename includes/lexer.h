@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
 typedef enum	e_state
 {
 	STATE_IDLE,
@@ -46,4 +44,3 @@ void	token_clear(t_token **lst);
 
 int	lexer(char *line, t_token **tokens);
 void	expander(t_token *tokens, char **env);
-t_cmd	*parser(t_token *tokens);

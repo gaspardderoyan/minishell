@@ -112,28 +112,42 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
+void	init_data(t_data *data, char **env)
+{
+	data->cmd_list = NULL;
+	data->tokens = NULL;
+	data->env = env;
+	data->env_list = NULL;
+	data->last_exit_code = 0; // TODO: is this right? ie. default 0
+	data->line = NULL;
+}
+
 int	main(int ac, char **av, char **env)
 {
-	char *line; 
 	t_data	data;
-	t_token *tokens = NULL;
-	t_cmd	*cmds = NULL;
+
+	init_data(&data, env);
 	(void)ac;
 	(void)av;
-	data.env = env;
-
 	while (1)
 	{
-		line = readline("minishell> ");
-		if (line)
+		data.line = readline("minishell$ ");
+		if (!data.line)
+			break ;
+		if (data.line[0])
 		{
-			add_history(line);
-			lexer(line, &tokens);
-			expander(tokens, data.env);
-			// print_tokens(tokens);
-			cmds = parser(tokens);	
-			print_cmds(cmds);
-			token_clear(&tokens);
+			add_history(data.line);
+
+			// TODO: extract to process_line() func
+			lexer(data.line, &data.tokens);
+			expander(data.tokens, data.env);
+			// print_data.tokens(data.tokens);
+			data.cmd_list = parser(data.tokens);	
+			print_cmds(data.cmd_list);
 		}
+		// TODO: add free_cycle() func
+		token_clear(&data.tokens);
 	}
+	// TODO: add free_permanent() func
+	return (data.last_exit_code);
 }
