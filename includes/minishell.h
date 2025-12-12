@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/11 17:43:27 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/12 19:38:42 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include "lexer.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# define SUCCESS 0
+# define FAIL 1
 
 /* -------------------------------------------------------
    1. REDIRECTION TYPES
@@ -88,6 +90,12 @@ t_redir	*redir_new(t_redir_type type, char *filename);
 t_redir	*redir_last(t_redir *lst);
 void	redir_add_back(t_redir **lst, t_redir *new);
 void	redir_clear(t_redir **lst);
+
+/*
+ * Utils to delete
+ * */
+void	print_cmds(t_cmd *cmds);
+void	print_tokens(t_token *tokens);
 
 t_cmd	*parser(t_token *tokens);
 
