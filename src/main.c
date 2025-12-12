@@ -141,7 +141,6 @@ int	main(int ac, char **av, char **env)
 			// TODO: extract to process_line() func
 			lexer(data.line, &data.tokens);
 			expander(data.tokens, data.env);
-			// print_data.tokens(data.tokens);
 			data.cmd_list = parser(data.tokens);	
 			print_cmds(data.cmd_list);
 		}
