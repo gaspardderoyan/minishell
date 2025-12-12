@@ -1,2 +1,4 @@
 CompileFlags:
   Add: [-Ilibft, -Iincludes]
+Diagnostics:
+  Suppress: [unused-includes]
