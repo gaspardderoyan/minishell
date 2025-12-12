@@ -12,8 +12,6 @@
 
 #ifndef LEXER_H
 # define LEXER_H
-# include <stdlib.h>
-# include <stdbool.h>
 
 typedef enum	e_state
 {

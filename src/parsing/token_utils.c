@@ -6,11 +6,11 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:00:47 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/11 17:00:48 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:58:45 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "minishell.h"
 
 t_token	*token_new(char *value, int type)
 {

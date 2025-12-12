@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "lexer.h"
 
 int	get_var_len(char *str)
 {

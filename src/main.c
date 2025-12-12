@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lexer.h"
 
 static char *get_redir_type(t_redir_type type)
 {
