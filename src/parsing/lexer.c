@@ -19,31 +19,31 @@ static int	get_operator_len(char *str)
 	return (1);
 }
 
-static void    skip_quote_content(char *line, int *i)
+static void	skip_quote_content(char *line, int *i)
 {
-    char    quote_char;
+	char	quote_char;
 
-    quote_char = line[*i];
-    (*i)++;
-    while (line[*i] && line[*i] != quote_char)
-        (*i)++;
-    if (line[*i] == quote_char)
-        (*i)++;
+	quote_char = line[*i];
+	(*i)++;
+	while (line[*i] && line[*i] != quote_char)
+		(*i)++;
+	if (line[*i] == quote_char)
+		(*i)++;
 }
 
-static int     get_word_len(char *line, int start)
+static int	get_word_len(char *line, int start)
 {
-    int i;
+	int	i;
 
-    i = start;
-    while (line[i] && !is_whitespace(line[i]) && !is_operator(line[i]))
-    {
-        if (line[i] == '\'' || line[i] == '"')
-            skip_quote_content(line, &i);
-        else
-            i++;
-    }
-    return (i - start);
+	i = start;
+	while (line[i] && !is_whitespace(line[i]) && !is_operator(line[i]))
+	{
+		if (line[i] == '\'' || line[i] == '"')
+			skip_quote_content(line, &i);
+		else
+			i++;
+	}
+	return (i - start);
 }
 
 t_token_type	id_token(char *str)
@@ -71,8 +71,7 @@ int	lexer(char *line, t_token **tokens)
 	i = 0;
 	while (line[i])
 	{
-		while (is_whitespace(line[i]) && line[i])
-			i++;
+		skip_whitespace(line, &i);
 		if (!line[i])
 			break ;
 		if (is_operator(line[i]))
