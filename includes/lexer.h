@@ -56,7 +56,11 @@ int		get_var_len(char *str);
 char	*char_append(char *s, char c);
 char	*get_env_value(char *var, char **env);
 
-int		lexer(char *line, t_token **tokens);
-int		expander(t_token *tokens, char **env);
+int	lexer(char *line, t_token **tokens);
+int	expander(t_token *tokens, char **env);
+
+/* parser_utils.c */
+int		ft_arrlen(char **arr);
+char	**ft_append_str(char **arr, char *str);
 
 #endif

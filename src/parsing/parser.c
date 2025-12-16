@@ -13,92 +13,79 @@
 #include "libft.h"
 #include "minishell.h"
 
-int	ft_arrlen(char **arr)
+static t_cmd	*handle_pipe(t_cmd **cursor)
 {
-	int	i;
-
-	i = 0;
-	if (!arr)
-		return (0);
-	while (arr[i])
-		i++;
-	return (i);
+	(*cursor)->next = cmd_new();
+	*cursor = (*cursor)->next;
+	if (!*cursor)
+		return (NULL);
+	return (*cursor);
 }
 
-char	**ft_append_str(char **arr, char *str)
+static int	handle_word(t_cmd *cursor, t_token *token)
 {
-	char	**new_arr;
-	int		len;
-	int		i;
+	char	*temp;
 
-	if (!str)
-		return (arr);
-	len = ft_arrlen(arr);
-	new_arr = malloc(sizeof(char *) * (len + 2));
-	if (!new_arr)
+	temp = ft_strdup_safe(token->value);
+	if (!temp)
+		return (0);
+	cursor->args = ft_append_str(cursor->args, temp);
+	if (!cursor->args)
+		return (0);
+	return (1);
+}
+
+static t_token	*handle_redir(t_cmd *cursor, t_token *token)
+{
+	t_redir	*redir;
+	char	*temp;
+
+	if (!token->next)
 		return (NULL);
-	i = -1;
-	while (++i < len)
-		new_arr[i] = arr[i];
-	new_arr[i] = str;
-	new_arr[i + 1] = NULL;
-	if (arr)
-		free(arr);
-	return (new_arr);
+	temp = ft_strdup_safe(token->next->value);
+	if (!temp)
+		return (NULL);
+	redir = create_redir(token, temp);
+	if (!redir)
+		return (NULL);
+	redir_add_back(&cursor->redirs, redir);
+	return (token->next);
+}
+
+static int	process_token(t_cmd **cursor, t_token **tokens)
+{
+	if ((*tokens)->type == TOKEN_PIPE)
+	{
+		if (!handle_pipe(cursor))
+			return (0);
+	}
+	else if ((*tokens)->type == TOKEN_WORD)
+	{
+		if (!handle_word(*cursor, *tokens))
+			return (0);
+	}
+	else
+	{
+		*tokens = handle_redir(*cursor, *tokens);
+		if (!*tokens)
+			return (0);
+	}
+	return (1);
 }
 
 t_cmd	*parser(t_token *tokens)
 {
 	t_cmd	*cmds;
 	t_cmd	*cursor;
-	t_redir	*redir;
-	char	*temp;
 
-	cmds = cmd_new();	
+	cmds = cmd_new();
 	if (!cmds)
 		return (NULL);
 	cursor = cmds;
 	while (tokens)
 	{
-		if (tokens->type == TOKEN_PIPE)
-		{
-			cursor->next = cmd_new();
-			cursor = cursor->next;
-			if (!cursor)
-				return (NULL);
-		}
-		else if (tokens->type == TOKEN_WORD)
-		{
-			temp = ft_strdup_safe(tokens->value);
-			if (!temp)
-				return (NULL);
-			cursor->args = ft_append_str(cursor->args, temp);
-			temp = NULL;
-			if (!cursor->args)
-				return (NULL);
-		}
-		else
-		{
-			if (!tokens->next)
-				return (NULL); // TODO: handle syntax error?
-			temp = ft_strdup_safe(tokens->next->value);
-			if (!temp)
-				return (NULL);
-			if (tokens->type == TOKEN_APPEND)
-				redir = redir_new(REDIR_APPEND, temp);
-			else if (tokens->type == TOKEN_INPUT)
-				redir = redir_new(REDIR_IN, temp);
-			else if (tokens->type == TOKEN_OUTPUT)
-				redir = redir_new(REDIR_OUT, temp);
-			else if (tokens->type == TOKEN_HEREDOC)
-				redir = redir_new(REDIR_HEREDOC, temp);
-			temp = NULL;
-			if (!redir)
-				return (NULL);
-			redir_add_back(&cursor->redirs, redir);
-			if (tokens->next)
-				tokens = tokens->next;
-		}
+		if (!process_token(&cursor, &tokens))
+			return (NULL);
 		tokens = tokens->next;
 	}
 	return (cmds);

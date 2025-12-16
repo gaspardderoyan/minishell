@@ -92,6 +92,7 @@ t_redir		*redir_new(t_redir_type type, char *filename);
 t_redir		*redir_last(t_redir *lst);
 void		redir_add_back(t_redir **lst, t_redir *new);
 void		redir_clear(t_redir **lst);
+t_redir		*create_redir(t_token *token, char *filename);
 
 /*
  * Utils to delete
