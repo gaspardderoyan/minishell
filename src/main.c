@@ -6,13 +6,12 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:21 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/12 19:43:27 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:57:07 by gaspardderoya    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <readline/readline.h>
-
 
 void	init_data(t_data *data, char **env)
 {
