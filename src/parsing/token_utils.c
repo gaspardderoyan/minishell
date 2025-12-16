@@ -6,7 +6,7 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:00:47 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/12 18:58:45 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:13:37 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,24 +74,4 @@ int	token_size(t_token *lst)
 		lst = lst->next;
 	}
 	return (count);
-}
-
-void	token_clear(t_token **lst)
-{
-	t_token	*tmp;
-
-	if (!lst)
-		return ;
-	while (*lst)
-	{
-		tmp = (*lst)->next;
-		if ((*lst)->value)
-		{
-			free((*lst)->value);
-			(*lst)->value = NULL;
-		}
-		free(*lst);
-		*lst = tmp;
-	}
-	*lst = NULL;
 }
