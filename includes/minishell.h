@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/10 12:14:12 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/16 19:53:39 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,28 @@ typedef struct s_data
 	t_list	*env_list;      // L'environnement manipulable (export/unset)
     int		last_exit_code; // Le code de retour de la dernière commande ($?)
 } t_data;
+
+/******    init_env.c    ******/
+t_list	*init_env_list(char **env);
+char	**env_list_to_array(t_list *env_list);
+
+/******    path.c   ******/
+char	*get_full_path(char *cmd, t_list *env_list);
+void	init_cmd_path(t_cmd *cmd, t_data *data);
+
+/******    child.c   ******/
+void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
+
+/******    cleanup_utils.c    ******/
+void	close_all_pipes(t_cmd *cmd_list);
+void	close_cmd_fds(t_cmd *cmd);
+
+/******    pipe_utils.c    ******/
+int		set_pipe(t_cmd *cmd);
+void	handle_redir_fds(t_cmd *cmd);
+void	connect_pipes(t_cmd *cmd, int prev_pipe_read);
+
+/******    pipeline.c    ******/
+void	execute_pipeline(t_data *data);
 
 #endif
