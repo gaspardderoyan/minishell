@@ -63,17 +63,22 @@ static char	*handle_expansion(char *res, char *token, int *i, char **env)
 	if (len == 0)
 	{
 		res = char_append(res, '$');
+		if (!res)
+			return (NULL);
 		return (res);
 	}
 	var_name = ft_substr(token, *i + 1, len);
+	if (!var_name)
+		return (NULL);
 	var_val = get_env_value(var_name, env);
+	if (!var_val)
+		return (free(var_name), NULL);
 	temp = res;
 	res = ft_strjoin(res, var_val);
-	free(temp);
-	free(var_name);
-	free(var_val);
+	if (!res)
+		return (free(temp), free(var_val), free(var_name), NULL);
 	*i += len;
-	return (res);
+	return (free(temp), free(var_val), free(var_name), res);
 }
 
 /*
@@ -110,6 +115,8 @@ char	*expand_token(char *token, char **env)
 	i = 0;
 	state = STATE_IDLE;
 	res = ft_strdup("");
+	if (!res)
+		return (NULL);
 	while (token[i])
 	{
 		if (is_quote_toggle(token[i], &state))
@@ -123,7 +130,7 @@ char	*expand_token(char *token, char **env)
 	return (res);
 }
 
-void	expander(t_token *tokens, char **env)
+int	expander(t_token *tokens, char **env)
 {
 	char	*new;
 
@@ -133,8 +140,11 @@ void	expander(t_token *tokens, char **env)
 		{
 			new = expand_token(tokens->value, env);
 			free(tokens->value);
+			if (!new)
+				return (FAIL);
 			tokens->value = new;
 		}
 		tokens = tokens->next;
 	}
+	return (SUCCESS);
 }

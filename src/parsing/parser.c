@@ -62,9 +62,15 @@ t_cmd	*parser(t_token *tokens)
 		{
 			cursor->next = cmd_new();
 			cursor = cursor->next;
+			if (!cursor)
+				return (NULL);
 		}
 		else if (tokens->type == TOKEN_WORD)
+		{
 			cursor->args = ft_append_str(cursor->args, tokens->value);
+			if (!cursor->args)
+				return (NULL);
+		}
 		else
 		{
 			if (!tokens->next)
@@ -78,7 +84,7 @@ t_cmd	*parser(t_token *tokens)
 			else if (tokens->type == TOKEN_HEREDOC)
 				redir = redir_new(REDIR_HEREDOC, tokens->next->value);
 			if (!redir)
-				exit(0);
+				return (NULL);
 			redir_add_back(&cursor->redirs, redir);
 			if (tokens->next)
 				tokens = tokens->next;

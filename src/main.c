@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <readline/readline.h>
 
 
 void	init_data(t_data *data, char **env)
@@ -21,6 +22,18 @@ void	init_data(t_data *data, char **env)
 	data->env_list = NULL;
 	data->last_exit_code = 0; // TODO: is this right? ie. default 0
 	data->line = NULL;
+}
+
+int	process_line(t_data *data)
+{
+	if (lexer(data->line, &data->tokens) == FAIL)
+		return (FAIL);
+	if (expander(data->tokens, data->env) == FAIL)
+		return (FAIL);
+	data->cmd_list = parser(data->tokens);
+	if (!data->cmd_list)
+		return (FAIL);
+	return (SUCCESS);
 }
 
 int	main(int ac, char **av, char **env)
@@ -38,16 +51,14 @@ int	main(int ac, char **av, char **env)
 		if (data.line[0])
 		{
 			add_history(data.line);
-
-			// TODO: extract to process_line() func
-			lexer(data.line, &data.tokens);
-			expander(data.tokens, data.env);
-			data.cmd_list = parser(data.tokens);	
+			process_line(&data);
 			print_cmds(data.cmd_list);
 		}
 		// TODO: add free_cycle() func
 		token_clear(&data.tokens);
+		free(data.line);
 	}
 	// TODO: add free_permanent() func
+	clear_history();
 	return (data.last_exit_code);
 }

@@ -46,6 +46,6 @@ int		token_size(t_token *lst);
 void	token_clear(t_token **lst);
 
 int		lexer(char *line, t_token **tokens);
-void	expander(t_token *tokens, char **env);
+int	expander(t_token *tokens, char **env);
 
 #endif
