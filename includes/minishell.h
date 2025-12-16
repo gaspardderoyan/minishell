@@ -85,6 +85,7 @@ t_cmd	*cmd_new(void);
 t_cmd	*cmd_last(t_cmd *lst);
 void	cmd_add_back(t_cmd **lst, t_cmd *new);
 void	cmd_clear(t_cmd **lst);
+void	free_cycle(t_data *data);
 
 t_redir	*redir_new(t_redir_type type, char *filename);
 t_redir	*redir_last(t_redir *lst);

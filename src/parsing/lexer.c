@@ -63,7 +63,6 @@ t_token_type	id_token(char *str)
 	return (TOKEN_WORD);
 }
 
-// TODO: split up
 int	lexer(char *line, t_token **tokens)
 {
 	int		i;
@@ -84,10 +83,10 @@ int	lexer(char *line, t_token **tokens)
 			len = get_word_len(line, i);
 		token_str = ft_substr(line, i, len);
 		if (!token_str)
-			return (token_clear(tokens), FAIL);
+			return (FAIL);
 		token = token_new(token_str, id_token(token_str));
 		if (!token)
-			return (free(token_str), token_clear(tokens), 0);
+			return (free(token_str), FAIL);
 		token_add_back(tokens, token);
 		i += len;
 	}

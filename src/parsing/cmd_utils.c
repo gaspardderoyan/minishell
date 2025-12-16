@@ -82,14 +82,11 @@ static void	free_args(char **args)
 }
 
 /*
-** Clears the command list.
-** NOTE: You must implement redir_clear(t_redir **redirs) in redir_utils.c
-** to fully free the memory, as t_cmd contains a nested list.
+** Clears the command list and all nested structures.
 */
 void	cmd_clear(t_cmd **lst)
 {
 	t_cmd	*temp;
-	t_redir	*r_temp;
 
 	if (!lst)
 		return ;
@@ -100,15 +97,10 @@ void	cmd_clear(t_cmd **lst)
 			free_args((*lst)->args);
 		if ((*lst)->redirs)
 			redir_clear(&(*lst)->redirs);
-		while ((*lst)->redirs)
-		{
-			r_temp = (*lst)->redirs->next;
-			free((*lst)->redirs->filename);
-			free((*lst)->redirs);
-			(*lst)->redirs = r_temp;
-		}
 		if ((*lst)->cmd_path)
 			free((*lst)->cmd_path);
+		if ((*lst)->heredoc_file)
+			free((*lst)->heredoc_file);
 		free(*lst);
 		*lst = temp;
 	}

@@ -20,7 +20,20 @@ void	init_data(t_data *data, char **env)
 	data->tokens = NULL;
 	data->env = env;
 	data->env_list = NULL;
-	data->last_exit_code = 0; // TODO: is this right? ie. default 0
+	data->last_exit_code = 0;
+	data->line = NULL;
+}
+
+void	free_cycle(t_data *data)
+{
+	if (data->tokens)
+		token_clear(&data->tokens);
+	if (data->cmd_list)
+		cmd_clear(&data->cmd_list);
+	if (data->line)
+		free(data->line);
+	data->tokens = NULL;
+	data->cmd_list = NULL;
 	data->line = NULL;
 }
 
@@ -54,9 +67,7 @@ int	main(int ac, char **av, char **env)
 			process_line(&data);
 			print_cmds(data.cmd_list);
 		}
-		// TODO: add free_cycle() func
-		token_clear(&data.tokens);
-		free(data.line);
+		free_cycle(&data);
 	}
 	// TODO: add free_permanent() func
 	clear_history();
