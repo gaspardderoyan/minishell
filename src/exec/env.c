@@ -13,6 +13,34 @@
 #include "../../includes/minishell.h"
 
 /*
+** Creates a new node from an env string and adds it to the list.
+** @param env_list: Pointer to the environment list.
+** @param env_str: The environment string to duplicate.
+** @return: 1 on success, 0 on error (list is cleared).
+*/
+static int	add_env_node(t_list **env_list, char *env_str)
+{
+	t_list	*new_node;
+	char	*content;
+
+	content = ft_strdup(env_str);
+	if (!content)
+	{
+		ft_lstclear(env_list, free);
+		return (0);
+	}
+	new_node = ft_lstnew(content);
+	if (!new_node)
+	{
+		free(content);
+		ft_lstclear(env_list, free);
+		return (0);
+	}
+	ft_lstadd_back(env_list, new_node);
+	return (1);
+}
+
+/*
 ** Initializes a linked list from the environment array.
 ** Each environment variable is duplicated into a t_list node.
 ** @param env: The environment array (char **envp from main).
@@ -21,30 +49,16 @@
 t_list	*init_env_list(char **env)
 {
 	t_list	*env_list;
-	t_list	*new_node;
-	char	*content;
 	int		i;
 
 	env_list = NULL;
-	i = 0;
 	if (!env)
 		return (NULL);
+	i = 0;
 	while (env[i])
 	{
-		content = ft_strdup(env[i]);
-		if (!content)
-		{
-			ft_lstclear(&env_list, free);
+		if (!add_env_node(&env_list, env[i]))
 			return (NULL);
-		}
-		new_node = ft_lstnew(content);
-		if (!new_node)
-		{
-			free(content);
-			ft_lstclear(&env_list, free);
-			return (NULL);
-		}
-		ft_lstadd_back(&env_list, new_node);
 		i++;
 	}
 	return (env_list);
