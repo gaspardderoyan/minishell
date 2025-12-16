@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 12:34:07 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/11 17:40:40 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/16 20:55:10 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 static char	*get_env_value(t_list *env_list, char *key)
 {
