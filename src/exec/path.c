@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 12:34:07 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/10 14:40:01 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/11 17:40:40 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
 static char	*get_env_value(t_list *env_list, char *key)
 {
@@ -31,7 +31,7 @@ static char	*get_env_value(t_list *env_list, char *key)
 static char	*search_in_paths(char **paths, char *cmd)
 {
 	char	*temp;
-	char	*path;
+	char	*full_path;
 	int		i;
 
 	i = 0;
@@ -40,13 +40,13 @@ static char	*search_in_paths(char **paths, char *cmd)
 		temp = ft_strjoin(paths[i], "/");
 		if (!temp)
 			return (NULL);
-		path = ft_strjoin(temp, cmd);
+		full_path = ft_strjoin(temp, cmd);
 		free(temp);
-		if (!path)
+		if (!full_path)
 			return (NULL);
-		if (access(path, X_OK) == 0)
-			return (path);
-		free(path);
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		free(full_path);
 		i++;
 	}
 	return (NULL);
@@ -75,4 +75,19 @@ char	*get_full_path(char *cmd, t_list *env_list)
 	full_path = search_in_paths(paths, cmd);
 	ft_free_array(paths);
 	return (full_path);
+}
+
+/*
+    Prépare le chemin de la commande.
+    Appelle find_path et stocke le résultat dans cmd->cmd_path.
+*/
+void	init_cmd_path(t_cmd *cmd, t_data *data)
+{
+	// Sécurité : Si pas d'arguments (ex: redirection seule "< file"), on ne fait rien
+	if (!cmd->args || !cmd->args[0])
+		return ;
+
+	// On appelle la fonction de recherche qu'on a codée en Phase 1
+	// Elle retourne le chemin absolu (ex: "/bin/ls") ou NULL
+	cmd->cmd_path = get_full_path(cmd->args[0], data->env_list);
 }
