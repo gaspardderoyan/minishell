@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "minishell.h"
 
 int	ft_arrlen(char **arr)
@@ -51,10 +52,11 @@ t_cmd	*parser(t_token *tokens)
 	t_cmd	*cmds;
 	t_cmd	*cursor;
 	t_redir	*redir;
+	char	*temp;
 
 	cmds = cmd_new();	
 	if (!cmds)
-		exit(0);
+		return (NULL);
 	cursor = cmds;
 	while (tokens)
 	{
@@ -67,22 +69,30 @@ t_cmd	*parser(t_token *tokens)
 		}
 		else if (tokens->type == TOKEN_WORD)
 		{
-			cursor->args = ft_append_str(cursor->args, tokens->value);
+			temp = ft_strdup_safe(tokens->value);
+			if (!temp)
+				return (NULL);
+			cursor->args = ft_append_str(cursor->args, temp);
+			temp = NULL;
 			if (!cursor->args)
 				return (NULL);
 		}
 		else
 		{
 			if (!tokens->next)
-				exit(0);
+				return (NULL); // TODO: handle syntax error?
+			temp = ft_strdup_safe(tokens->next->value);
+			if (!temp)
+				return (NULL);
 			if (tokens->type == TOKEN_APPEND)
-				redir = redir_new(REDIR_APPEND, tokens->next->value);
+				redir = redir_new(REDIR_APPEND, temp);
 			else if (tokens->type == TOKEN_INPUT)
-				redir = redir_new(REDIR_IN, tokens->next->value);
+				redir = redir_new(REDIR_IN, temp);
 			else if (tokens->type == TOKEN_OUTPUT)
-				redir = redir_new(REDIR_OUT, tokens->next->value);
+				redir = redir_new(REDIR_OUT, temp);
 			else if (tokens->type == TOKEN_HEREDOC)
-				redir = redir_new(REDIR_HEREDOC, tokens->next->value);
+				redir = redir_new(REDIR_HEREDOC, temp);
+			temp = NULL;
 			if (!redir)
 				return (NULL);
 			redir_add_back(&cursor->redirs, redir);
