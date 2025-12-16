@@ -12,6 +12,12 @@
 
 #include "../../includes/minishell.h"
 
+/*
+** Searches for the value of an environment variable in the list.
+** @param env_list: The environment linked list.
+** @param key: The variable name to search for (e.g., "PATH").
+** @return: A pointer to the value (after '='), or NULL if not found.
+*/
 static char	*get_env_value(t_list *env_list, char *key)
 {
 	size_t	len;
@@ -28,6 +34,13 @@ static char	*get_env_value(t_list *env_list, char *key)
 	return (NULL);
 }
 
+/*
+** Iterates through PATH directories searching for a matching executable.
+** Concatenates each path with the command name and checks access.
+** @param paths: Array of PATH directories (split by ':').
+** @param cmd: The command name to search for.
+** @return: The full path if found (must be freed), or NULL otherwise.
+*/
 static char	*search_in_paths(char **paths, char *cmd)
 {
 	char	*temp;
@@ -52,6 +65,14 @@ static char	*search_in_paths(char **paths, char *cmd)
 	return (NULL);
 }
 
+/*
+** Resolves the full path of a command.
+** If cmd contains '/', treats it as a direct path.
+** Otherwise, searches through PATH directories.
+** @param cmd: The command name or path.
+** @param env_list: The environment linked list.
+** @return: The full executable path (must be freed), or NULL if not found.
+*/
 char	*get_full_path(char *cmd, t_list *env_list)
 {
 	char	**paths;
@@ -78,16 +99,14 @@ char	*get_full_path(char *cmd, t_list *env_list)
 }
 
 /*
-    Prépare le chemin de la commande.
-    Appelle find_path et stocke le résultat dans cmd->cmd_path.
+** Prepares the command path for execution.
+** Calls get_full_path and stores the result in cmd->cmd_path.
+** @param cmd: The command structure to initialize.
+** @param data: Global data structure containing the environment.
 */
 void	init_cmd_path(t_cmd *cmd, t_data *data)
 {
-	// Sécurité : Si pas d'arguments (ex: redirection seule "< file"), on ne fait rien
 	if (!cmd->args || !cmd->args[0])
 		return ;
-
-	// On appelle la fonction de recherche qu'on a codée en Phase 1
-	// Elle retourne le chemin absolu (ex: "/bin/ls") ou NULL
 	cmd->cmd_path = get_full_path(cmd->args[0], data->env_list);
 }

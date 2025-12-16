@@ -12,6 +12,11 @@
 
 #include "../../includes/minishell.h"
 
+/*
+** Waits for all child processes to terminate.
+** Stores the exit code of the last command in data->last_exit_code.
+** @param data: Global data structure containing the command list.
+*/
 static void	wait_all_children(t_data *data)
 {
 	t_cmd	*cmd;
@@ -35,6 +40,13 @@ static void	wait_all_children(t_data *data)
 	}
 }
 
+/*
+** Parent process routine after forking a child.
+** Closes used pipe ends and returns the read fd for the next iteration.
+** @param cmd: The current command structure.
+** @param prev_read_fd: The previous read fd to close.
+** @return: The read fd for the next command, or -1 if last command.
+*/
 static int	parent_routine(t_cmd *cmd, int prev_read_fd)
 {
 	if (cmd->next)
@@ -46,24 +58,19 @@ static int	parent_routine(t_cmd *cmd, int prev_read_fd)
 	return (-1);
 }
 
-static int	exec_solo_builtin(t_cmd *cmd, t_data *data)
-{
-	if (cmd && !cmd->next && cmd->args && is_modifier_builtin(cmd->args[0]))
-	{
-		execute_builtin_in_parent(cmd, data);
-		return (1);
-	}
-	return (0);
-}
-
+/*
+** Main pipeline execution function.
+** Iterates through commands, creates pipes, forks children, and waits.
+** @param data: Global data structure containing the command list.
+*/
 void	execute_pipeline(t_data *data)
 {
 	t_cmd	*cmd;
 	int		prev_fd;
 
 	cmd = data->cmd_list;
-	if (exec_solo_builtin(cmd, data))
-		return ;
+	//if (exec_solo_builtin(cmd, data))
+	//	return ;
 	prev_fd = -1;
 	while (cmd)
 	{

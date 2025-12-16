@@ -12,6 +12,11 @@
 
 #include "../../includes/minishell.h"
 
+/*
+** Closes all pipe file descriptors in the command list.
+** Sets fd to -1 after closing to prevent double-close errors.
+** @param cmd_list: The head of the command linked list.
+*/
 void	close_all_pipes(t_cmd *cmd_list)
 {
 	t_cmd	*tmp;
@@ -19,13 +24,11 @@ void	close_all_pipes(t_cmd *cmd_list)
 	tmp = cmd_list;
 	while (tmp)
 	{
-		// Fermeture du côté LECTURE
 		if (tmp->pipefd[0] != -1)
 		{
 			close(tmp->pipefd[0]);
-			tmp->pipefd[0] = -1; // Sécurité pour éviter double close
+			tmp->pipefd[0] = -1;
 		}
-		// Fermeture du côté ÉCRITURE
 		if (tmp->pipefd[1] != -1)
 		{
 			close(tmp->pipefd[1]);
@@ -35,6 +38,11 @@ void	close_all_pipes(t_cmd *cmd_list)
 	}
 }
 
+/*
+** Closes the input and output file descriptors of a command.
+** Only closes if fd is valid and not stdin/stdout.
+** @param cmd: The command structure containing fd_in and fd_out.
+*/
 void	close_cmd_fds(t_cmd *cmd)
 {
 	if (cmd->fd_in != -1 && cmd->fd_in != STDIN_FILENO)

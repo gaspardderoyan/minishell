@@ -12,6 +12,12 @@
 
 #include "../../includes/minishell.h"
 
+/*
+** Initializes a linked list from the environment array.
+** Each environment variable is duplicated into a t_list node.
+** @param env: The environment array (char **envp from main).
+** @return: The environment linked list, or NULL on error.
+*/
 t_list	*init_env_list(char **env)
 {
 	t_list	*env_list;
@@ -27,11 +33,15 @@ t_list	*init_env_list(char **env)
 	{
 		content = ft_strdup(env[i]);
 		if (!content)
+		{
+			ft_lstclear(&env_list, free);
 			return (NULL);
+		}
 		new_node = ft_lstnew(content);
 		if (!new_node)
 		{
 			free(content);
+			ft_lstclear(&env_list, free);
 			return (NULL);
 		}
 		ft_lstadd_back(&env_list, new_node);
@@ -40,6 +50,12 @@ t_list	*init_env_list(char **env)
 	return (env_list);
 }
 
+/*
+** Converts the environment linked list to a string array.
+** Required to pass the environment to execve().
+** @param env_list: The environment linked list.
+** @return: A NULL-terminated string array, or NULL on error.
+*/
 char	**env_list_to_array(t_list *env_list)
 {
 	char	**env_array;
