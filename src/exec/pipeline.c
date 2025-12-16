@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:56:49 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/16 16:20:30 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/16 18:36:56 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,6 @@ static int	parent_routine(t_cmd *cmd, int prev_read_fd)
 	return (-1);
 }
 
-/*
-    Vérifie si on a affaire à un Builtin Solo (cd, export...).
-    Si oui, l'exécute et retourne 1. Sinon retourne 0.
-*/
 static int	exec_solo_builtin(t_cmd *cmd, t_data *data)
 {
 	if (cmd && !cmd->next && cmd->args && is_modifier_builtin(cmd->args[0]))

@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:43:41 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/11 13:46:53 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/16 18:36:22 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,6 @@ int	set_pipe(t_cmd *cmd)
 	return (1);
 }
 
-/*
-    Ouvre le fichier selon le type de redirection.
-    Retourne le FD ouvert ou -1 en cas d'erreur.
-*/
 static int	open_redir_file(t_redir *redir)
 {
 	int	fd;
@@ -83,16 +79,8 @@ void	handle_redir_fds(t_cmd *cmd)
 	}
 }
 
-/*
-    Connecte les entrées/sorties standards aux pipes.
-    - cmd : la commande actuelle.
-    - prev_pipe_read : le bout de lecture du pipe de la commande PRÉCÉDENTE.
-      (Doit être -1 si c'est la première commande).
-*/
 void	connect_pipes(t_cmd *cmd, int prev_pipe_read)
 {
-	// 1. GESTION ENTRÉE (Connexion au pipe précédent)
-	// Si on n'est pas la première commande, on lit depuis le pipe précédent
 	if (prev_pipe_read != -1)
 	{
 		if (dup2(prev_pipe_read, STDIN_FILENO) == -1)
@@ -105,7 +93,6 @@ void	connect_pipes(t_cmd *cmd, int prev_pipe_read)
 	}
 	if (cmd->next)
 	{
-		// dans l'enfant, on ferme le bout de LECTURE du pipe actuel car on ne va faire qu'écrire dedans.
 		close(cmd->pipefd[0]);
 		if (dup2(cmd->pipefd[1], STDOUT_FILENO) == -1)
 		{
@@ -113,7 +100,6 @@ void	connect_pipes(t_cmd *cmd, int prev_pipe_read)
 			close(cmd->pipefd[1]);
 			exit(1);
 		}
-		// Une fois connecté à STDOUT, on ferme l'original
 		close(cmd->pipefd[1]);
 	}
 }

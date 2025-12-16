@@ -6,18 +6,12 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:50:13 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/11 14:50:28 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/16 18:38:03 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*
-    Ferme tous les pipes ouverts dans la liste des commandes.
-    Utilisé pour nettoyer proprement :
-    1. Dans l'enfant : après les dup2, pour ne pas garder de pipes ouverts.
-    2. Dans le parent : en cas d'erreur ou à la fin de tout le pipeline.
-*/
 void	close_all_pipes(t_cmd *cmd_list)
 {
 	t_cmd	*tmp;
@@ -41,11 +35,6 @@ void	close_all_pipes(t_cmd *cmd_list)
 	}
 }
 
-/* 
-   Ferme les FDs spécifiques d'une commande (utile pour le nettoyage ponctuel)
-   Par exemple : fermer les fichiers ouverts par les redirections (<, >)
-   s'ils ont été stockés dans fd_in/fd_out.
-*/
 void	close_cmd_fds(t_cmd *cmd)
 {
 	if (cmd->fd_in != -1 && cmd->fd_in != STDIN_FILENO)
