@@ -2,10 +2,10 @@
 
 static void	error_exit(t_cmd *cmd, t_data *data, char *msg, int err_code)
 {
-	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	if (cmd->args && cmd->args[0])
-		ft_putstr_fd(cmd->args[0], 2);
-	ft_putstr_fd(msg, 2);
+		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
 	ft_free_array(data->env);
 	ft_lstclear(&data->env_list, free);
 	exit(err_code);

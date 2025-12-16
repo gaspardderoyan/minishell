@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:43:41 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/16 18:36:22 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/16 18:56:00 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	handle_redir_fds(t_cmd *cmd)
 		fd = open_redir_file(tmp);
 		if (fd == -1)
 		{
-			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
 			perror(tmp->filename);
 			exit(1);
 		}
