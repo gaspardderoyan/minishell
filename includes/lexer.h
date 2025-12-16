@@ -6,12 +6,13 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:09 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/12 19:00:26 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/16 15:45:14 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
+# include <stdbool.h>
 
 typedef enum	e_state
 {
@@ -44,6 +45,10 @@ void	token_add_back(t_token **lst, t_token *new);
 void	token_add_front(t_token **lst, t_token *new);
 int		token_size(t_token *lst);
 void	token_clear(t_token **lst);
+
+
+bool	is_whitespace(char c);
+bool	is_operator(char c);
 
 int		lexer(char *line, t_token **tokens);
 int	expander(t_token *tokens, char **env);

@@ -1,27 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/16 15:42:37 by gderoyan          #+#    #+#             */
+/*   Updated: 2025/12/16 15:42:38 by gderoyan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-bool	is_whitespace(char c)
-{
-	if ((c >= 9 && c <= 13) || c == ' ')
-		return (true);
-	return (false);
-}
-
-bool	is_operator(char c)
-{
-	if (c == '|' || c == '>' || c == '<')
-		return (true);
-	return (false);
-}
-
-int	get_operator_len(char *str)
+static int	get_operator_len(char *str)
 {
 	if ((*str == '>' || *str == '<') && *str == *(str + 1))
 		return (2);
 	return (1);
 }
 
-void    skip_quote_content(char *line, int *i)
+static void    skip_quote_content(char *line, int *i)
 {
     char    quote_char;
 
@@ -33,7 +31,7 @@ void    skip_quote_content(char *line, int *i)
         (*i)++;
 }
 
-int     get_word_len(char *line, int start)
+static int     get_word_len(char *line, int start)
 {
     int i;
 
