@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <unistd.h>
 
 /*
 ** Helper: Handles variable expansion.
@@ -91,6 +92,11 @@ char	*expand_token(char *token, char **env)
 			res = char_append(res, token[i]);
 		i++;
 	}
+	if (state != STATE_IDLE)
+	{
+		ft_putstr_fd("minishell: unexpected EOF\n", STDERR_FILENO);
+		return (free(res), NULL);
+	}
 	return (res);
 }
 
@@ -104,6 +110,7 @@ int	expander(t_token *tokens, char **env)
 		{
 			new = expand_token(tokens->value, env);
 			free(tokens->value);
+			tokens->value = NULL;
 			if (!new)
 				return (FAIL);
 			tokens->value = new;

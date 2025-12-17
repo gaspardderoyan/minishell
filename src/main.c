@@ -63,8 +63,8 @@ int	main(int ac, char **av, char **env)
 		if (data.line[0])
 		{
 			add_history(data.line);
-			process_line(&data);
-			execute_pipeline(&data);
+			if (process_line(&data) == SUCCESS)
+				execute_pipeline(&data);
 		}
 		free_cycle(&data);
 	}
