@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/16 20:57:04 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/17 13:50:01 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_cmd
 typedef struct s_data
 {
 	t_cmd	*cmd_list;      // Le début de ta liste chaînée de commandes
-	char	**env;    		// L'environnement converti pour execve
+	//char	**env;    		// L'environnement converti pour execve
 	t_list	*env_list;      // L'environnement manipulable (export/unset)
     int		last_exit_code; // Le code de retour de la dernière commande ($?)
 } t_data;
