@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:21 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/16 16:57:07 by gaspardderoya    ###   ########.fr       */
+/*   Updated: 2025/12/17 14:20:50 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	main(int ac, char **av, char **env)
 		{
 			add_history(data.line);
 			process_line(&data);
-			print_cmds(data.cmd_list);
+			execute_pipeline(&data);
 		}
 		free_cycle(&data);
 	}

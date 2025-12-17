@@ -20,7 +20,13 @@ SRC_FILES = main.c \
 			parsing/parser.c \
 			parsing/parser_utils.c \
 			parsing/lexer_utils.c \
-			parsing/utils_to_delete.c
+			parsing/utils_to_delete.c \
+			exec/child.c \
+			exec/cleanup_utils.c \
+			exec/env.c \
+			exec/path.c \
+			exec/pipe_utils.c \
+			exec/pipeline.c
 
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

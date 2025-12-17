@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/17 14:14:14 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:23:02 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ typedef struct s_data
 	t_list	*env_list;      // L'environnement manipulable (export/unset)
     int		last_exit_code; // Le code de retour de la dernière commande ($?)
 	t_token *tokens;    // The tokens lists
-	t_list	*env_list;   // L'environnement manipulable (export/unset)
-	int		last_exit_code; // Le code de retour de la dernière commande ($?)
 	char	*line;
 } t_data;
 
