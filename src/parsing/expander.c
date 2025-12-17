@@ -10,8 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "minishell.h"
 #include <unistd.h>
+
+static void	*ms_error(char *err_msg, void *to_free)
+{
+	if (to_free)
+		free(to_free);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(err_msg, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	return (NULL);
+}
 
 /*
 ** Helper: Handles variable expansion.
@@ -88,15 +99,14 @@ char	*expand_token(char *token, char **env)
 			;
 		else if (token[i] == '$' && state != STATE_QUOTES)
 			res = handle_expansion(res, token, &i, env);
+		else if (ft_strchr("\\;&", token[i]))
+			return (ms_error("unexpected token", res));
 		else
 			res = char_append(res, token[i]);
 		i++;
 	}
 	if (state != STATE_IDLE)
-	{
-		ft_putstr_fd("minishell: unexpected EOF\n", STDERR_FILENO);
-		return (free(res), NULL);
-	}
+		return (ms_error("unexpected EOF", res));
 	return (res);
 }
 
