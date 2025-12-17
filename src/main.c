@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:21 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/17 14:20:50 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/17 14:53:39 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_data(t_data *data, char **env)
 	data->cmd_list = NULL;
 	data->tokens = NULL;
 	data->env = env;
-	data->env_list = NULL;
+	data->env_list = init_env_list(env);
 	data->last_exit_code = 0;
 	data->line = NULL;
 }
