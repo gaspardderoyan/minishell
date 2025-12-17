@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iincludes -Ilibft -Iincludes
+CFLAGS = -Wall -Wextra -Werror -Ilibft -Iincludes -g3
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -9,8 +9,21 @@ LIBFT= $(LIBFT_DIR)/libft.a
 
 NAME = minishell
 
-SRC_FILES = main.c
+SRC_FILES = main.c \
+			parsing/token_utils.c \
+			parsing/token_utils_2.c \
+			parsing/lexer.c \
+			parsing/expander.c \
+			parsing/expander_utils.c \
+			parsing/redir_utils.c \
+			parsing/cmd_utils.c \
+			parsing/parser.c \
+			parsing/parser_utils.c \
+			parsing/lexer_utils.c \
+			parsing/utils_to_delete.c
+
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
+
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
 .PHONY: all clean fclean libft re
@@ -23,11 +36,11 @@ all: $(NAME)
 
 # Build the main executable
 $(NAME): $(OBJS) $(LIBFT) 
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
 
 # Compile the object files for main sources
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR) # @ so not printed
+	@mkdir -p $(dir $@) # @ so not printed
 	$(CC) $(CFLAGS)  -c $< -o $@
 
 ################################################################################
