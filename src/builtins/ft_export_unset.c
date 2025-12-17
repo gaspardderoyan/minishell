@@ -28,35 +28,57 @@ static int	is_valid_env_key(char *key)
 	return (1);
 }
 
+/*
+** Processes a single export argument (KEY or KEY=VALUE).
+** @param arg: The argument string.
+** @param data: Global data structure.
+** @return: 0 on success, 1 on error.
+*/
+static int	process_export_arg(char *arg, t_data *data)
+{
+	char	*equal_sign;
+	char	*value;
+
+	if (!is_valid_env_key(arg))
+	{
+		ft_putstr_fd("minishell: export: not a valid identifier\n", 2);
+		return (1);
+	}
+	equal_sign = ft_strchr(arg, '=');
+	if (equal_sign)
+	{
+		*equal_sign = '\0';
+		value = equal_sign + 1;
+		if (update_or_add_env(&data->env_list, arg, value) == -1)
+			return (1);
+		*equal_sign = '=';
+	}
+	return (0);
+}
+
+/*
+** Builtin export command.
+** Without args: prints all env vars. With args: sets variables.
+** @param args: The argument array.
+** @param data: Global data structure.
+** @return: 0 on success, 1 on error.
+*/
 int	builtin_export(char **args, t_data *data)
 {
-	int		i;
-	char	*key;
-	char	*value;
-	char	*equal_sign;
+	int	i;
+	int	ret;
 
 	if (!args[1])
 		return (builtin_env(data->env_list));
+	ret = 0;
 	i = 1;
 	while (args[i])
 	{
-		if (!is_valid_env_key(args[i]))
-		{
-			ft_putstr_fd("minishell: export: not a valid identifier\n", 2);
-			return (1);
-		}
-		equal_sign = ft_strchr(args[i], '=');
-		if (equal_sign)
-		{
-			*equal_sign = '\0';
-			key = args[i];
-			value = equal_sign + 1;
-			update_or_add_env(&data->env_list, key, value);
-			*equal_sign = '=';
-		}
+		if (process_export_arg(args[i], data) != 0)
+			ret = 1;
 		i++;
 	}
-	return (0);
+	return (ret);
 }
 
 int	builtin_unset(char **args, t_data *data)

@@ -105,8 +105,12 @@ void	close_cmd_fds(t_cmd *cmd);
 
 /******    env_utils.c    ******/
 t_list	*find_env_node(t_list *env, char *key);
-void	update_or_add_env(t_list **env, char *key, char *value);
+int		update_or_add_env(t_list **env, char *key, char *value);
 void	remove_env_node(t_list **env, char *key);
+
+/******    ft_export_unset.c    ******/
+int		builtin_export(char **args, t_data *data);
+int		builtin_unset(char **args, t_data *data);
 
 /******    env.c    ******/
 t_list	*init_env_list(char **env);

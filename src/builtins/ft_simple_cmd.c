@@ -12,6 +12,29 @@
 
 #include "../../includes/minishell.h"
 
+/*
+** Checks if arg is a valid -n flag (handles -n, -nn, -nnn, etc.).
+** @param arg: The argument to check.
+** @return: 1 if valid -n flag, 0 otherwise.
+*/
+static int	is_n_flag(char *arg)
+{
+	int	i;
+
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	i = 1;
+	while (arg[i] == 'n')
+		i++;
+	return (arg[i] == '\0');
+}
+
+/*
+** Builtin echo command.
+** Prints arguments to stdout, -n flag suppresses trailing newline.
+** @param args: The argument array.
+** @return: Always returns 0 (success).
+*/
 int	builtin_echo(char **args)
 {
 	int	i;
@@ -19,7 +42,7 @@ int	builtin_echo(char **args)
 
 	i = 1;
 	n_option = 0;
-	while (args[i] && ft_strncmp(args[i], "-n", 3) == 0)
+	while (args[i] && is_n_flag(args[i]))
 	{
 		n_option = 1;
 		i++;
@@ -43,7 +66,6 @@ int	builtin_pwd(void)
 	if (getcwd(cwd, sizeof(cwd)))
 	{
 		ft_putendl_fd(cwd, STDOUT_FILENO);
-		free(cwd);
 		return (0);
 	}
 	perror("minishell: pwd");
