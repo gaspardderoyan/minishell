@@ -6,7 +6,7 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:09 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/16 16:18:36 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/17 18:31:29 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,11 @@ int	expander(t_token *tokens, char **env);
 /* parser_utils.c */
 int		ft_arrlen(char **arr);
 char	**ft_append_str(char **arr, char *str);
+
+/* errors.c */
+void	*ms_error(char *err_msg, void *to_free);
+
+/* check_syntax.c */
+int	check_syntax(t_token *tokens);
 
 #endif

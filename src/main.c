@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:21 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/17 14:53:39 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/17 18:32:19 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	process_line(t_data *data)
 	if (lexer(data->line, &data->tokens) == FAIL)
 		return (FAIL);
 	if (expander(data->tokens, data->env) == FAIL)
+		return (FAIL);
+	if (check_syntax(data->tokens) == FAIL)
 		return (FAIL);
 	data->cmd_list = parser(data->tokens);
 	if (!data->cmd_list)
