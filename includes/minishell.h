@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/17 14:23:02 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/17 20:03:04 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,31 @@ typedef struct s_data
 	char	*line;
 } t_data;
 
+/******    builtins_dispatch.c   ******/
+int		is_builtin(char *cmd);
+int		is_modifier_builtin(char *cmd);
+int		dispatch_builtin(t_cmd *cmd, t_data *data);
+
+/******    exec_builtins.c    ******/
+int		apply_redirections(t_cmd *cmd);
+void	execute_builtin_in_parent(t_cmd *cmd, t_data *data);
+
+/******    ft_simple_cmd.c   ******/
+int		builtin_echo(char **args);
+int		builtin_pwd(void);
+int		builtin_env(t_list *env);
+
 /******    child.c   ******/
 void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 
 /******    cleanup_utils.c    ******/
 void	close_all_pipes(t_cmd *cmd_list);
 void	close_cmd_fds(t_cmd *cmd);
+
+/******    env_utils.c    ******/
+t_list	*find_env_node(t_list *env, char *key);
+void	update_or_add_env(t_list **env, char *key, char *value);
+void	remove_env_node(t_list **env, char *key);
 
 /******    env.c    ******/
 t_list	*init_env_list(char **env);
