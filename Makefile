@@ -26,7 +26,11 @@ SRC_FILES = main.c \
 			exec/env.c \
 			exec/path.c \
 			exec/pipe_utils.c \
-			exec/pipeline.c
+			exec/pipeline.c \
+			builtins/builtins_dispatch.c \
+			builtins/exec_builtins.c \
+			builtins/ft_simple_cmd.c \
+			builtins/ft_export_unset.c
 
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
