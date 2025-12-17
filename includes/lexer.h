@@ -54,7 +54,7 @@ void	skip_whitespace(char *line, int *i);
 /* expander_utils.c */
 int		get_var_len(char *str);
 char	*char_append(char *s, char c);
-char	*get_env_value(char *var, char **env);
+char	*get_env_value_tab(char *var, char **env);
 
 int	lexer(char *line, t_token **tokens);
 int	expander(t_token *tokens, char **env);

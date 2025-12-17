@@ -43,7 +43,7 @@ char	*char_append(char *s, char c)
 	return (free(s), new_s);
 }
 
-char	*get_env_value(char *var, char **env)
+char	*get_env_value_tab(char *var, char **env)
 {
 	int	i;
 	int	len;

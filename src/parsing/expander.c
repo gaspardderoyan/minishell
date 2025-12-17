@@ -34,7 +34,7 @@ static char	*handle_expansion(char *res, char *token, int *i, char **env)
 	var_name = ft_substr(token, *i + 1, len);
 	if (!var_name)
 		return (NULL);
-	var_val = get_env_value(var_name, env);
+	var_val = get_env_value_tab(var_name, env);
 	if (!var_val)
 		return (free(var_name), NULL);
 	temp = res;
