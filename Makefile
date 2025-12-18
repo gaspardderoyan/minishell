@@ -22,6 +22,7 @@ SRC_FILES = main.c \
 			parsing/lexer_utils.c \
 			parsing/errors.c \
 			parsing/check_syntax.c \
+			parsing/signals.c \
 			parsing/utils_to_delete.c \
 			exec/child.c \
 			exec/cleanup_utils.c \

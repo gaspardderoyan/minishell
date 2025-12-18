@@ -6,7 +6,7 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:09 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/17 18:31:29 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:37:19 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,10 @@ void	*ms_error(char *err_msg, void *to_free);
 
 /* check_syntax.c */
 int	check_syntax(t_token *tokens);
+
+/* signals.c */
+void	signal_handler(int signal);
+void	set_signal_action(void);
+void	reset_signals(void);
 
 #endif

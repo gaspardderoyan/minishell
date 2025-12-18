@@ -23,8 +23,7 @@ static void	wait_all_children(t_data *data)
 	int		status;
 
 	cmd = data->cmd_list;
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
+	reset_signals();
 	while (cmd)
 	{
 		if (cmd->pid != -1)
@@ -39,6 +38,8 @@ static void	wait_all_children(t_data *data)
 					data->last_exit_code = 128 + WTERMSIG(status);
 					if (WTERMSIG(status) == SIGQUIT)
 						ft_putstr_fd("Quit (core dumped)\n", 1);
+					if (WTERMSIG(status) == SIGINT)
+						ft_putstr_fd("\n", 1);
 				}
 			}
 		}
@@ -96,4 +97,5 @@ void	execute_pipeline(t_data *data)
 		cmd = cmd->next;
 	}
 	wait_all_children(data);
+	set_signal_action();
 }

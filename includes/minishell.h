@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/17 14:23:02 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:38:13 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <signal.h>
 # define SUCCESS 0
 # define FAIL 1
 

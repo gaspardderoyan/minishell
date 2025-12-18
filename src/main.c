@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:21 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/17 18:57:52 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:36:46 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 volatile sig_atomic_t	g_status;
 
-static void	signal_handler(int signal)
+void	signal_handler(int signal)
 {
 	g_status = signal;
 	if (signal == SIGINT)
@@ -28,7 +28,7 @@ static void	signal_handler(int signal)
 	}
 }
 
-static void	set_signal_action(void)
+void	set_signal_action(void)
 {
 	struct sigaction	act;
 
@@ -42,6 +42,7 @@ static void	set_signal_action(void)
 	act.sa_flags = 0;
 	sigaction(SIGQUIT, &act, NULL);
 }
+
 
 void	init_data(t_data *data, char **env)
 {
