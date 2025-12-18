@@ -23,6 +23,8 @@ static void	wait_all_children(t_data *data)
 	int		status;
 
 	cmd = data->cmd_list;
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	while (cmd)
 	{
 		if (cmd->pid != -1)
@@ -33,7 +35,11 @@ static void	wait_all_children(t_data *data)
 				if (WIFEXITED(status))
 					data->last_exit_code = WEXITSTATUS(status);
 				else if (WIFSIGNALED(status))
+				{
 					data->last_exit_code = 128 + WTERMSIG(status);
+					if (WTERMSIG(status) == SIGQUIT)
+						ft_putstr_fd("Quit (core dumped)\n", 1);
+				}
 			}
 		}
 		cmd = cmd->next;

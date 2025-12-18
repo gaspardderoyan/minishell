@@ -59,6 +59,8 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 */
 void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	connect_pipes(cmd, prev_read_fd);
 	handle_redir_fds(cmd);
 	close_all_pipes(data->cmd_list);
