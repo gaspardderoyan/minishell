@@ -32,7 +32,7 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 
 	if (!cmd->args || !cmd->args[0])
 	{
-		//ft_free_array(data->env);
+		ft_free_array(data->env);
 		ft_lstclear(&data->env_list, free);
 		exit(0);
 	}
