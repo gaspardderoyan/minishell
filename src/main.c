@@ -12,6 +12,36 @@
 
 #include "minishell.h"
 #include <readline/readline.h>
+#include <signal.h>
+
+volatile sig_atomic_t	g_status;
+
+static void	signal_handler(int signal)
+{
+	g_status = signal;
+	if (signal == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
+static void	set_signal_action(void)
+{
+	struct sigaction	act;
+
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_handler = &signal_handler;
+	sigemptyset(&act.sa_mask);
+	sigaction(SIGINT, &act, NULL);
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_handler = SIG_IGN;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = 0;
+	sigaction(SIGQUIT, &act, NULL);
+}
 
 void	init_data(t_data *data, char **env)
 {
@@ -21,6 +51,7 @@ void	init_data(t_data *data, char **env)
 	data->env_list = init_env_list(env);
 	data->last_exit_code = 0;
 	data->line = NULL;
+	g_status = 0;
 }
 
 void	free_cycle(t_data *data)
@@ -57,9 +88,13 @@ int	main(int ac, char **av, char **env)
 	init_data(&data, env);
 	(void)ac;
 	(void)av;
+	set_signal_action();
 	while (1)
 	{
 		data.line = readline("minishell$ ");
+		g_status = 0;
+		if (g_status == SIGINT)
+			data.last_exit_code = 130;
 		if (!data.line)
 			break ;
 		if (data.line[0])
@@ -71,6 +106,6 @@ int	main(int ac, char **av, char **env)
 		free_cycle(&data);
 	}
 	// TODO: add free_permanent() func
-	clear_history();
+	rl_clear_history();
 	return (data.last_exit_code);
 }
