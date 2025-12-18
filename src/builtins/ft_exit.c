@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:18:53 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/18 16:39:54 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/18 19:11:51 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	builtin_exit(char **args, t_data *data)
 		}
 		else if (args[2])
 		{
-			ft_putendl_fd("minishell: exit: too many arguments", 2);
+			ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 			return (1);
 		}
 		else
@@ -55,8 +55,7 @@ int	builtin_exit(char **args, t_data *data)
 	}
 	ft_lstclear(&data->env_list, free);
 	if (data->line)
-        free(data->line);
-	rl_clear_history();
+		free(data->line);
 	exit(exit_code % 256);
 	return (0);
 }
