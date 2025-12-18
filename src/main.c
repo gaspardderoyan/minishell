@@ -6,13 +6,12 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:21 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/18 17:36:46 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/18 18:02:42 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <readline/readline.h>
-#include <signal.h>
 
 volatile sig_atomic_t	g_status;
 
@@ -92,8 +91,8 @@ int	main(int ac, char **av, char **env)
 	set_signal_action();
 	while (1)
 	{
-		data.line = readline("minishell$ ");
 		g_status = 0;
+		data.line = readline("minishell$ ");
 		if (g_status == SIGINT)
 			data.last_exit_code = 130;
 		if (!data.line)
