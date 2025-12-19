@@ -73,9 +73,9 @@ static int	exec_solo_builtin(t_cmd *cmd, t_data *data)
 		return (0);
 	if (!is_modifier_builtin(cmd->args[0]))
 		return (0);
-	execute_builtin_in_parent(cmd, data);
-	return (1);
-}
+		execute_builtin_in_parent(cmd, data);
+		return (1);
+	}
 
 /*
 ** Main pipeline execution function.

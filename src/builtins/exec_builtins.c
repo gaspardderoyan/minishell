@@ -50,7 +50,7 @@ int	apply_redirections(t_cmd *cmd)
 		}
 		else
 		{
-			flags = O_WRONLY | O_CREAT | O_APPEND;
+				flags = O_WRONLY | O_CREAT | O_APPEND;
 			ret = setup_redir(cur->filename, flags, STDOUT_FILENO);
 		}
 		if (ret == -1)
