@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export_unset.c                                  :+:      :+:    :+:   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 19:12:51 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/17 20:32:29 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:48:20 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	builtin_export(char **args, t_data *data)
 	int	ret;
 
 	if (!args[1])
-		return (builtin_env(data->env_list));
+		return (print_sorted_env(data));
 	ret = 0;
 	i = 1;
 	while (args[i])
@@ -79,17 +79,4 @@ int	builtin_export(char **args, t_data *data)
 		i++;
 	}
 	return (ret);
-}
-
-int	builtin_unset(char **args, t_data *data)
-{
-	int	i;
-
-	i = 1;
-	while (args[i])
-	{
-		remove_env_node(&data->env_list, args[i]);
-		i++;
-	}
-	return (0);
 }

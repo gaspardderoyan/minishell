@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:18:53 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/18 19:11:51 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/19 18:14:44 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static int	is_numeric(char *str)
 {
 	int	i;
 
-	if (!str || !*str)
-		return (0);
 	i = 0;
+	while (str[i] && (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13)))
+		i++;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
 	if (!str[i])
@@ -46,28 +46,31 @@ static int	is_numeric(char *str)
 */
 static long long	ft_atoll_safe(char *str, int *overflow)
 {
-	long long	result;
+	long long	res;
 	int			sign;
 	int			i;
 
-	result = 0;
+	res = 0;
 	sign = 1;
 	i = 0;
 	*overflow = 0;
 	if (str[i] == '-' || str[i] == '+')
-		if (str[i++] == '-')
+	{
+		if (str[i] == '-')
 			sign = -1;
+		i++;
+	}
 	while (str[i])
 	{
-		if (result > (LLONG_MAX - (str[i] - '0')) / 10)
+		if (res > (LLONG_MAX - (str[i] - '0')) / 10)
 		{
 			*overflow = 1;
 			return (0);
 		}
-		result = result * 10 + (str[i] - '0');
+		res = res * 10 + (str[i] - '0');
 		i++;
 	}
-	return (result * sign);
+	return (res * sign);
 }
 
 /*
@@ -127,5 +130,12 @@ int	builtin_exit(char **args, t_data *data)
 	else
 		exit_code = parse_exit_arg(args[1]);
 	ft_lstclear(&data->env_list, free);
+	if (data->env)
+		free(data->env);
+	if (data->cmd_list)
+		cmd_clear(&data->cmd_list);
+	if (data->line)
+		free(data->line);
+	rl_clear_history();
 	exit((unsigned char)exit_code);
 }

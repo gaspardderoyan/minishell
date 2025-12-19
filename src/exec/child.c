@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   child.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/19 16:49:10 by mgregoir          #+#    #+#             */
+/*   Updated: 2025/12/19 18:22:44 by mgregoir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
@@ -28,7 +40,7 @@ static void	error_exit(t_cmd *cmd, t_data *data, char *msg, int err_code)
 */
 static void	do_execve(t_cmd *cmd, t_data *data)
 {
-	char    **env_array;
+	char	**env_array;
 
 	if (!cmd->args || !cmd->args[0])
 	{
@@ -60,8 +72,17 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 */
 void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 {
+	int	exit_code;
+
 	connect_pipes(cmd, prev_read_fd);
 	handle_redir_fds(cmd);
 	close_all_pipes(data->cmd_list);
+	if (cmd->args && is_builtin(cmd->args[0]))
+	{
+		exit_code = dispatch_builtin(cmd, data);
+		ft_free_array(data->env);
+		ft_lstclear(&data->env_list, free);
+		exit(exit_code);
+	}
 	do_execve(cmd, data);
 }

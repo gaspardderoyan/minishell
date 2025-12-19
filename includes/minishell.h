@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/18 18:56:24 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/19 17:48:17 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 # include <limits.h>
 # define SUCCESS 0
 # define FAIL 1
+
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 /* -------------------------------------------------------
    1. REDIRECTION TYPES
@@ -83,38 +87,35 @@ typedef struct s_data
 	char	*line;
 } t_data;
 
+/******    builtin_cd.c    ******/
+int		builtin_cd(char **args, t_data *data);
+
+/******   builtin_exit.c    ******/
+int		builtin_exit(char **args, t_data *data);
+
+/******    builtin_export.c    ******/
+int		builtin_export(char **args, t_data *data);
+
+/******    builtin_rest.c   ******/
+int		builtin_echo(char **args);
+int		builtin_pwd(void);
+int		builtin_env(t_list *env);
+int		builtin_unset(char **args, t_data *data);
+
 /******    builtins_dispatch.c   ******/
 int		is_builtin(char *cmd);
 int		is_modifier_builtin(char *cmd);
 int		dispatch_builtin(t_cmd *cmd, t_data *data);
 
-/******    exec_builtins.c    ******/
+/******    builtins_exec.c    ******/
 int		apply_redirections(t_cmd *cmd);
 void	execute_builtin_in_parent(t_cmd *cmd, t_data *data);
 
-/******    ft_cd.c    ******/
-int		builtin_cd(char **args, t_data *data);
-
-/******   ft_exit.c    ******/
-int		builtin_exit(char **args, t_data *data);
-
-/******    ft_export_unset.c    ******/
-int		builtin_export(char **args, t_data *data);
-int		builtin_unset(char **args, t_data *data);
-
-/******    ft_simple_cmd.c   ******/
-int		builtin_echo(char **args);
-int		builtin_pwd(void);
-int		builtin_env(t_list *env);
-
-/******    child.c   ******/
-void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
-
-/******    cleanup_utils.c    ******/
-void	close_all_pipes(t_cmd *cmd_list);
-void	close_cmd_fds(t_cmd *cmd);
+/******    sort_export.c    ******/
+int		print_sorted_env(t_data *data);
 
 /******    env_utils.c    ******/
+char	*get_env_value(t_list *env_list, char *key);
 t_list	*find_env_node(t_list *env, char *key);
 int		update_or_add_env(t_list **env, char *key, char *value);
 void	remove_env_node(t_list **env, char *key);
@@ -122,6 +123,13 @@ void	remove_env_node(t_list **env, char *key);
 /******    env.c    ******/
 t_list	*init_env_list(char **env);
 char	**env_list_to_array(t_list *env_list);
+
+/******    child.c   ******/
+void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
+
+/******    cleanup_utils.c    ******/
+void	close_all_pipes(t_cmd *cmd_list);
+void	close_cmd_fds(t_cmd *cmd);
 
 /******    path.c   ******/
 char	*get_full_path(char *cmd, t_list *env_list);

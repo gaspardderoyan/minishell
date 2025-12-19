@@ -1,38 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:05:07 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/18 19:32:41 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/19 17:48:41 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*
-** Gets the value of an environment variable from the list.
-** @param env_list: The environment linked list.
-** @param key: The variable name to search for.
-** @return: Pointer to the value (after '='), or NULL if not found.
-*/
-static char	*get_env_value(t_list *env_list, char *key)
-{
-	size_t	len;
-	char	*content;
-
-	len = ft_strlen(key);
-	while (env_list)
-	{
-		content = (char *)env_list->content;
-		if (ft_strncmp(content, key, len) == 0 && content[len] == '=')
-			return (content + len + 1);
-		env_list = env_list->next;
-	}
-	return (NULL);
-}
 
 /*
 ** Gets the target path for cd command.

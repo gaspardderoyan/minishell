@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_simple_cmd.c                                    :+:      :+:    :+:   */
+/*   builtin_rest.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 18:14:45 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/17 18:50:01 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:48:09 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,19 @@ int	builtin_env(t_list *env)
 		if (ft_strchr((char *)env->content, '='))
 			ft_putendl_fd((char *)env->content, STDOUT_FILENO);
 		env = env->next;
+	}
+	return (0);
+}
+
+int	builtin_unset(char **args, t_data *data)
+{
+	int	i;
+
+	i = 1;
+	while (args[i])
+	{
+		remove_env_node(&data->env_list, args[i]);
+		i++;
 	}
 	return (0);
 }

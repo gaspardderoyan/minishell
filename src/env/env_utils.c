@@ -6,11 +6,27 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 19:49:40 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/17 20:30:08 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:48:49 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*get_env_value(t_list *env_list, char *key)
+{
+	size_t	len;
+	char	*content;
+
+	len = ft_strlen(key);
+	while (env_list)
+	{
+		content = (char *)env_list->content;
+		if (ft_strncmp(content, key, len) == 0 && content[len] == '=')
+			return (content + len + 1);
+		env_list = env_list->next;
+	}
+	return (NULL);
+}
 
 t_list	*find_env_node(t_list *env, char *key)
 {
