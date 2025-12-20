@@ -180,7 +180,7 @@ char	**ft_append_str(char **arr, char *str);
 /* errors.c */
 void	*ms_error(char *err_msg, void *to_free);
 void	synterr(t_token *token, char c, bool nl, t_data *data);
-void	eoferr(t_state state);
+void	eoferr(t_state state, t_data *data);
 
 /* check_syntax.c */
 int	check_syntax(t_token *tokens, t_data *data);

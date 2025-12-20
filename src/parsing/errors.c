@@ -44,12 +44,13 @@ void	synterr(t_token *token, char c, bool nl, t_data *data)
 	ft_dprintf(fn, "minishell: syntax error near unexpected token `%c'\n", c);
 }
 
-void	eoferr(t_state state)
+void	eoferr(t_state state, t_data data)
 {
 	int		fn;
 	char	c;
 
 	fn = STDERR_FILENO;
+	data.last_exit_code = 2;
 	c = '\'';
 	if (state == STATE_DQUOTES)
 		c = '"';

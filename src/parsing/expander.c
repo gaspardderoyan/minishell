@@ -104,7 +104,7 @@ char	*expand_token(char *t, t_data *d)
 		i++;
 	}
 	if (state != STATE_IDLE)
-		return (eoferr(state), free(res), NULL);
+		return (eoferr(state, d), free(res), NULL);
 	return (res);
 }
 
