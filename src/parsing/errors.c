@@ -23,7 +23,8 @@ void	*ms_error(char *err_msg, void *to_free)
 }
 
 /*
-** prints to STDERR the 'minishell: syntax error near unexpected token X' message
+** prints to STDERR the 'minishell: syntax error near
+** unexpected token `X' message
 ** where X will be 'newline' if nl is TRUE
 ** else if c != 0, X = c
 ** else c = token->value[0]
@@ -36,7 +37,8 @@ void	synterr(t_token *token, char c, bool nl, t_data *data)
 	data->last_exit_code = 2;
 	if (nl)
 	{
-		ft_dprintf(fn, "minishell: syntax error near unexpected token `newline'\n");
+		ft_dprintf(fn, "minishell: syntax error ");
+		ft_dprintf(fn, "near unexpected token `newline'\n");
 		return ;
 	}
 	if (!c)
@@ -44,13 +46,13 @@ void	synterr(t_token *token, char c, bool nl, t_data *data)
 	ft_dprintf(fn, "minishell: syntax error near unexpected token `%c'\n", c);
 }
 
-void	eoferr(t_state state, t_data data)
+void	eoferr(t_state state, t_data *data)
 {
 	int		fn;
 	char	c;
 
 	fn = STDERR_FILENO;
-	data.last_exit_code = 2;
+	data->last_exit_code = 2;
 	c = '\'';
 	if (state == STATE_DQUOTES)
 		c = '"';
