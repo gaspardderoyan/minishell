@@ -14,8 +14,10 @@
 
 volatile sig_atomic_t	g_status;
 
-void	init_data(t_data *data, char **env)
+void	init_data(t_data *data, char **env, int *ac, char ***av)
 {
+	(void)ac;
+	(void)av;
 	data->cmd_list = NULL;
 	data->tokens = NULL;
 	data->env = env;
@@ -23,6 +25,7 @@ void	init_data(t_data *data, char **env)
 	data->last_exit_code = 0;
 	data->line = NULL;
 	g_status = 0;
+	set_signal_action();
 }
 
 void	free_cycle(t_data *data)
@@ -56,10 +59,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_data	data;
 
-	init_data(&data, env);
-	(void)ac;
-	(void)av;
-	set_signal_action();
+	init_data(&data, env, &ac, &av);
 	while (1)
 	{
 		g_status = 0;
