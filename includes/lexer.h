@@ -12,6 +12,7 @@
 
 #ifndef LEXER_H
 # define LEXER_H
+struct s_data;
 # include <stdbool.h>
 
 typedef enum e_state
@@ -57,7 +58,7 @@ char	*char_append(char *s, char c);
 char	*get_env_value_tab(char *var, char **env);
 
 int	lexer(char *line, t_token **tokens);
-int	expander(t_token *tokens, char **env);
+int	expander(t_token *tokens, struct s_data *data);
 
 /* parser_utils.c */
 int		ft_arrlen(char **arr);
