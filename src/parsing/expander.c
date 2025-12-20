@@ -80,7 +80,7 @@ static int	is_quote_toggle(char c, t_state *state)
 	return (0);
 }
 
-char	*expand_token(char *t, t_data *d)
+char	*expand_token(char *tkn, t_data *d)
 {
 	char	*res;
 	int		i;
@@ -91,16 +91,16 @@ char	*expand_token(char *t, t_data *d)
 	res = ft_strdup("");
 	if (!res)
 		return (NULL);
-	while (t[i])
+	while (tkn[i])
 	{
-		if (is_quote_toggle(t[i], &state))
+		if (is_quote_toggle(tkn[i], &state))
 			;
-		else if (t[i] == '$' && state != STATE_QUOTES)
-			res = handle_expansion(res, t, &i, d);
-		else if (ft_strchr("\\;&", t[i]))
-			return (synterr(NULL, *ft_strchr("\\;&", t[i]), 0, d), free(res), NULL);
+		else if (tkn[i] == '$' && state != STATE_QUOTES)
+			res = handle_expansion(res, tkn, &i, d);
+		else if (ft_strchr("\\;&", tkn[i]))
+			return (synterr(NULL, tkn[i], 0, d), free(res), NULL);
 		else
-			res = char_append(res, t[i]);
+			res = char_append(res, tkn[i]);
 		i++;
 	}
 	if (state != STATE_IDLE)
