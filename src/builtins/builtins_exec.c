@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:40:37 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 16:51:49 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/20 19:25:09 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ int	apply_redirections(t_cmd *cmd)
 			flags = O_WRONLY | O_CREAT | O_TRUNC;
 			ret = setup_redir(cur->filename, flags, STDOUT_FILENO);
 		}
-	else
-	{
-		flags = O_WRONLY | O_CREAT | O_APPEND;
-		ret = setup_redir(cur->filename, flags, STDOUT_FILENO);
-	}
+		else
+		{
+			flags = O_WRONLY | O_CREAT | O_APPEND;
+			ret = setup_redir(cur->filename, flags, STDOUT_FILENO);
+		}
 		if (ret == -1)
 			return (-1);
 		cur = cur->next;
