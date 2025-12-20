@@ -12,10 +12,11 @@
 
 #include "minishell.h"
 
-static char *get_var_val(char *token, int i, int len, t_data *data)
+static char	*get_var_val(char *token, int i, int len, t_data *data)
 {
-	char *var_name;
-	char *var_val;
+	char	*var_name;
+	char	*var_val;
+
 	var_name = ft_substr(token, i + 1, len);
 	if (!var_name)
 		return (NULL);
@@ -26,6 +27,7 @@ static char *get_var_val(char *token, int i, int len, t_data *data)
 	free(var_name);
 	return (var_val);
 }
+
 /*
 ** Helper: Handles variable expansion.
 ** Returns updated string and advances index i past the variable name.
