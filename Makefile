@@ -21,12 +21,20 @@ SRC_FILES = main.c \
 			parsing/parser_utils.c \
 			parsing/lexer_utils.c \
 			parsing/utils_to_delete.c \
+			env/env.c \
+			env/env_utils.c \
 			exec/child.c \
 			exec/cleanup_utils.c \
-			exec/env.c \
 			exec/path.c \
 			exec/pipe_utils.c \
-			exec/pipeline.c
+			exec/pipeline.c \
+			builtins/builtin_cd.c \
+			builtins/builtin_exit.c \
+			builtins/builtin_export.c \
+			builtins/builtin_rest.c \
+			builtins/builtins_dispatch.c \
+			builtins/builtins_exec.c \
+			builtins/sort_export.c
 
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:56:49 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/16 18:36:56 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:49:36 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,25 @@ static int	parent_routine(t_cmd *cmd, int prev_read_fd)
 }
 
 /*
+** Checks if command is a single builtin that must run in parent.
+** Only applies to cd, export, unset, exit when alone (no pipe).
+** @param cmd: The command to check.
+** @param data: Global data structure.
+** @return: 1 if handled in parent, 0 otherwise.
+*/
+static int	exec_solo_builtin(t_cmd *cmd, t_data *data)
+{
+	if (!cmd || !cmd->args || !cmd->args[0])
+		return (0);
+	if (cmd->next != NULL)
+		return (0);
+	if (!is_modifier_builtin(cmd->args[0]))
+		return (0);
+	execute_builtin_in_parent(cmd, data);
+	return (1);
+}
+
+/*
 ** Main pipeline execution function.
 ** Iterates through commands, creates pipes, forks children, and waits.
 ** @param data: Global data structure containing the command list.
@@ -69,8 +88,8 @@ void	execute_pipeline(t_data *data)
 	int		prev_fd;
 
 	cmd = data->cmd_list;
-	//if (exec_solo_builtin(cmd, data))
-	//	return ;
+	if (exec_solo_builtin(cmd, data))
+		return ;
 	prev_fd = -1;
 	while (cmd)
 	{

@@ -6,33 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 12:34:07 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/16 20:55:10 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/19 14:13:02 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*
-** Searches for the value of an environment variable in the list.
-** @param env_list: The environment linked list.
-** @param key: The variable name to search for (e.g., "PATH").
-** @return: A pointer to the value (after '='), or NULL if not found.
-*/
-static char	*get_env_value(t_list *env_list, char *key)
-{
-	size_t	len;
-	char	*content;
-
-	len = ft_strlen(key);
-	while (env_list)
-	{
-		content = (char *)env_list->content;
-		if (ft_strncmp(content, key, len) == 0 && content[len] == '=')
-			return (content + len + 1);
-		env_list = env_list->next;
-	}
-	return (NULL);
-}
 
 /*
 ** Iterates through PATH directories searching for a matching executable.
