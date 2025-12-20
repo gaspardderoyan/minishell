@@ -20,6 +20,9 @@ SRC_FILES = main.c \
 			parsing/parser.c \
 			parsing/parser_utils.c \
 			parsing/lexer_utils.c \
+			parsing/errors.c \
+			parsing/check_syntax.c \
+			parsing/signals.c \
 			parsing/utils_to_delete.c \
 			env/env.c \
 			env/env_utils.c \

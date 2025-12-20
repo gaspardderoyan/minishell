@@ -18,7 +18,8 @@ SRCS_LIBFT =	ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c \
 				ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
 				ft_lstclear.c ft_lstiter.c ft_lstmap.c
 
-SRCS_PRINTF = 	ft_printf.c print_cs.c print_nbr.c print_ptr.c
+SRCS_PRINTF = 	ft_printf.c print_cs.c print_nbr.c print_ptr.c \
+				ft_dprintf.c dprint_cs.c dprint_nbr.c dprint_ptr.c
 
 SRCS_GNL = 		get_next_line.c get_next_line_utils.c \
 				get_next_line_bonus.c get_next_line_utils_bonus.c

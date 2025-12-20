@@ -6,21 +6,25 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 17:01:21 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/18 17:41:22 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <readline/readline.h>
 
-void	init_data(t_data *data, char **env)
+volatile sig_atomic_t	g_status;
+
+void	init_data(t_data *data, char **env, int *ac, char ***av)
 {
+	(void)ac;
+	(void)av;
 	data->cmd_list = NULL;
 	data->tokens = NULL;
 	data->env = NULL;
 	data->env_list = init_env_list(env);
 	data->last_exit_code = 0;
 	data->line = NULL;
+	g_status = 0;
+	set_signal_action();
 }
 
 void	free_cycle(t_data *data)
@@ -40,7 +44,9 @@ int	process_line(t_data *data)
 {
 	if (lexer(data->line, &data->tokens) == FAIL)
 		return (FAIL);
-	if (expander(data->tokens, data->env) == FAIL)
+	if (expander(data->tokens, data) == FAIL)
+		return (FAIL);
+	if (check_syntax(data->tokens, data) == FAIL)
 		return (FAIL);
 	data->cmd_list = parser(data->tokens);
 	if (!data->cmd_list)
@@ -52,19 +58,23 @@ int	main(int ac, char **av, char **env)
 {
 	t_data	data;
 
-	init_data(&data, env);
-	(void)ac;
-	(void)av;
+	init_data(&data, env, &ac, &av);
 	while (1)
 	{
+		g_status = 0;
 		data.line = readline("minishell$ ");
+		if (g_status == SIGINT)
+			data.last_exit_code = 130;
 		if (!data.line)
+		{
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
 			break ;
+		}
 		if (data.line[0])
 		{
 			add_history(data.line);
-			process_line(&data);
-			execute_pipeline(&data);
+			if (process_line(&data) == SUCCESS)
+				execute_pipeline(&data);
 		}
 		free_cycle(&data);
 	}

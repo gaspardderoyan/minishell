@@ -92,6 +92,17 @@ int		print_uint(unsigned int nb);
 int		print_hexa(unsigned int nb, int uppercase);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*            Fonctions ft_dprintf               */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+int		ft_dprintf(int fd, const char *format, ...);
+int		dprint_char(char c, int fd);
+int		dprint_str(char *str, int fd);
+int		dprint_ptr(void *ptr, int fd);
+int		dprint_decimal(int nb, int fd);
+int		dprint_uint(unsigned int nb, int fd);
+int		dprint_hexa(unsigned int nb, int uppercase, int fd);
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*           Fonctions get_next_line             */
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 # ifndef BUFFER_SIZE

@@ -13,6 +13,26 @@
 #include "../../includes/minishell.h"
 
 /*
+** Handles the exit status of a terminated child process.
+** Sets the exit code and prints signal messages if needed.
+** @param data: Global data structure to store exit code.
+** @param status: The status returned by waitpid.
+*/
+static void	handle_child_status(t_data *data, int status)
+{
+	if (WIFEXITED(status))
+		data->last_exit_code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		data->last_exit_code = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)\n", 1);
+		if (WTERMSIG(status) == SIGINT)
+			ft_putstr_fd("\n", 1);
+	}
+}
+
+/*
 ** Waits for all child processes to terminate.
 ** Stores the exit code of the last command in data->last_exit_code.
 ** @param data: Global data structure containing the command list.
@@ -23,18 +43,14 @@ static void	wait_all_children(t_data *data)
 	int		status;
 
 	cmd = data->cmd_list;
+	ignore_signals();
 	while (cmd)
 	{
 		if (cmd->pid != -1)
 		{
 			waitpid(cmd->pid, &status, 0);
 			if (cmd->next == NULL)
-			{
-				if (WIFEXITED(status))
-					data->last_exit_code = WEXITSTATUS(status);
-				else if (WIFSIGNALED(status))
-					data->last_exit_code = 128 + WTERMSIG(status);
-			}
+				handle_child_status(data, status);
 		}
 		cmd = cmd->next;
 	}
@@ -109,4 +125,5 @@ void	execute_pipeline(t_data *data)
 		cmd = cmd->next;
 	}
 	wait_all_children(data);
+	set_signal_action();
 }
