@@ -106,6 +106,10 @@ void	connect_pipes(t_cmd *cmd, int prev_pipe_read);
 /******    pipeline.c    ******/
 void	execute_pipeline(t_data *data);
 
+/******    signals.c    ******/
+void	ignore_signals(void);
+void	set_signal_action(void);
+
 t_cmd		*cmd_new(void);
 t_cmd		*cmd_last(t_cmd *lst);
 void		cmd_add_back(t_cmd **lst, t_cmd *new);

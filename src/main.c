@@ -14,34 +14,6 @@
 
 volatile sig_atomic_t	g_status;
 
-void	signal_handler(int signal)
-{
-	g_status = signal;
-	if (signal == SIGINT)
-	{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-
-void	set_signal_action(void)
-{
-	struct sigaction	act;
-
-	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = &signal_handler;
-	sigemptyset(&act.sa_mask);
-	sigaction(SIGINT, &act, NULL);
-	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = SIG_IGN;
-	sigemptyset(&act.sa_mask);
-	act.sa_flags = 0;
-	sigaction(SIGQUIT, &act, NULL);
-}
-
-
 void	init_data(t_data *data, char **env)
 {
 	data->cmd_list = NULL;
@@ -95,7 +67,10 @@ int	main(int ac, char **av, char **env)
 		if (g_status == SIGINT)
 			data.last_exit_code = 130;
 		if (!data.line)
+		{
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
 			break ;
+		}
 		if (data.line[0])
 		{
 			add_history(data.line);

@@ -69,10 +69,21 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 ** @param data: Global data structure.
 ** @param prev_read_fd: Read fd from previous pipe (-1 if first command).
 */
+static void	reset_signals_default(void)
+{
+	struct sigaction	sa;
+
+	ft_memset(&sa, 0, sizeof(sa));
+	sa.sa_handler = SIG_DFL;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
+}
+
 void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	reset_signals_default();
 	connect_pipes(cmd, prev_read_fd);
 	handle_redir_fds(cmd);
 	close_all_pipes(data->cmd_list);

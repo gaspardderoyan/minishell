@@ -69,9 +69,4 @@ void	*ms_error(char *err_msg, void *to_free);
 /* check_syntax.c */
 int	check_syntax(t_token *tokens);
 
-/* signals.c */
-void	signal_handler(int signal);
-void	set_signal_action(void);
-void	reset_signals(void);
-
 #endif
