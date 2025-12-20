@@ -13,7 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "lexer.h"
 # include "libft.h"
 # include <fcntl.h>
 # include <readline/history.h>
@@ -28,6 +27,30 @@
 # define SUCCESS 0
 # define FAIL 1
 
+typedef enum e_state
+{
+	STATE_IDLE,
+	STATE_DQUOTES,
+	STATE_QUOTES
+}	t_state;
+
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_INPUT,
+	TOKEN_OUTPUT,
+	TOKEN_HEREDOC,
+	TOKEN_APPEND,
+}	t_token_type;
+
+typedef struct s_token
+{
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+	struct s_token	*prev;
+}	t_token;
 /* -------------------------------------------------------
    1. REDIRECTION TYPES
    Used to identify what kind of redirection a node is.
@@ -122,12 +145,44 @@ void		redir_add_back(t_redir **lst, t_redir *new);
 void		redir_clear(t_redir **lst);
 t_redir		*create_redir(t_token *token, char *filename);
 
-/*
- * Utils to delete
- * */
+/* utils_to_delete.c */
 void		print_cmds(t_cmd *cmds);
 void		print_tokens(t_token *tokens);
 
+/* parser.c */
 t_cmd		*parser(t_token *tokens);
+
+/* token_utils.c */
+t_token	*token_new(char *value, int type);
+t_token	*token_last(t_token *token);
+void	token_add_back(t_token **lst, t_token *new);
+void	token_add_front(t_token **lst, t_token *new);
+int		token_size(t_token *lst);
+void	token_clear(t_token **lst);
+
+/* lexer_utils.c */
+bool	is_whitespace(char c);
+bool	is_operator(char c);
+void	skip_whitespace(char *line, int *i);
+
+/* expander_utils.c */
+int		get_var_len(char *str);
+char	*char_append(char *s, char c);
+char	*get_env_value_tab(char *var, char **env);
+
+int	lexer(char *line, t_token **tokens);
+int	expander(t_token *tokens, struct s_data *data);
+
+/* parser_utils.c */
+int		ft_arrlen(char **arr);
+char	**ft_append_str(char **arr, char *str);
+
+/* errors.c */
+void	*ms_error(char *err_msg, void *to_free);
+void	synterr(t_token *token, char c, bool nl, t_data *data);
+void	eoferr(t_state state);
+
+/* check_syntax.c */
+int	check_syntax(t_token *tokens, t_data *data);
 
 #endif

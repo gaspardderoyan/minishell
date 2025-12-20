@@ -80,7 +80,7 @@ static int	is_quote_toggle(char c, t_state *state)
 	return (0);
 }
 
-char	*expand_token(char *token, t_data *data)
+char	*expand_token(char *t, t_data *d)
 {
 	char	*res;
 	int		i;
@@ -91,20 +91,20 @@ char	*expand_token(char *token, t_data *data)
 	res = ft_strdup("");
 	if (!res)
 		return (NULL);
-	while (token[i])
+	while (t[i])
 	{
-		if (is_quote_toggle(token[i], &state))
+		if (is_quote_toggle(t[i], &state))
 			;
-		else if (token[i] == '$' && state != STATE_QUOTES)
-			res = handle_expansion(res, token, &i, data);
-		else if (ft_strchr("\\;&", token[i]))
-			return (ms_error("unexpected token", res));
+		else if (t[i] == '$' && state != STATE_QUOTES)
+			res = handle_expansion(res, t, &i, d);
+		else if (ft_strchr("\\;&", t[i]))
+			return (synterr(NULL, *ft_strchr("\\;&", t[i]), 0, d), free(res), NULL);
 		else
-			res = char_append(res, token[i]);
+			res = char_append(res, t[i]);
 		i++;
 	}
 	if (state != STATE_IDLE)
-		return (ms_error("unexpected EOF", res));
+		return (eoferr(state), free(res), NULL);
 	return (res);
 }
 

@@ -47,7 +47,7 @@ int	process_line(t_data *data)
 		return (FAIL);
 	if (expander(data->tokens, data) == FAIL)
 		return (FAIL);
-	if (check_syntax(data->tokens) == FAIL)
+	if (check_syntax(data->tokens, data) == FAIL)
 		return (FAIL);
 	data->cmd_list = parser(data->tokens);
 	if (!data->cmd_list)
