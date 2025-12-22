@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:50:13 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 16:49:18 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:13 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Closes all pipe file descriptors in the command list.
@@ -54,5 +54,22 @@ void	close_cmd_fds(t_cmd *cmd)
 	{
 		close(cmd->fd_out);
 		cmd->fd_out = -1;
+	}
+}
+
+void	cleanup_heredocs(t_data *data)
+{
+	t_cmd	*cmd;
+
+	cmd = data->cmd_list;
+	while (cmd)
+	{
+		if (cmd->heredoc_file)
+		{
+			unlink(cmd->heredoc_file);
+			free(cmd->heredoc_file);
+			cmd->heredoc_file = NULL;
+		}
+		cmd = cmd->next;
 	}
 }

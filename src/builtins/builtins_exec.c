@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:40:37 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/20 19:25:09 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:34 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 static int	setup_redir(char *file, int flags, int target_fd)
 {
@@ -68,27 +68,26 @@ int	apply_redirections(t_cmd *cmd)
 */
 void	execute_builtin_in_parent(t_cmd *cmd, t_data *data)
 {
-	int	saved_stdin;
-	int	saved_stdout;
-
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	if (saved_stdin == -1 || saved_stdout == -1)
+	data->stdin_backup = dup(STDIN_FILENO);
+	data->stdout_backup = dup(STDOUT_FILENO);
+	if (data->stdin_backup == -1 || data->stdout_backup == -1)
 	{
 		perror("minishell: dup");
 		data->last_exit_code = 1;
-		if (saved_stdin != -1)
-			close(saved_stdin);
-		if (saved_stdout != -1)
-			close(saved_stdout);
+		if (data->stdin_backup != -1)
+			close(data->stdin_backup);
+		if (data->stdout_backup != -1)
+			close(data->stdout_backup);
 		return ;
 	}
 	if (apply_redirections(cmd) == -1)
 		data->last_exit_code = 1;
 	else
 		data->last_exit_code = dispatch_builtin(cmd, data);
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+	dup2(data->stdin_backup, STDIN_FILENO);
+	dup2(data->stdout_backup, STDOUT_FILENO);
+	close(data->stdin_backup);
+	close(data->stdout_backup);
+    data->stdin_backup = -1;
+    data->stdout_backup = -1;
 }

@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 18:12:46 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 16:48:56 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:23 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Creates a new node from an env string and adds it to the list.

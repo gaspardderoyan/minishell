@@ -6,11 +6,13 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
+/*   Updated: 2025/12/22 17:21:24 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
 # include "libft.h"
 # include <fcntl.h>
 # include <readline/history.h>
@@ -22,15 +24,13 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <limits.h>
+# include <signal.h>
 # define SUCCESS 0
 # define FAIL 1
 
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
 # endif
-# include <signal.h>
-# define SUCCESS 0
-# define FAIL 1
 
 typedef enum e_state
 {
@@ -110,6 +110,8 @@ typedef struct s_data
     int		last_exit_code; // Le code de retour de la dernière commande ($?)
 	t_token *tokens;    // The tokens lists
 	char	*line;
+	int		stdin_backup;
+	int		stdout_backup;
 } t_data;
 
 /******    builtin_cd.c    ******/
@@ -155,6 +157,10 @@ void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 /******    cleanup_utils.c    ******/
 void	close_all_pipes(t_cmd *cmd_list);
 void	close_cmd_fds(t_cmd *cmd);
+void	cleanup_heredocs(t_data *data);
+
+/******    heredoc.c   ******/
+int		check_heredoc(t_data *data);
 
 /******    path.c   ******/
 char	*get_full_path(char *cmd, t_list *env_list);

@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 12:34:07 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 14:13:02 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:08 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Iterates through PATH directories searching for a matching executable.

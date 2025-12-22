@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:43:41 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 16:49:26 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:06 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Creates a pipe for communication between the current and next command.
@@ -35,7 +35,7 @@ int	set_pipe(t_cmd *cmd)
 ** @param redir: The redirection structure containing type and filename.
 ** @return: The file descriptor, or -1 on error.
 */
-static int	open_redir_file(t_redir *redir)
+static int	open_redir_file(t_cmd *cmd, t_redir *redir)
 {
 	int	fd;
 
@@ -43,7 +43,10 @@ static int	open_redir_file(t_redir *redir)
 	if (redir->type == REDIR_IN)
 		fd = open(redir->filename, O_RDONLY);
 	else if (redir->type == REDIR_HEREDOC)
-		fd = open(redir->filename, O_RDONLY);
+	{
+		if (cmd->heredoc_file)
+			fd = open(cmd->heredoc_file, O_RDONLY);
+	}
 	else if (redir->type == REDIR_OUT)
 		fd = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (redir->type == REDIR_APPEND)
@@ -86,7 +89,7 @@ void	handle_redir_fds(t_cmd *cmd)
 	tmp = cmd->redirs;
 	while (tmp)
 	{
-		fd = open_redir_file(tmp);
+		fd = open_redir_file(cmd, tmp);
 		if (fd == -1)
 		{
 			ft_putstr_fd("minishell: ", STDERR_FILENO);

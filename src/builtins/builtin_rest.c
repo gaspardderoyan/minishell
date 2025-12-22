@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 18:14:45 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 16:48:09 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:44 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Checks if arg is a valid -n flag (handles -n, -nn, -nnn, etc.).

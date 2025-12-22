@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:56:49 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/20 19:24:25 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:01 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Handles the exit status of a terminated child process.
@@ -103,9 +103,14 @@ void	execute_pipeline(t_data *data)
 	t_cmd	*cmd;
 	int		prev_fd;
 
+	if (check_heredoc(data) != 0)
+		return ;
 	cmd = data->cmd_list;
 	if (exec_solo_builtin(cmd, data))
+	{
+		cleanup_heredocs(data);
 		return ;
+	}
 	prev_fd = -1;
 	while (cmd)
 	{
@@ -126,4 +131,5 @@ void	execute_pipeline(t_data *data)
 	}
 	wait_all_children(data);
 	set_signal_action();
+	cleanup_heredocs(data);
 }

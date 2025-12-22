@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 18:03:06 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/18 18:03:07 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:05:40 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Prints an error message and exits the child process cleanly.

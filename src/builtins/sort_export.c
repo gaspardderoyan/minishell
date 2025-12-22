@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 15:55:41 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 16:53:57 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:41 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 static int	ft_strcmp(const char *s1, const char *s2)
 {

@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:18:53 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 18:14:44 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:50 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Checks if a string contains only digits (with optional leading +/-).
@@ -137,5 +137,9 @@ int	builtin_exit(char **args, t_data *data)
 	if (data->line)
 		free(data->line);
 	rl_clear_history();
+	if (data->stdin_backup != -1)
+		close(data->stdin_backup);
+	if (data->stdout_backup != -1)
+		close(data->stdout_backup);
 	exit((unsigned char)exit_code);
 }

@@ -28,6 +28,7 @@ SRC_FILES = main.c \
 			env/env_utils.c \
 			exec/child.c \
 			exec/cleanup_utils.c \
+			exec/heredoc.c \
 			exec/path.c \
 			exec/pipe_utils.c \
 			exec/pipeline.c \
@@ -79,4 +80,3 @@ fclean: clean
 
 # Rebuild the project
 re: fclean all
-

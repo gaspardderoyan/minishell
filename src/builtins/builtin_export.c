@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 19:12:51 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 16:48:20 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:46 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 static int	is_valid_env_key(char *key)
 {

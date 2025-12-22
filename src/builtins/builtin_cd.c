@@ -6,11 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:05:07 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/19 17:48:41 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:03:52 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 ** Gets the target path for cd command.
