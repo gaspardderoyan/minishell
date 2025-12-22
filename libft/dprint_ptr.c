@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 12:00:00 by opencode          #+#    #+#             */
-/*   Updated: 2025/12/20 12:00:00 by opencode         ###   ########.fr       */
+/*   Updated: 2025/12/22 14:01:02 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static	int	dget_address(unsigned long nb, int fd)
 }
 
 /**
- * @brief      Prints a pointer address in hexadecimal format to a file descriptor.
+ * @brief	Prints a pointer address in hexadecimal format to a file descriptor
  * @param ptr  The pointer to print (if NULL, prints "(nil)").
  * @param fd   The file descriptor.
  * @return     The number of characters printed.
