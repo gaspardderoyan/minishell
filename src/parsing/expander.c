@@ -6,20 +6,35 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 16:09:00 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/16 16:18:09 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/17 18:29:54 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static char	*get_var_val(char *token, int i, int len, t_data *data)
+{
+	char	*var_name;
+	char	*var_val;
+
+	var_name = ft_substr(token, i + 1, len);
+	if (!var_name)
+		return (NULL);
+	if (ft_strncmp(var_name, "?", 2) == 0)
+		var_val = ft_itoa(data->last_exit_code);
+	else
+		var_val = get_env_value_tab(var_name, data->env);
+	free(var_name);
+	return (var_val);
+}
+
 /*
 ** Helper: Handles variable expansion.
 ** Returns updated string and advances index i past the variable name.
 */
-static char	*handle_expansion(char *res, char *token, int *i, char **env)
+static char	*handle_expansion(char *res, char *token, int *i, t_data *data)
 {
-	char	*var_name;
-	char	*var_val;
+	char	*var;
 	char	*temp;
 	int		len;
 
@@ -31,18 +46,13 @@ static char	*handle_expansion(char *res, char *token, int *i, char **env)
 			return (NULL);
 		return (res);
 	}
-	var_name = ft_substr(token, *i + 1, len);
-	if (!var_name)
-		return (NULL);
-	var_val = get_env_value_tab(var_name, env);
-	if (!var_val)
-		return (free(var_name), NULL);
+	var = get_var_val(token, *i, len, data);
 	temp = res;
-	res = ft_strjoin(res, var_val);
+	res = ft_strjoin(res, var);
 	if (!res)
-		return (free(temp), free(var_val), free(var_name), NULL);
+		return (free(temp), free(var), NULL);
 	*i += len;
-	return (free(temp), free(var_val), free(var_name), res);
+	return (free(temp), free(var), res);
 }
 
 /*
@@ -70,7 +80,7 @@ static int	is_quote_toggle(char c, t_state *state)
 	return (0);
 }
 
-char	*expand_token(char *token, char **env)
+char	*expand_token(char *tkn, t_data *d)
 {
 	char	*res;
 	int		i;
@@ -81,20 +91,24 @@ char	*expand_token(char *token, char **env)
 	res = ft_strdup("");
 	if (!res)
 		return (NULL);
-	while (token[i])
+	while (tkn[i])
 	{
-		if (is_quote_toggle(token[i], &state))
+		if (is_quote_toggle(tkn[i], &state))
 			;
-		else if (token[i] == '$' && state != STATE_QUOTES)
-			res = handle_expansion(res, token, &i, env);
+		else if (tkn[i] == '$' && state != STATE_QUOTES)
+			res = handle_expansion(res, tkn, &i, d);
+		else if (ft_strchr("\\;&", tkn[i]))
+			return (synterr(NULL, tkn[i], 0, d), free(res), NULL);
 		else
-			res = char_append(res, token[i]);
+			res = char_append(res, tkn[i]);
 		i++;
 	}
+	if (state != STATE_IDLE)
+		return (eoferr(state, d), free(res), NULL);
 	return (res);
 }
 
-int	expander(t_token *tokens, char **env)
+int	expander(t_token *tokens, t_data *data)
 {
 	char	*new;
 
@@ -102,8 +116,9 @@ int	expander(t_token *tokens, char **env)
 	{
 		if (tokens->type == TOKEN_WORD)
 		{
-			new = expand_token(tokens->value, env);
+			new = expand_token(tokens->value, data);
 			free(tokens->value);
+			tokens->value = NULL;
 			if (!new)
 				return (FAIL);
 			tokens->value = new;
