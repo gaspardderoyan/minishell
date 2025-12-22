@@ -6,7 +6,7 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 19:24:10 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/20 19:24:11 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:41:09 by gaspardderoya    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	init_data(t_data *data, char **env, int *ac, char ***av)
 	(void)av;
 	data->cmd_list = NULL;
 	data->tokens = NULL;
-	data->env = NULL;
+	data->env = env;
 	data->env_list = init_env_list(env);
 	data->last_exit_code = 0;
 	data->line = NULL;
