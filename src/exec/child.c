@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 18:03:06 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/22 18:05:40 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/23 12:35:35 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 
 /*
 ** Resets signal handlers to default behavior (SIG_DFL).
-** Called in child processes to restore normal signal handling for SIGINT/SIGQUIT.
+** Called in child processes to restore normal signal handling 
+** for SIGINT/SIGQUIT.
 */
 static void	reset_signals_default(void)
 {

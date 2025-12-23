@@ -32,6 +32,7 @@ SRC_FILES = main.c \
 			exec/path.c \
 			exec/pipe_utils.c \
 			exec/pipeline.c \
+			exec/wait.c \
 			builtins/builtin_cd.c \
 			builtins/builtin_exit.c \
 			builtins/builtin_export.c \
