@@ -45,6 +45,7 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 	if (!cmd->args || !cmd->args[0])
 	{
 		ft_free_array(data->env);
+		data->env = NULL;
 		ft_lstclear(&data->env_list, free);
 		exit(0);
 	}
@@ -94,6 +95,7 @@ void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 	{
 		exit_code = dispatch_builtin(cmd, data);
 		ft_free_array(data->env);
+		data->env = NULL;
 		ft_lstclear(&data->env_list, free);
 		exit(exit_code);
 	}
