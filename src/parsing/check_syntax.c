@@ -6,7 +6,7 @@
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 17:52:39 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/17 19:13:08 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/23 00:50:24 by gaspardderoya    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static bool	is_redir(t_token_type type)
 
 int	check_syntax(t_token *tokens, t_data *data)
 {
+	if (!tokens)
+		return (SUCCESS);
 	if (tokens->type == TOKEN_PIPE || token_last(tokens)->type == TOKEN_PIPE)
 		return (synterr(tokens->next, '|', 0, data), FAIL);
 	while (tokens)

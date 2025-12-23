@@ -130,12 +130,12 @@ int	builtin_exit(char **args, t_data *data)
 	else
 		exit_code = parse_exit_arg(args[1]);
 	ft_lstclear(&data->env_list, free);
-	if (data->env)
-		free(data->env);
 	if (data->cmd_list)
 		cmd_clear(&data->cmd_list);
 	if (data->line)
 		free(data->line);
+	if (data->tokens)
+		token_clear(&data->tokens);
 	rl_clear_history();
 	if (data->stdin_backup != -1)
 		close(data->stdin_backup);

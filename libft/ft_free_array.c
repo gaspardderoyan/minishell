@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 13:08:40 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/08/26 14:32:19 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/23 06:46:10 by gaspardderoya    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ void	ft_free_array(char **array)
 	i = 0;
 	while (array[i])
 	{
-		free(array[i]);
+		if (array[i])
+		{
+			free(array[i]);
+			array[i] = NULL;
+		}
 		i++;
 	}
 	free(array);
