@@ -26,7 +26,6 @@ static void	error_exit(t_cmd *cmd, t_data *data, char *msg, int err_code)
 	if (cmd->args && cmd->args[0])
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 	ft_putstr_fd(msg, STDERR_FILENO);
-	ft_free_array(data->env);
 	ft_lstclear(&data->env_list, free);
 	exit(err_code);
 }
@@ -94,8 +93,6 @@ void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 	if (cmd->args && is_builtin(cmd->args[0]))
 	{
 		exit_code = dispatch_builtin(cmd, data);
-		ft_free_array(data->env);
-		data->env = NULL;
 		ft_lstclear(&data->env_list, free);
 		exit(exit_code);
 	}
