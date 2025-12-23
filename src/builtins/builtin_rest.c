@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 18:14:45 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/22 18:03:44 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/23 18:20:37 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	builtin_env(t_list *env)
 /*
 ** Builtin unset command.
 ** Removes environment variables specified as arguments.
-** @param args: The argument array (args[0] = "unset", args[1+] = vars to remove).
+** @param args: The args array (args[0] = "unset", args[1+] = vars to remove).
 ** @param data: Global data structure.
 ** @return: Always returns 0 (success).
 */

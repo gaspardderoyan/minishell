@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:40:37 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/22 18:03:34 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/23 18:19:57 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 ** Opens a file with specified flags and redirects it to target fd.
 ** @param file: The filename to open.
 ** @param flags: The open flags (O_RDONLY, O_WRONLY | O_CREAT | O_TRUNC, etc.).
-** @param target_fd: The file descriptor to redirect to (STDIN_FILENO or STDOUT_FILENO).
+** @param target_fd: The file descriptor to redirect to (STDIN_FILENO or 
+** STDOUT_FILENO).
 ** @return: 0 on success, -1 on error.
 */
 static int	setup_redir(char *file, int flags, int target_fd)

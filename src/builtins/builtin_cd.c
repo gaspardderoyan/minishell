@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:05:07 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/23 16:40:59 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/23 19:01:30 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ int	builtin_cd(char **args, t_data *data)
 	char	new_cwd[PATH_MAX];
 	char	*path;
 
+	if (args[1] && args[2])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		return (1);
+	}
 	path = get_cd_path(args, data);
 	if (!path)
 		return (1);

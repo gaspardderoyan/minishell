@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 19:12:51 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/22 18:03:46 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/23 18:20:57 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** Validates an environment variable key name.
 ** Key must start with letter or underscore, followed by alphanumeric or _.
-** @param key: The key string to validate (e.g., "VAR_NAME" or "VAR_NAME=value").
+** @param key: The key string to validate (e.g., "VAR_NAME" or "VAR_NAME=value")
 ** @return: 1 if valid, 0 otherwise.
 */
 static int	is_valid_env_key(char *key)
