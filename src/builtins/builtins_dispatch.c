@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/*
+** Checks if a command name is a builtin.
+** @param cmd: The command name to check.
+** @return: 1 if builtin, 0 otherwise.
+*/
 int	is_builtin(char *cmd)
 {
 	if (!cmd)
@@ -33,6 +38,12 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
+/*
+** Checks if a builtin modifies the parent shell environment.
+** Modifier builtins: cd, export, unset, exit.
+** @param cmd: The command name to check.
+** @return: 1 if modifier builtin, 0 otherwise.
+*/
 int	is_modifier_builtin(char *cmd)
 {
 	if (!cmd)
@@ -48,6 +59,12 @@ int	is_modifier_builtin(char *cmd)
 	return (0);
 }
 
+/*
+** Dispatches execution to the appropriate builtin function.
+** @param cmd: The command structure containing args.
+** @param data: Global data structure.
+** @return: The exit code of the builtin, or 127 if not found.
+*/
 int	dispatch_builtin(t_cmd *cmd, t_data *data)
 {
 	char	*name;

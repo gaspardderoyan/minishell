@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+/*
+** Opens a file with specified flags and redirects it to target fd.
+** @param file: The filename to open.
+** @param flags: The open flags (O_RDONLY, O_WRONLY | O_CREAT | O_TRUNC, etc.).
+** @param target_fd: The file descriptor to redirect to (STDIN_FILENO or STDOUT_FILENO).
+** @return: 0 on success, -1 on error.
+*/
 static int	setup_redir(char *file, int flags, int target_fd)
 {
 	int	fd;
@@ -88,6 +95,6 @@ void	execute_builtin_in_parent(t_cmd *cmd, t_data *data)
 	dup2(data->stdout_backup, STDOUT_FILENO);
 	close(data->stdin_backup);
 	close(data->stdout_backup);
-    data->stdin_backup = -1;
-    data->stdout_backup = -1;
+	data->stdin_backup = -1;
+	data->stdout_backup = -1;
 }

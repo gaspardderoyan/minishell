@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/*
+** Searches for an environment variable value by key.
+** @param env_list: The environment linked list.
+** @param key: The variable name to search for (e.g., "PATH").
+** @return: Pointer to the value (after '='), or NULL if not found.
+*/
 char	*get_env_value(t_list *env_list, char *key)
 {
 	size_t	len;
@@ -28,6 +34,12 @@ char	*get_env_value(t_list *env_list, char *key)
 	return (NULL);
 }
 
+/*
+** Finds the node containing a specific environment variable.
+** @param env: The environment linked list.
+** @param key: The variable name to search for.
+** @return: Pointer to the node, or NULL if not found.
+*/
 t_list	*find_env_node(t_list *env, char *key)
 {
 	size_t	len;
@@ -110,6 +122,12 @@ int	update_or_add_env(t_list **env, char *key, char *value)
 	return (0);
 }
 
+/*
+** Removes an environment variable from the list.
+** Frees the node and its content if found.
+** @param env: Pointer to the environment list.
+** @param key: The variable name to remove.
+*/
 void	remove_env_node(t_list **env, char *key)
 {
 	t_list	*current;

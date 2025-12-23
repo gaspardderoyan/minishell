@@ -61,6 +61,11 @@ int	builtin_echo(char **args)
 	return (0);
 }
 
+/*
+** Builtin pwd command.
+** Prints the current working directory to stdout.
+** @return: 0 on success, 1 on error.
+*/
 int	builtin_pwd(void)
 {
 	char	cwd[1024];
@@ -74,6 +79,12 @@ int	builtin_pwd(void)
 	return (1);
 }
 
+/*
+** Builtin env command.
+** Prints all environment variables containing '=' to stdout.
+** @param env: The environment linked list.
+** @return: Always returns 0 (success).
+*/
 int	builtin_env(t_list *env)
 {
 	while (env)
@@ -85,6 +96,13 @@ int	builtin_env(t_list *env)
 	return (0);
 }
 
+/*
+** Builtin unset command.
+** Removes environment variables specified as arguments.
+** @param args: The argument array (args[0] = "unset", args[1+] = vars to remove).
+** @param data: Global data structure.
+** @return: Always returns 0 (success).
+*/
 int	builtin_unset(char **args, t_data *data)
 {
 	int	i;

@@ -64,11 +64,8 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 }
 
 /*
-** Entry point of the child process after fork().
-** Sets up pipes, applies redirections, then executes the command.
-** @param cmd: The command to execute.
-** @param data: Global data structure.
-** @param prev_read_fd: Read fd from previous pipe (-1 if first command).
+** Resets signal handlers to default behavior (SIG_DFL).
+** Called in child processes to restore normal signal handling for SIGINT/SIGQUIT.
 */
 static void	reset_signals_default(void)
 {
@@ -82,6 +79,14 @@ static void	reset_signals_default(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
+/*
+** Entry point of the child process after fork().
+** Resets signals, connects pipes, applies redirections, then executes command.
+** Handles both builtins (in child) and external commands.
+** @param cmd: The command to execute.
+** @param data: Global data structure.
+** @param prev_read_fd: Read fd from previous pipe (-1 if first command).
+*/
 void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 {
 	int	exit_code;

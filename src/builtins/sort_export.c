@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/*
+** Compares two strings lexicographically.
+** @param s1: First string.
+** @param s2: Second string.
+** @return: Difference between first differing characters, or 0 if equal.
+*/
 static int	ft_strcmp(const char *s1, const char *s2)
 {
 	int	i;
@@ -22,6 +28,11 @@ static int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
+/*
+** Sorts an array of strings alphabetically using bubble sort.
+** @param tab: The array to sort.
+** @param size: Number of elements in the array.
+*/
 static void	sort_env_array(char **tab, int size)
 {
 	int		i;
@@ -52,7 +63,9 @@ static void	sort_env_array(char **tab, int size)
 }
 
 /*
-    Affiche une ligne au format export : declare -x KEY="VALUE"
+** Prints an environment variable in export format: declare -x KEY="VALUE".
+** Variables without '=' are printed without quotes.
+** @param str: The environment string (e.g., "PATH=/usr/bin" or "MYVAR").
 */
 static void	print_export_line(char *str)
 {
@@ -73,11 +86,10 @@ static void	print_export_line(char *str)
 }
 
 /*
-    Fonction principale :
-    1. Convertit la liste en tableau.
-    2. Trie le tableau.
-    3. Affiche chaque ligne formatée.
-    4. Nettoie.
+** Prints all environment variables in sorted export format.
+** Excludes the special '_' variable.
+** @param data: Global data structure containing env_list.
+** @return: 0 on success, 1 on malloc error.
 */
 int	print_sorted_env(t_data *data)
 {

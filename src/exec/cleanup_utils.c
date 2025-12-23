@@ -57,6 +57,11 @@ void	close_cmd_fds(t_cmd *cmd)
 	}
 }
 
+/*
+** Removes all heredoc temporary files and frees their paths.
+** Called after pipeline execution to clean up resources.
+** @param data: Global data structure containing cmd_list.
+*/
 void	cleanup_heredocs(t_data *data)
 {
 	t_cmd	*cmd;

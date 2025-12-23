@@ -13,50 +13,6 @@
 #include "minishell.h"
 
 /*
-** Handles the exit status of a terminated child process.
-** Sets the exit code and prints signal messages if needed.
-** @param data: Global data structure to store exit code.
-** @param status: The status returned by waitpid.
-*/
-static void	handle_child_status(t_data *data, int status)
-{
-	if (WIFEXITED(status))
-		data->last_exit_code = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		data->last_exit_code = 128 + WTERMSIG(status);
-		if (WTERMSIG(status) == SIGQUIT)
-			ft_putstr_fd("Quit (core dumped)\n", 1);
-		if (WTERMSIG(status) == SIGINT)
-			ft_putstr_fd("\n", 1);
-	}
-}
-
-/*
-** Waits for all child processes to terminate.
-** Stores the exit code of the last command in data->last_exit_code.
-** @param data: Global data structure containing the command list.
-*/
-static void	wait_all_children(t_data *data)
-{
-	t_cmd	*cmd;
-	int		status;
-
-	cmd = data->cmd_list;
-	ignore_signals();
-	while (cmd)
-	{
-		if (cmd->pid != -1)
-		{
-			waitpid(cmd->pid, &status, 0);
-			if (cmd->next == NULL)
-				handle_child_status(data, status);
-		}
-		cmd = cmd->next;
-	}
-}
-
-/*
 ** Parent process routine after forking a child.
 ** Closes used pipe ends and returns the read fd for the next iteration.
 ** @param cmd: The current command structure.
@@ -94,23 +50,14 @@ static int	exec_solo_builtin(t_cmd *cmd, t_data *data)
 }
 
 /*
-** Main pipeline execution function.
-** Iterates through commands, creates pipes, forks children, and waits.
-** @param data: Global data structure containing the command list.
+** Iterates through commands, creates pipes and forks children.
+** @param data: Global data structure.
+** @param cmd: First command in the pipeline.
 */
-void	execute_pipeline(t_data *data)
+static void	fork_pipeline(t_data *data, t_cmd *cmd)
 {
-	t_cmd	*cmd;
-	int		prev_fd;
+	int	prev_fd;
 
-	if (check_heredoc(data) != 0)
-		return ;
-	cmd = data->cmd_list;
-	if (exec_solo_builtin(cmd, data))
-	{
-		cleanup_heredocs(data);
-		return ;
-	}
 	prev_fd = -1;
 	while (cmd)
 	{
@@ -129,6 +76,23 @@ void	execute_pipeline(t_data *data)
 		prev_fd = parent_routine(cmd, prev_fd);
 		cmd = cmd->next;
 	}
+}
+
+/*
+** Main pipeline execution function.
+** Handles heredocs, solo builtins, then forks and waits for children.
+** @param data: Global data structure containing the command list.
+*/
+void	execute_pipeline(t_data *data)
+{
+	if (check_heredoc(data) != 0)
+		return ;
+	if (exec_solo_builtin(data->cmd_list, data))
+	{
+		cleanup_heredocs(data);
+		return ;
+	}
+	fork_pipeline(data, data->cmd_list);
 	wait_all_children(data);
 	set_signal_action();
 	cleanup_heredocs(data);
