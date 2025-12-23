@@ -174,6 +174,9 @@ void	connect_pipes(t_cmd *cmd, int prev_pipe_read);
 /******    pipeline.c    ******/
 void	execute_pipeline(t_data *data);
 
+/******    wait.c    ******/
+void	wait_all_children(t_data *data);
+
 /******    signals.c    ******/
 void	ignore_signals(void);
 void	set_signal_action(void);
