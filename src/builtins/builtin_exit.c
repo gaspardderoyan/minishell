@@ -129,6 +129,8 @@ int	builtin_exit(char **args, t_data *data)
 	}
 	else
 		exit_code = parse_exit_arg(args[1]);
+	if (data->env)
+		ft_free_array(data->env);
 	ft_lstclear(&data->env_list, free);
 	if (data->cmd_list)
 		cmd_clear(&data->cmd_list);
