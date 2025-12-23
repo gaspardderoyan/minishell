@@ -25,6 +25,8 @@ static void	cleanup_child(t_data *data)
 		cmd_clear(&data->cmd_list);
 	if (data->line)
 		free(data->line);
+	if (data->env)
+		ft_free_array(data->env);
 	ft_lstclear(&data->env_list, free);
 }
 
