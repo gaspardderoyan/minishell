@@ -84,5 +84,6 @@ int	builtin_export(char **args, t_data *data)
 			ret = 1;
 		i++;
 	}
+	sync_env(data);
 	return (ret);
 }

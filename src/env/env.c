@@ -65,6 +65,55 @@ t_list	*init_env_list(char **env)
 }
 
 /*
+** Creates a malloc'd copy of the environment array.
+** @param env: The original environment array.
+** @return: A NULL-terminated string array copy, or NULL on error.
+*/
+char	**copy_env(char **env)
+{
+	char	**env_copy;
+	int		count;
+	int		i;
+
+	if (!env)
+		return (NULL);
+	count = 0;
+	while (env[count])
+		count++;
+	env_copy = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!env_copy)
+		return (NULL);
+	i = 0;
+	while (i < count)
+	{
+		env_copy[i] = ft_strdup(env[i]);
+		if (!env_copy[i])
+		{
+			ft_free_array(env_copy);
+			return (NULL);
+		}
+		i++;
+	}
+	env_copy[i] = NULL;
+	return (env_copy);
+}
+
+/*
+** Syncs data->env array from env_list. Frees old array and creates new one.
+** @param data: Global data structure.
+** @return: 0 on success, -1 on error.
+*/
+int	sync_env(t_data *data)
+{
+	if (data->env)
+		ft_free_array(data->env);
+	data->env = env_list_to_array(data->env_list);
+	if (!data->env)
+		return (-1);
+	return (0);
+}
+
+/*
 ** Converts the environment linked list to a string array.
 ** Required to pass the environment to execve().
 ** @param env_list: The environment linked list.

@@ -113,5 +113,6 @@ int	builtin_unset(char **args, t_data *data)
 		remove_env_node(&data->env_list, args[i]);
 		i++;
 	}
+	sync_env(data);
 	return (0);
 }

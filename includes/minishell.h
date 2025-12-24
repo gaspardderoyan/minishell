@@ -149,6 +149,8 @@ void	remove_env_node(t_list **env, char *key);
 
 /******    env.c    ******/
 t_list	*init_env_list(char **env);
+char	**copy_env(char **env);
+int		sync_env(t_data *data);
 char	**env_list_to_array(t_list *env_list);
 
 /******    child.c   ******/
@@ -186,6 +188,7 @@ t_cmd		*cmd_last(t_cmd *lst);
 void		cmd_add_back(t_cmd **lst, t_cmd *new);
 void		cmd_clear(t_cmd **lst);
 void		free_cycle(t_data *data);
+void		free_data(t_data *data);
 
 t_redir		*redir_new(t_redir_type type, char *filename);
 t_redir		*redir_last(t_redir *lst);

@@ -13,39 +13,55 @@
 #include "minishell.h"
 
 /*
-** Prints an error message and exits the child process cleanly.
-** Frees allocated resources before exiting.
-** @param cmd: The current command (to display its name).
-** @param data: Global data structure (to free env).
-** @param msg: The error message to display.
-** @param err_code: Exit code (127 = not found, 126 = permission denied).
-*/
+ * ** Frees all resources allocated in the child process before exiting.
+ * ** Prevents memory leaks reported by valgrind in forked processes.
+ * ** @param data: Global data structure containing all allocated resources.
+ * */
+static void	cleanup_child(t_data *data)
+{
+	if (data->tokens)
+		token_clear(&data->tokens);
+	if (data->cmd_list)
+		cmd_clear(&data->cmd_list);
+	if (data->line)
+		free(data->line);
+	if (data->env)
+		ft_free_array(data->env);
+	ft_lstclear(&data->env_list, free);
+}
+
+/*
+ * ** Prints an error message and exits the child process cleanly.
+ * ** Frees allocated resources before exiting.
+ * ** @param cmd: The current command (to display its name).
+ * ** @param data: Global data structure (to free env).
+ * ** @param msg: The error message to display.
+ * ** @param err_code: Exit code (127 = not found, 126 = permission denied).
+ * */
 static void	error_exit(t_cmd *cmd, t_data *data, char *msg, int err_code)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	if (cmd->args && cmd->args[0])
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 	ft_putstr_fd(msg, STDERR_FILENO);
-	ft_lstclear(&data->env_list, free);
+	cleanup_child(data);
 	exit(err_code);
 }
 
 /*
-** Prepares and executes the command with execve().
-** Resolves the command path, converts the environment to an array,
-** then replaces the process with the command to execute.
-** @param cmd: The command to execute.
-** @param data: Global data structure containing the environment.
-*/
+ * ** Prepares and executes the command with execve().
+ * ** Resolves the command path, converts the environment to an array,
+ * ** then replaces the process with the command to execute.
+ * ** @param cmd: The command to execute.
+ * ** @param data: Global data structure containing the environment.
+ * */
 static void	do_execve(t_cmd *cmd, t_data *data)
 {
 	char	**env_array;
 
 	if (!cmd->args || !cmd->args[0])
 	{
-		ft_free_array(data->env);
-		data->env = NULL;
-		ft_lstclear(&data->env_list, free);
+		cleanup_child(data);
 		exit(0);
 	}
 	init_cmd_path(cmd, data);
@@ -58,16 +74,16 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 	{
 		perror("minishell");
 		ft_free_array(env_array);
-		ft_lstclear(&data->env_list, free);
+		cleanup_child(data);
 		exit(126);
 	}
 }
 
 /*
-** Resets signal handlers to default behavior (SIG_DFL).
-** Called in child processes to restore normal signal handling 
-** for SIGINT/SIGQUIT.
-*/
+ * ** Resets signal handlers to default behavior (SIG_DFL).
+ * ** Called in child processes to restore normal signal handling 
+ * ** for SIGINT/SIGQUIT.
+ * */
 static void	reset_signals_default(void)
 {
 	struct sigaction	sa;
@@ -81,13 +97,13 @@ static void	reset_signals_default(void)
 }
 
 /*
-** Entry point of the child process after fork().
-** Resets signals, connects pipes, applies redirections, then executes command.
-** Handles both builtins (in child) and external commands.
-** @param cmd: The command to execute.
-** @param data: Global data structure.
-** @param prev_read_fd: Read fd from previous pipe (-1 if first command).
-*/
+ * ** Entry point of the child process after fork().
+ * ** Resets signals, connects pipes, applies redirections, then executes command.
+ * ** Handles both builtins (in child) and external commands.
+ * ** @param cmd: The command to execute.
+ * ** @param data: Global data structure.
+ * ** @param prev_read_fd: Read fd from previous pipe (-1 if first command).
+ * */
 void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 {
 	int	exit_code;
@@ -99,8 +115,9 @@ void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 	if (cmd->args && is_builtin(cmd->args[0]))
 	{
 		exit_code = dispatch_builtin(cmd, data);
-		ft_lstclear(&data->env_list, free);
+		cleanup_child(data);
 		exit(exit_code);
 	}
 	do_execve(cmd, data);
 }
+
