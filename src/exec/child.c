@@ -6,29 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 18:03:06 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/23 12:35:35 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/24 16:01:07 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * ** Frees all resources allocated in the child process before exiting.
- * ** Prevents memory leaks reported by valgrind in forked processes.
- * ** @param data: Global data structure containing all allocated resources.
- * */
-static void	cleanup_child(t_data *data)
-{
-	if (data->tokens)
-		token_clear(&data->tokens);
-	if (data->cmd_list)
-		cmd_clear(&data->cmd_list);
-	if (data->line)
-		free(data->line);
-	if (data->env)
-		ft_free_array(data->env);
-	ft_lstclear(&data->env_list, free);
-}
 
 /*
  * ** Prints an error message and exits the child process cleanly.
@@ -46,6 +28,21 @@ static void	error_exit(t_cmd *cmd, t_data *data, char *msg, int err_code)
 	ft_putstr_fd(msg, STDERR_FILENO);
 	cleanup_child(data);
 	exit(err_code);
+}
+
+/*
+ * ** Checks if the command path points to a directory.
+ * ** If so, prints "Is a directory" and exits with 126.
+ */
+static void	check_directory(t_cmd *cmd, t_data *data)
+{
+	struct stat	sb;
+
+	// On vérifie si le chemin existe et si c'est un dossier
+	if (stat(cmd->cmd_path, &sb) == 0 && S_ISDIR(sb.st_mode))
+	{
+		error_exit(cmd, data, ": Is a directory\n", 126);
+	}
 }
 
 /*
@@ -67,15 +64,23 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 	init_cmd_path(cmd, data);
 	if (!cmd->cmd_path)
 		error_exit(cmd, data, ": command not found\n", 127);
+	check_directory(cmd, data);
 	env_array = env_list_to_array(data->env_list);
 	if (!env_array)
 		error_exit(cmd, data, ": malloc error\n", 1);
 	if (execve(cmd->cmd_path, cmd->args, env_array) == -1)
 	{
-		perror("minishell");
 		ft_free_array(env_array);
-		cleanup_child(data);
-		exit(126);
+		if (errno == EACCES) // Permission denied (ex: script sans chmod +x)
+			error_exit(cmd, data, ": Permission denied\n", 126);
+		else if (errno == ENOENT) // No such file (ex: mauvais path)
+			error_exit(cmd, data, ": No such file or directory\n", 127);
+		else
+		{
+			perror("minishell"); 
+			cleanup_child(data);
+			exit(126);
+		}
 	}
 }
 

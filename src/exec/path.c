@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 12:34:07 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/22 18:03:08 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/24 15:36:55 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,7 @@ char	*get_full_path(char *cmd, t_list *env_list)
 	char	*full_path;
 
 	if (cmd && (ft_strchr(cmd, '/') != NULL))
-	{
-		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
-		return (NULL);
-	}
+		return (ft_strdup(cmd));
 	if (!cmd || !*cmd || !env_list)
 		return (NULL);
 	path_env = get_env_value(env_list, "PATH");

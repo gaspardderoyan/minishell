@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/22 17:21:24 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/24 15:51:40 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <unistd.h>
 # include <limits.h>
 # include <signal.h>
+# include <sys/stat.h>
+# include <errno.h>
 # define SUCCESS 0
 # define FAIL 1
 
@@ -160,6 +162,7 @@ void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 void	close_all_pipes(t_cmd *cmd_list);
 void	close_cmd_fds(t_cmd *cmd);
 void	cleanup_heredocs(t_data *data);
+void	cleanup_child(t_data *data);
 
 /******    heredoc.c   ******/
 int		check_heredoc(t_data *data);
