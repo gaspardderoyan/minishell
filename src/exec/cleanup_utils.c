@@ -80,10 +80,10 @@ void	cleanup_heredocs(t_data *data)
 }
 
 /*
- * ** Frees all resources allocated in the child process before exiting.
- * ** Prevents memory leaks reported by valgrind in forked processes.
- * ** @param data: Global data structure containing all allocated resources.
- * */
+** Frees all resources allocated in the child process before exiting.
+** Prevents memory leaks reported by valgrind in forked processes.
+** @param data: Global data structure containing all allocated resources.
+*/
 void	cleanup_child(t_data *data)
 {
 	if (data->tokens)
@@ -95,4 +95,27 @@ void	cleanup_child(t_data *data)
 	if (data->env)
 		ft_free_array(data->env);
 	ft_lstclear(&data->env_list, free);
+}
+
+/*
+** Cleans up all allocated resources before exiting the shell.
+** Includes readline history and file descriptor backups.
+** @param data: Global data structure containing all allocated resources.
+*/
+void	cleanup_exit(t_data *data)
+{
+	if (data->env)
+		ft_free_array(data->env);
+	ft_lstclear(&data->env_list, free);
+	if (data->cmd_list)
+		cmd_clear(&data->cmd_list);
+	if (data->line)
+		free(data->line);
+	if (data->tokens)
+		token_clear(&data->tokens);
+	rl_clear_history();
+	if (data->stdin_backup != -1)
+		close(data->stdin_backup);
+	if (data->stdout_backup != -1)
+		close(data->stdout_backup);
 }

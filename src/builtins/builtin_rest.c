@@ -51,13 +51,13 @@ int	builtin_echo(char **args)
 	}
 	while (args[i])
 	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
+		printf("%s", args[i]);
 		if (args[i + 1])
-			ft_putstr_fd(" ", STDOUT_FILENO);
+			printf(" ");
 		i++;
 	}
 	if (!n_option)
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		printf("\n");
 	return (0);
 }
 
@@ -72,7 +72,7 @@ int	builtin_pwd(void)
 
 	if (getcwd(cwd, sizeof(cwd)))
 	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
+		printf("%s\n", cwd);
 		return (0);
 	}
 	perror("minishell: pwd");
@@ -90,7 +90,7 @@ int	builtin_env(t_list *env)
 	while (env)
 	{
 		if (ft_strchr((char *)env->content, '='))
-			ft_putendl_fd((char *)env->content, STDOUT_FILENO);
+			printf("%s\n", (char *)env->content);
 		env = env->next;
 	}
 	return (0);

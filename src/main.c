@@ -80,7 +80,7 @@ int	main(int ac, char **av, char **env)
 			data.last_exit_code = 130;
 		if (!data.line)
 		{
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			ft_putendl_fd("exit", STDERR_FILENO);
 			break ;
 		}
 		if (data.line[0])

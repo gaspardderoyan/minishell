@@ -27,12 +27,16 @@
 # include <signal.h>
 # include <sys/stat.h>
 # include <errno.h>
-# define SUCCESS 0
-# define FAIL 1
 
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
 # endif
+
+# define EXIT_CMD_NOT_FOUND 127
+# define EXIT_CANT_EXEC 126
+
+# define SUCCESS 0
+# define FAIL 1
 
 typedef enum e_state
 {
@@ -163,6 +167,7 @@ void	close_all_pipes(t_cmd *cmd_list);
 void	close_cmd_fds(t_cmd *cmd);
 void	cleanup_heredocs(t_data *data);
 void	cleanup_child(t_data *data);
+void	cleanup_exit(t_data *data);
 
 /******    heredoc.c   ******/
 int		check_heredoc(t_data *data);
@@ -185,6 +190,7 @@ void	wait_all_children(t_data *data);
 /******    signals.c    ******/
 void	ignore_signals(void);
 void	set_signal_action(void);
+void	reset_signals_default(void);
 
 t_cmd		*cmd_new(void);
 t_cmd		*cmd_last(t_cmd *lst);
@@ -238,5 +244,8 @@ void	eoferr(t_state state, t_data *data);
 
 /* check_syntax.c */
 int	check_syntax(t_token *tokens, t_data *data);
+
+/******    error_utils.c    ******/
+void	print_error(char *cmd, char *arg, char *msg);
 
 #endif

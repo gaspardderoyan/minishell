@@ -47,7 +47,7 @@ static int	process_export_arg(char *arg, t_data *data)
 
 	if (!is_valid_env_key(arg))
 	{
-		ft_putstr_fd("minishell: export: not a valid identifier\n", 2);
+		print_error("export", NULL, "not a valid identifier");
 		return (1);
 	}
 	equal_sign = ft_strchr(arg, '=');

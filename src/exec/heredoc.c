@@ -15,7 +15,8 @@
 /*
 ** Generates a unique heredoc temporary filename.
 ** @param i: Unique identifier number.
-** @return: Allocated filename string (e.g., ".heredoc_tmp_0"), or NULL on error.
+** @return: Allocated filename string (e.g., ".heredoc_tmp_0"),
+** or NULL on error.
 */
 static char	*generate_heredoc_name(int i)
 {
