@@ -53,12 +53,30 @@ void	free_data(t_data *data)
 	data->env_list = NULL;
 }
 
+void	remove_empty_tokens(t_token **tokens)
+{
+	t_token	*curr;
+	t_token	*next_node;
+
+	if (!tokens || !*tokens)
+		return ;
+	curr = *tokens;
+	while (curr)
+	{
+		next_node = curr->next;
+		if (curr->type == TOKEN_WORD && !ft_strlen_safe(curr->value))
+			token_delete(tokens, curr);
+		curr = next_node;
+	}
+}
+
 int	process_line(t_data *data)
 {
 	if (lexer(data->line, &data->tokens) == FAIL)
 		return (FAIL);
 	if (expander(data->tokens, data) == FAIL)
 		return (FAIL);
+	remove_empty_tokens(&data->tokens);
 	if (check_syntax(data->tokens, data) == FAIL)
 		return (FAIL);
 	data->cmd_list = parser(data->tokens);
