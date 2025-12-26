@@ -246,6 +246,7 @@ void		synterr(t_token *token, char c, bool nl, t_data *data);
 void		eoferr(t_state state, t_data *data);
 
 /* check_syntax.c */
+void		remove_empty_tokens(t_token **tokens);
 int			check_syntax(t_token *tokens, t_data *data);
 
 /******  error_utils.c  ******/

@@ -20,6 +20,23 @@ static bool	is_redir(t_token_type type)
 	return (false);
 }
 
+void	remove_empty_tokens(t_token **tokens)
+{
+	t_token	*curr;
+	t_token	*next_node;
+
+	if (!tokens || !*tokens)
+		return ;
+	curr = *tokens;
+	while (curr)
+	{
+		next_node = curr->next;
+		if (curr->type == TOKEN_WORD && !ft_strlen_safe(curr->value))
+			token_delete(tokens, curr);
+		curr = next_node;
+	}
+}
+
 int	check_syntax(t_token *tokens, t_data *data)
 {
 	if (!tokens)
