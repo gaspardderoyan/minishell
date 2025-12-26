@@ -51,6 +51,7 @@ void	free_data(t_data *data)
 		ft_lstclear(&data->env_list, free);
 	data->env = NULL;
 	data->env_list = NULL;
+	rl_clear_history();
 }
 
 int	process_line(t_data *data)
@@ -94,6 +95,5 @@ int	main(int ac, char **av, char **env)
 		free_cycle(&data);
 	}
 	free_data(&data);
-	rl_clear_history();
 	return (data.last_exit_code);
 }
