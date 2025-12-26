@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 19:12:51 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/23 18:20:57 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/26 13:17:14 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	process_export_arg(char *arg, t_data *data)
 
 	if (!is_valid_env_key(arg))
 	{
-		ft_putstr_fd("minishell: export: not a valid identifier\n", 2);
+		print_error_var("export", arg, "not a valid identifier");
 		return (1);
 	}
 	equal_sign = ft_strchr(arg, '=');

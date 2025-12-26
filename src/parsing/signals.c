@@ -52,3 +52,19 @@ void	ignore_signals(void)
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 }
+
+/*
+** Resets signal handlers to default behavior (SIG_DFL).
+** Called in child processes to restore normal signal handling.
+*/
+void	reset_signals_default(void)
+{
+	struct sigaction	sa;
+
+	ft_memset(&sa, 0, sizeof(sa));
+	sa.sa_handler = SIG_DFL;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
+}

@@ -48,7 +48,7 @@ static int	open_redir_file(t_cmd *cmd, t_redir *redir)
 			fd = open(cmd->heredoc_file, O_RDONLY);
 		else
 		{
-			ft_putstr_fd("minishell: heredoc file missing\n", STDERR_FILENO);
+			print_error(NULL, NULL, "heredoc file missing");
 			fd = -1;
 		}
 	}

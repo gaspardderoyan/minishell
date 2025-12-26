@@ -28,7 +28,7 @@ static char	*get_cd_path(char **args, t_data *data)
 		path = get_env_value(data->env_list, "HOME");
 		if (!path)
 		{
-			ft_putendl_fd("minishell: cd: HOME not set", STDERR_FILENO);
+			print_error("cd", NULL, "HOME not set");
 			return (NULL);
 		}
 		return (path);
@@ -38,10 +38,10 @@ static char	*get_cd_path(char **args, t_data *data)
 		path = get_env_value(data->env_list, "OLDPWD");
 		if (!path)
 		{
-			ft_putendl_fd("minishell: cd: OLDPWD not set", STDERR_FILENO);
+			print_error("cd", NULL, "OLDPWD not set");
 			return (NULL);
 		}
-		ft_putendl_fd(path, STDOUT_FILENO);
+		printf("%s\n", path);
 		return (path);
 	}
 	return (args[1]);
@@ -62,7 +62,7 @@ int	builtin_cd(char **args, t_data *data)
 
 	if (args[1] && args[2])
 	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		print_error("cd", NULL, "too many arguments");
 		return (1);
 	}
 	path = get_cd_path(args, data);

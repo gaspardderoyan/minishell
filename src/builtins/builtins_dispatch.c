@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:39:47 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/22 18:03:36 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/26 12:29:25 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ int	is_modifier_builtin(char *cmd)
 ** Dispatches execution to the appropriate builtin function.
 ** @param cmd: The command structure containing args.
 ** @param data: Global data structure.
-** @return: The exit code of the builtin, or 127 if not found.
+** @return: The exit code of the builtin, or 
+** EXIT_CMD_NOT_FOUND if not found.
 */
 int	dispatch_builtin(t_cmd *cmd, t_data *data)
 {
@@ -86,5 +87,5 @@ int	dispatch_builtin(t_cmd *cmd, t_data *data)
 		return (builtin_env(data->env_list));
 	if (ft_strncmp(name, "exit", 5) == 0)
 		return (builtin_exit(cmd->args, data));
-	return (127);
+	return (CMD_NOT_FOUND);
 }

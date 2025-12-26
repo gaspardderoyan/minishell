@@ -26,9 +26,9 @@ static void	handle_child_status(t_data *data, int status)
 	{
 		data->last_exit_code = 128 + WTERMSIG(status);
 		if (WTERMSIG(status) == SIGQUIT)
-			ft_putstr_fd("Quit (core dumped)\n", 1);
+			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
 		if (WTERMSIG(status) == SIGINT)
-			ft_putstr_fd("\n", 1);
+			printf("\n");
 	}
 }
 

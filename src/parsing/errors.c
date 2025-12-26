@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 18:29:58 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/17 18:30:00 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/26 13:32:52 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void	*ms_error(char *err_msg, void *to_free)
 {
 	if (to_free)
 		free(to_free);
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(err_msg, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
+	print_error(NULL, NULL, err_msg);
 	return (NULL);
 }
 
@@ -31,31 +29,27 @@ void	*ms_error(char *err_msg, void *to_free)
 */
 void	synterr(t_token *token, char c, bool nl, t_data *data)
 {
-	int		fn;
-
-	fn = STDERR_FILENO;
 	data->last_exit_code = 2;
 	if (nl)
 	{
-		ft_dprintf(fn, "minishell: syntax error ");
-		ft_dprintf(fn, "near unexpected token `newline'\n");
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `newline'\n");
 		return ;
 	}
 	if (!c)
 		c = *token->value;
-	ft_dprintf(fn, "minishell: syntax error near unexpected token `%c'\n", c);
+	ft_dprintf(STDERR_FILENO,
+		"minishell: syntax error near unexpected token `%c'\n", c);
 }
 
 void	eoferr(t_state state, t_data *data)
 {
-	int		fn;
 	char	c;
 
-	fn = STDERR_FILENO;
 	data->last_exit_code = 2;
 	c = '\'';
 	if (state == STATE_DQUOTES)
 		c = '"';
-	ft_dprintf(fn, "minishell: unexpected EOF while ");
-	ft_dprintf(fn, "looking for matching `%c'\n", c);
+	ft_dprintf(STDERR_FILENO,
+		"minishell: unexpected EOF while looking for matching `%c'\n", c);
 }

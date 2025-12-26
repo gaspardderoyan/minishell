@@ -71,17 +71,15 @@ static void	print_export_line(char *str)
 {
 	char	*equal_sign;
 
-	ft_putstr_fd("declare -x ", STDOUT_FILENO);
+	printf("declare -x ");
 	equal_sign = ft_strchr(str, '=');
 	if (equal_sign)
 	{
-		write(STDOUT_FILENO, str, equal_sign - str);
-		write(STDOUT_FILENO, "=\"", 2);
-		ft_putstr_fd(equal_sign + 1, STDOUT_FILENO);
-		write(STDOUT_FILENO, "\"", 1);
+		printf("%.*s", (int)(equal_sign - str), str);
+		printf("=\"%s\"", equal_sign + 1);
 	}
 	else
-		ft_putstr_fd(str, STDOUT_FILENO);
+		printf("%s", str);
 	printf("\n");
 }
 

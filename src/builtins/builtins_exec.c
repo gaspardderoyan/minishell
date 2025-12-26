@@ -30,7 +30,12 @@ static int	setup_redir(char *file, int flags, int target_fd)
 		perror("minishell");
 		return (-1);
 	}
-	dup2(fd, target_fd);
+	if (dup2(fd, target_fd) == -1)
+	{
+		perror("minishell: dup2");
+		close(fd);
+		return (-1);
+	}
 	close(fd);
 	return (0);
 }
@@ -69,6 +74,23 @@ int	apply_redirections(t_cmd *cmd)
 }
 
 /*
+** Restores stdin/stdout from backups and closes backup fds.
+** Checks dup2() return values and prints error if it fails.
+** @param data: Global data structure containing fd backups.
+*/
+static void	restore_stdio(t_data *data)
+{
+	if (dup2(data->stdin_backup, STDIN_FILENO) == -1)
+		perror("minishell: dup2");
+	if (dup2(data->stdout_backup, STDOUT_FILENO) == -1)
+		perror("minishell: dup2");
+	close(data->stdin_backup);
+	close(data->stdout_backup);
+	data->stdin_backup = -1;
+	data->stdout_backup = -1;
+}
+
+/*
 ** Executes a builtin command in the parent process.
 ** Saves and restores stdin/stdout around redirections.
 ** @param cmd: The command to execute.
@@ -92,10 +114,5 @@ void	execute_builtin_in_parent(t_cmd *cmd, t_data *data)
 		data->last_exit_code = 1;
 	else
 		data->last_exit_code = dispatch_builtin(cmd, data);
-	dup2(data->stdin_backup, STDIN_FILENO);
-	dup2(data->stdout_backup, STDOUT_FILENO);
-	close(data->stdin_backup);
-	close(data->stdout_backup);
-	data->stdin_backup = -1;
-	data->stdout_backup = -1;
+	restore_stdio(data);
 }

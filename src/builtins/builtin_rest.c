@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 18:14:45 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/23 18:20:37 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/26 13:22:24 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ int	builtin_echo(char **args)
 	}
 	while (args[i])
 	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
+		printf("%s", args[i]);
 		if (args[i + 1])
-			ft_putstr_fd(" ", STDOUT_FILENO);
+			printf(" ");
 		i++;
 	}
 	if (!n_option)
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		printf("\n");
 	return (0);
 }
 
@@ -72,7 +72,7 @@ int	builtin_pwd(void)
 
 	if (getcwd(cwd, sizeof(cwd)))
 	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
+		printf("%s\n", cwd);
 		return (0);
 	}
 	perror("minishell: pwd");
@@ -90,29 +90,8 @@ int	builtin_env(t_list *env)
 	while (env)
 	{
 		if (ft_strchr((char *)env->content, '='))
-			ft_putendl_fd((char *)env->content, STDOUT_FILENO);
+			printf("%s\n", (char *)env->content);
 		env = env->next;
 	}
-	return (0);
-}
-
-/*
-** Builtin unset command.
-** Removes environment variables specified as arguments.
-** @param args: The args array (args[0] = "unset", args[1+] = vars to remove).
-** @param data: Global data structure.
-** @return: Always returns 0 (success).
-*/
-int	builtin_unset(char **args, t_data *data)
-{
-	int	i;
-
-	i = 1;
-	while (args[i])
-	{
-		remove_env_node(&data->env_list, args[i]);
-		i++;
-	}
-	sync_env(data);
 	return (0);
 }
