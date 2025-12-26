@@ -21,7 +21,6 @@ static int	is_valid_unset_key(char *key)
 	i = 1;
 	while (key[i])
 	{
-		// Si on trouve un caractère non-alnum (y compris '='), c'est faux.
 		if (!ft_isalnum(key[i]) && key[i] != '_')
 			return (0);
 		i++;
