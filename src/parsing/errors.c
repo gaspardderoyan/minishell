@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 18:29:58 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/17 18:30:00 by gderoyan         ###   ########.fr       */
+/*   Updated: 2025/12/26 13:32:52 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	synterr(t_token *token, char c, bool nl, t_data *data)
 	data->last_exit_code = 2;
 	if (nl)
 	{
-		print_error(NULL, NULL,
-			"syntax error near unexpected token `newline'");
+		ft_dprintf(STDERR_FILENO,
+			"minishell: syntax error near unexpected token `newline'\n");
 		return ;
 	}
 	if (!c)

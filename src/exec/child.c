@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 18:03:06 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/24 16:01:07 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/26 12:07:52 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	check_directory(t_cmd *cmd, t_data *data)
 	struct stat	sb;
 
 	if (stat(cmd->cmd_path, &sb) == 0 && S_ISDIR(sb.st_mode))
-		error_exit(cmd, data, ": Is a directory\n", EXIT_CANT_EXEC);
+		error_exit(cmd, data, ": Is a directory\n", CANT_EXEC);
 }
 
 /*
@@ -56,14 +56,14 @@ static void	handle_execve_error(char **env_array, t_cmd *cmd, t_data *data)
 {
 	ft_free_array(env_array);
 	if (errno == EACCES)
-		error_exit(cmd, data, ": Permission denied\n", EXIT_CANT_EXEC);
+		error_exit(cmd, data, ": Permission denied\n", CANT_EXEC);
 	else if (errno == ENOENT)
-		error_exit(cmd, data, ": No such file or directory\n", EXIT_CMD_NOT_FOUND);
+		error_exit(cmd, data, ": No such file or directory\n", CMD_NOT_FOUND);
 	else
 	{
 		perror("minishell");
 		cleanup_child(data);
-		exit(EXIT_CANT_EXEC);
+		exit(CANT_EXEC);
 	}
 }
 
@@ -85,7 +85,7 @@ static void	do_execve(t_cmd *cmd, t_data *data)
 	}
 	init_cmd_path(cmd, data);
 	if (!cmd->cmd_path)
-		error_exit(cmd, data, ": command not found\n", EXIT_CMD_NOT_FOUND);
+		error_exit(cmd, data, ": command not found\n", CMD_NOT_FOUND);
 	check_directory(cmd, data);
 	env_array = env_list_to_array(data->env_list);
 	if (!env_array)

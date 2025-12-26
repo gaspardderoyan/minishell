@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 12:18:53 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/23 16:34:05 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/26 13:16:06 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ int	builtin_exit(char **args, t_data *data)
 {
 	long long	exit_code;
 
-	ft_putendl_fd("exit", STDERR_FILENO);
+	if (isatty(STDIN_FILENO))
+		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!args[1])
 		exit_code = data->last_exit_code;
 	else if (args[2] && is_numeric(args[1]))

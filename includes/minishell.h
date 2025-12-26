@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/24 15:51:40 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/26 14:00:13 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@
 #  define PATH_MAX 4096
 # endif
 
-# define EXIT_CMD_NOT_FOUND 127
-# define EXIT_CANT_EXEC 126
+# define CMD_NOT_FOUND 127
+# define CANT_EXEC 126
 
 # define SUCCESS 0
 # define FAIL 1
@@ -120,77 +120,79 @@ typedef struct s_data
 	int		stdout_backup;
 } t_data;
 
-/******    builtin_cd.c    ******/
-int		builtin_cd(char **args, t_data *data);
+/******  builtin_cd.c  ******/
+int			builtin_cd(char **args, t_data *data);
 
-/******   builtin_exit.c    ******/
-int		builtin_exit(char **args, t_data *data);
+/******  builtin_exit.c  ******/
+int			builtin_exit(char **args, t_data *data);
 
-/******    builtin_export.c    ******/
-int		builtin_export(char **args, t_data *data);
+/******  builtin_export.c  ******/
+int			builtin_export(char **args, t_data *data);
 
-/******    builtin_rest.c   ******/
-int		builtin_echo(char **args);
-int		builtin_pwd(void);
-int		builtin_env(t_list *env);
-int		builtin_unset(char **args, t_data *data);
+/******  builtin_rest.c  ******/
+int			builtin_echo(char **args);
+int			builtin_pwd(void);
+int			builtin_env(t_list *env);
 
-/******    builtins_dispatch.c   ******/
-int		is_builtin(char *cmd);
-int		is_modifier_builtin(char *cmd);
-int		dispatch_builtin(t_cmd *cmd, t_data *data);
+/******  builtin_unset.c  ******/
+int			builtin_unset(char **args, t_data *data);
 
-/******    builtins_exec.c    ******/
-int		apply_redirections(t_cmd *cmd);
-void	execute_builtin_in_parent(t_cmd *cmd, t_data *data);
+/******  builtins_dispatch.c  ******/
+int			is_builtin(char *cmd);
+int			is_modifier_builtin(char *cmd);
+int			dispatch_builtin(t_cmd *cmd, t_data *data);
 
-/******    sort_export.c    ******/
-int		print_sorted_env(t_data *data);
+/******  builtins_exec.c  ******/
+int			apply_redirections(t_cmd *cmd);
+void		execute_builtin_in_parent(t_cmd *cmd, t_data *data);
 
-/******    env_utils.c    ******/
-char	*get_env_value(t_list *env_list, char *key);
-t_list	*find_env_node(t_list *env, char *key);
-int		update_or_add_env(t_list **env, char *key, char *value);
-void	remove_env_node(t_list **env, char *key);
+/******  sort_export.c  ******/
+int			print_sorted_env(t_data *data);
 
-/******    env.c    ******/
-t_list	*init_env_list(char **env);
-char	**copy_env(char **env);
-int		sync_env(t_data *data);
-char	**env_list_to_array(t_list *env_list);
+/******  env_utils.c  ******/
+char		*get_env_value(t_list *env_list, char *key);
+t_list		*find_env_node(t_list *env, char *key);
+int			update_or_add_env(t_list **env, char *key, char *value);
+void		remove_env_node(t_list **env, char *key);
 
-/******    child.c   ******/
-void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
+/******  env.c  ******/
+t_list		*init_env_list(char **env);
+char		**copy_env(char **env);
+int			sync_env(t_data *data);
+char		**env_list_to_array(t_list *env_list);
 
-/******    cleanup_utils.c    ******/
-void	close_all_pipes(t_cmd *cmd_list);
-void	close_cmd_fds(t_cmd *cmd);
-void	cleanup_heredocs(t_data *data);
-void	cleanup_child(t_data *data);
-void	cleanup_exit(t_data *data);
+/******  child.c  ******/
+void		exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 
-/******    heredoc.c   ******/
-int		check_heredoc(t_data *data);
+/******  cleanup_utils.c  ******/
+void		close_all_pipes(t_cmd *cmd_list);
+void		close_cmd_fds(t_cmd *cmd);
+void		cleanup_heredocs(t_data *data);
+void		cleanup_child(t_data *data);
+void		cleanup_exit(t_data *data);
 
-/******    path.c   ******/
-char	*get_full_path(char *cmd, t_list *env_list);
-void	init_cmd_path(t_cmd *cmd, t_data *data);
+/******  heredoc.c  ******/
+int			check_heredoc(t_data *data);
 
-/******    pipe_utils.c    ******/
-int		set_pipe(t_cmd *cmd);
-void	handle_redir_fds(t_cmd *cmd);
-void	connect_pipes(t_cmd *cmd, int prev_pipe_read);
+/******  path.c  ******/
+char		*get_full_path(char *cmd, t_list *env_list);
+void		init_cmd_path(t_cmd *cmd, t_data *data);
 
-/******    pipeline.c    ******/
-void	execute_pipeline(t_data *data);
+/******  pipe_utils.c  ******/
+int			set_pipe(t_cmd *cmd);
+void		handle_redir_fds(t_cmd *cmd);
+void		connect_pipes(t_cmd *cmd, int prev_pipe_read);
 
-/******    wait.c    ******/
-void	wait_all_children(t_data *data);
+/******  pipeline.c  ******/
+void		execute_pipeline(t_data *data);
 
-/******    signals.c    ******/
-void	ignore_signals(void);
-void	set_signal_action(void);
-void	reset_signals_default(void);
+/******  wait.c  ******/
+void		wait_all_children(t_data *data);
+
+/******  signals.c  ******/
+void		ignore_signals(void);
+void		set_signal_action(void);
+void		reset_signals_default(void);
 
 t_cmd		*cmd_new(void);
 t_cmd		*cmd_last(t_cmd *lst);
@@ -213,39 +215,40 @@ void		print_tokens(t_token *tokens);
 t_cmd		*parser(t_token *tokens);
 
 /* token_utils.c */
-t_token	*token_new(char *value, int type);
-t_token	*token_last(t_token *token);
-void	token_add_back(t_token **lst, t_token *new);
-void	token_add_front(t_token **lst, t_token *new);
-int		token_size(t_token *lst);
-void	token_clear(t_token **lst);
+t_token		*token_new(char *value, int type);
+t_token		*token_last(t_token *token);
+void		token_add_back(t_token **lst, t_token *new);
+void		token_add_front(t_token **lst, t_token *new);
+int			token_size(t_token *lst);
+void		token_clear(t_token **lst);
 
 /* lexer_utils.c */
-bool	is_whitespace(char c);
-bool	is_operator(char c);
-void	skip_whitespace(char *line, int *i);
+bool		is_whitespace(char c);
+bool		is_operator(char c);
+void		skip_whitespace(char *line, int *i);
 
 /* expander_utils.c */
-int		get_var_len(char *str);
-char	*char_append(char *s, char c);
-char	*get_env_value_tab(char *var, char **env);
+int			get_var_len(char *str);
+char		*char_append(char *s, char c);
+char		*get_env_value_tab(char *var, char **env);
 
-int	lexer(char *line, t_token **tokens);
-int	expander(t_token *tokens, struct s_data *data);
+int			lexer(char *line, t_token **tokens);
+int			expander(t_token *tokens, struct s_data *data);
 
 /* parser_utils.c */
-int		ft_arrlen(char **arr);
-char	**ft_append_str(char **arr, char *str);
+int			ft_arrlen(char **arr);
+char		**ft_append_str(char **arr, char *str);
 
 /* errors.c */
-void	*ms_error(char *err_msg, void *to_free);
-void	synterr(t_token *token, char c, bool nl, t_data *data);
-void	eoferr(t_state state, t_data *data);
+void		*ms_error(char *err_msg, void *to_free);
+void		synterr(t_token *token, char c, bool nl, t_data *data);
+void		eoferr(t_state state, t_data *data);
 
 /* check_syntax.c */
-int	check_syntax(t_token *tokens, t_data *data);
+int			check_syntax(t_token *tokens, t_data *data);
 
-/******    error_utils.c    ******/
-void	print_error(char *cmd, char *arg, char *msg);
+/******  error_utils.c  ******/
+void		print_error(char *cmd, char *arg, char *msg);
+void		print_error_var(char *cmd, char *arg, char *msg);
 
 #endif

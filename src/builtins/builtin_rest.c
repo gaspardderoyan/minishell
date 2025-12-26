@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 18:14:45 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/23 18:20:37 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/26 13:22:24 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,26 +93,5 @@ int	builtin_env(t_list *env)
 			printf("%s\n", (char *)env->content);
 		env = env->next;
 	}
-	return (0);
-}
-
-/*
-** Builtin unset command.
-** Removes environment variables specified as arguments.
-** @param args: The args array (args[0] = "unset", args[1+] = vars to remove).
-** @param data: Global data structure.
-** @return: Always returns 0 (success).
-*/
-int	builtin_unset(char **args, t_data *data)
-{
-	int	i;
-
-	i = 1;
-	while (args[i])
-	{
-		remove_env_node(&data->env_list, args[i]);
-		i++;
-	}
-	sync_env(data);
 	return (0);
 }

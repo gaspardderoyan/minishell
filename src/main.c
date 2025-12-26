@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 19:24:10 by gderoyan          #+#    #+#             */
-/*   Updated: 2025/12/23 17:59:27 by mgregoir         ###   ########.fr       */
+/*   Updated: 2025/12/26 12:56:42 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ int	main(int ac, char **av, char **env)
 			data.last_exit_code = 130;
 		if (!data.line)
 		{
-			ft_putendl_fd("exit", STDERR_FILENO);
+			if (isatty(STDIN_FILENO))
+				ft_putendl_fd("exit", STDERR_FILENO);
 			break ;
 		}
 		if (data.line[0])
