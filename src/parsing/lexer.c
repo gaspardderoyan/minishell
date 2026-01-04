@@ -12,11 +12,6 @@
 
 #include "minishell.h"
 
-/*
-** Determines the length of an operator token (1 or 2 characters).
-** @param str: The string starting with an operator.
-** @return: 2 if double operator (<<, >>), 1 otherwise.
-*/
 static int	get_operator_len(char *str)
 {
 	if ((*str == '>' || *str == '<') && *str == *(str + 1))
@@ -24,11 +19,6 @@ static int	get_operator_len(char *str)
 	return (1);
 }
 
-/*
-** Skips over quoted content until the closing quote is found.
-** @param line: The input line.
-** @param i: Pointer to the current index (updated to after closing quote).
-*/
 static void	skip_quote_content(char *line, int *i)
 {
 	char	quote_char;
@@ -41,12 +31,6 @@ static void	skip_quote_content(char *line, int *i)
 		(*i)++;
 }
 
-/*
-** Calculates the length of a word token, handling quoted sections.
-** @param line: The input line.
-** @param start: The starting index of the word.
-** @return: The length of the word token.
-*/
 static int	get_word_len(char *line, int start)
 {
 	int	i;
@@ -62,11 +46,6 @@ static int	get_word_len(char *line, int start)
 	return (i - start);
 }
 
-/*
-** Identifies the token type based on its string value.
-** @param str: The token string.
-** @return: The corresponding token type (TOKEN_PIPE, TOKEN_INPUT, etc.).
-*/
 t_token_type	id_token(char *str)
 {
 	if (*str == '|')
@@ -82,12 +61,6 @@ t_token_type	id_token(char *str)
 	return (TOKEN_WORD);
 }
 
-/*
-** Tokenizes an input line into a linked list of tokens.
-** @param line: The input line to tokenize.
-** @param tokens: Pointer to the token list head (will be populated).
-** @return: SUCCESS (0) on success, FAIL (1) on malloc failure.
-*/
 int	lexer(char *line, t_token **tokens)
 {
 	int		i;

@@ -13,11 +13,6 @@
 #include "libft.h"
 #include "minishell.h"
 
-/*
-** Counts the number of strings in a NULL-terminated string array.
-** @param arr: The string array to count (can be NULL).
-** @return: The number of strings, or 0 if arr is NULL.
-*/
 int	ft_arrlen(char **arr)
 {
 	int	i;
@@ -30,13 +25,6 @@ int	ft_arrlen(char **arr)
 	return (i);
 }
 
-/*
-** Appends a string to a NULL-terminated string array.
-** Creates a new array with one additional slot, frees the old array.
-** @param arr: The original string array (can be NULL).
-** @param str: The string to append (ownership transferred to new array).
-** @return: The new array, or NULL on malloc failure.
-*/
 char	**ft_append_str(char **arr, char *str)
 {
 	char	**new_arr;
@@ -59,13 +47,6 @@ char	**ft_append_str(char **arr, char *str)
 	return (new_arr);
 }
 
-/*
-** Creates a redirection structure from a token and filename.
-** Determines the redirection type based on the token type.
-** @param token: The token containing the redirection operator.
-** @param filename: The filename for the redirection (ownership transferred).
-** @return: A new redirection structure, or NULL if token type is invalid.
-*/
 t_redir	*create_redir(t_token *token, char *filename)
 {
 	if (token->type == TOKEN_APPEND)

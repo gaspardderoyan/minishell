@@ -13,11 +13,6 @@
 #include "libft.h"
 #include "minishell.h"
 
-/*
-** Creates a new command node for pipeline.
-** @param cursor: Pointer to current command cursor.
-** @return: The new command node, or NULL on malloc failure.
-*/
 static t_cmd	*handle_pipe(t_cmd **cursor)
 {
 	(*cursor)->next = cmd_new();
@@ -27,12 +22,6 @@ static t_cmd	*handle_pipe(t_cmd **cursor)
 	return (*cursor);
 }
 
-/*
-** Adds a word token to the command's argument array.
-** @param cursor: The current command node.
-** @param token: The token containing the word value.
-** @return: 1 on success, 0 on malloc failure.
-*/
 static int	handle_word(t_cmd *cursor, t_token *token)
 {
 	char	*temp;
@@ -46,12 +35,6 @@ static int	handle_word(t_cmd *cursor, t_token *token)
 	return (1);
 }
 
-/*
-** Creates a redirection from token and adds it to the command.
-** @param cursor: The current command node.
-** @param token: The redirection token (<, >, <<, >>).
-** @return: Pointer to the filename token, or NULL on error.
-*/
 static t_token	*handle_redir(t_cmd *cursor, t_token *token)
 {
 	t_redir	*redir;
@@ -69,13 +52,6 @@ static t_token	*handle_redir(t_cmd *cursor, t_token *token)
 	return (token->next);
 }
 
-/*
-** Processes a single token and updates the command structure.
-** Handles pipes, words, and redirections.
-** @param cursor: Pointer to current command cursor.
-** @param tokens: Pointer to current token pointer.
-** @return: 1 on success, 0 on error.
-*/
 static int	process_token(t_cmd **cursor, t_token **tokens)
 {
 	if ((*tokens)->type == TOKEN_PIPE)
@@ -97,12 +73,6 @@ static int	process_token(t_cmd **cursor, t_token **tokens)
 	return (1);
 }
 
-/*
-** Parses a list of tokens into a command structure.
-** Builds a linked list of commands separated by pipes.
-** @param tokens: The linked list of tokens from the lexer.
-** @return: The head of the command list, or NULL on error.
-*/
 t_cmd	*parser(t_token *tokens)
 {
 	t_cmd	*cmds;

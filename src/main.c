@@ -14,14 +14,6 @@
 
 volatile sig_atomic_t	g_status;
 
-/*
-** Initializes the global data structure.
-** Sets up environment, signals, and initial values for the shell session.
-** @param data: Global data structure to initialize.
-** @param env: Environment array from main.
-** @param ac: Argument count (unused, for future use).
-** @param av: Argument vector (unused, for future use).
-*/
 void	init_data(t_data *data, char **env, int *ac, char ***av)
 {
 	(void)ac;
@@ -38,11 +30,6 @@ void	init_data(t_data *data, char **env, int *ac, char ***av)
 	set_signal_action();
 }
 
-/*
-** Frees resources allocated during a single command cycle.
-** Clears tokens, command list, and input line after each prompt execution.
-** @param data: Global data structure containing cycle resources.
-*/
 void	free_cycle(t_data *data)
 {
 	if (data->tokens)
@@ -56,11 +43,6 @@ void	free_cycle(t_data *data)
 	data->line = NULL;
 }
 
-/*
-** Frees all remaining resources before exiting the shell.
-** Clears environment arrays and readline history.
-** @param data: Global data structure to clean up.
-*/
 void	free_data(t_data *data)
 {
 	if (data->env)
@@ -72,11 +54,6 @@ void	free_data(t_data *data)
 	rl_clear_history();
 }
 
-/*
-** Processes a user input line through lexer, expander, and parser.
-** @param data: Global data structure containing the input line.
-** @return: SUCCESS (0) if parsing succeeded, FAIL (1) otherwise.
-*/
 int	process_line(t_data *data)
 {
 	if (lexer(data->line, &data->tokens) == FAIL)

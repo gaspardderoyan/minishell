@@ -35,14 +35,6 @@ void	print_error(char *cmd, char *arg, char *msg)
 	ft_putendl_fd(msg, STDERR_FILENO);
 }
 
-/*
-** Prints a formatted error message for variable-related errors.
-** Format: "minishell: [cmd: ]`arg': msg\n"
-** Used specifically for export/unset variable validation errors.
-** @param cmd: Optional command name (can be NULL).
-** @param arg: Variable name that caused the error (printed with backticks).
-** @param msg: The error message to display.
-*/
 void	print_error_var(char *cmd, char *arg, char *msg)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
