@@ -13,7 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -27,6 +26,7 @@
 # include <signal.h>
 # include <sys/stat.h>
 # include <errno.h>
+# include "libft.h"
 
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
@@ -166,7 +166,6 @@ void		exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 
 /******  cleanup_utils.c  ******/
 void		close_all_pipes(t_cmd *cmd_list);
-void		close_cmd_fds(t_cmd *cmd);
 void		cleanup_heredocs(t_data *data);
 void		cleanup_child(t_data *data);
 void		cleanup_exit(t_data *data);
