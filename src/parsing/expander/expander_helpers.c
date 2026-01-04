@@ -77,4 +77,3 @@ char	*get_env_value_tab(char *var, char **env)
 	}
 	return (ft_strdup(""));
 }
-

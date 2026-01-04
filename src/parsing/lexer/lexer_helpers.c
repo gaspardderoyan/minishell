@@ -48,4 +48,3 @@ void	skip_whitespace(char *line, int *i)
 	while (is_whitespace(line[*i]) && line[*i])
 		(*i)++;
 }
-

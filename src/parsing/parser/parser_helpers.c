@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 /*
@@ -57,4 +56,23 @@ char	**ft_append_str(char **arr, char *str)
 	if (arr)
 		free(arr);
 	return (new_arr);
+}
+
+/*
+** Creates a new redirection node based on the token type and filename.
+** @param token: The token representing the redirection operator.
+** @param filename: The filename associated with the redirection.
+** @return: A new t_redir node, or NULL on error.
+*/
+t_redir	*create_redir(t_token *token, char *filename)
+{
+	if (token->type == TOKEN_APPEND)
+		return (redir_new(REDIR_APPEND, filename));
+	else if (token->type == TOKEN_INPUT)
+		return (redir_new(REDIR_IN, filename));
+	else if (token->type == TOKEN_OUTPUT)
+		return (redir_new(REDIR_OUT, filename));
+	else if (token->type == TOKEN_HEREDOC)
+		return (redir_new(REDIR_HEREDOC, filename));
+	return (NULL);
 }

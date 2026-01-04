@@ -113,4 +113,3 @@ void	token_delete(t_token **lst, t_token *token)
 		free(token->value);
 	free(token);
 }
-

@@ -10,27 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-
-/*
-** Creates a new redirection node based on the token type and filename.
-** @param token: The token representing the redirection operator.
-** @param filename: The filename associated with the redirection.
-** @return: A new t_redir node, or NULL on error.
-*/
-static t_redir	*create_redir(t_token *token, char *filename)
-{
-	if (token->type == TOKEN_APPEND)
-		return (redir_new(REDIR_APPEND, filename));
-	else if (token->type == TOKEN_INPUT)
-		return (redir_new(REDIR_IN, filename));
-	else if (token->type == TOKEN_OUTPUT)
-		return (redir_new(REDIR_OUT, filename));
-	else if (token->type == TOKEN_HEREDOC)
-		return (redir_new(REDIR_HEREDOC, filename));
-	return (NULL);
-}
 
 /*
 ** Handles a pipe token by creating a new command node and linking it.
@@ -120,7 +100,8 @@ static int	process_token(t_cmd **cursor, t_token **tokens)
 }
 
 /*
-** Main parser function. Converts a linked list of tokens into a command pipeline.
+** Main parser function. Converts a linked list of tokens into a
+** command pipeline.
 ** Creates a new command list and populates it by processing each token.
 ** @param tokens: The head of the token linked list.
 ** @return: The head of the command linked list, or NULL on error.
