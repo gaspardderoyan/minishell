@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup_utils.c                                    :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -35,25 +35,6 @@ void	close_all_pipes(t_cmd *cmd_list)
 			tmp->pipefd[1] = -1;
 		}
 		tmp = tmp->next;
-	}
-}
-
-/*
-** Closes the input and output file descriptors of a command.
-** Only closes if fd is valid and not stdin/stdout.
-** @param cmd: The command structure containing fd_in and fd_out.
-*/
-void	close_cmd_fds(t_cmd *cmd)
-{
-	if (cmd->fd_in != -1 && cmd->fd_in != STDIN_FILENO)
-	{
-		close(cmd->fd_in);
-		cmd->fd_in = -1;
-	}
-	if (cmd->fd_out != -1 && cmd->fd_out != STDOUT_FILENO)
-	{
-		close(cmd->fd_out);
-		cmd->fd_out = -1;
 	}
 }
 

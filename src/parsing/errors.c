@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/*
+** Prints an error message and frees the provided pointer.
+** @param err_msg: The error message to display.
+** @param to_free: Pointer to free (can be NULL).
+** @return: Always returns NULL (for convenient error propagation).
+*/
 void	*ms_error(char *err_msg, void *to_free)
 {
 	if (to_free)
@@ -21,11 +27,12 @@ void	*ms_error(char *err_msg, void *to_free)
 }
 
 /*
-** prints to STDERR the 'minishell: syntax error near
-** unexpected token `X' message
-** where X will be 'newline' if nl is TRUE
-** else if c != 0, X = c
-** else c = token->value[0]
+** Prints a syntax error message to stderr.
+** Formats: "minishell: syntax error near unexpected token `X'"
+** @param token: The token causing the error (can be NULL).
+** @param c: Character to display (0 = use token->value[0]).
+** @param nl: If true, displays "newline" instead of a character.
+** @param data: Global data structure (sets exit code to 2).
 */
 void	synterr(t_token *token, char c, bool nl, t_data *data)
 {
@@ -42,6 +49,11 @@ void	synterr(t_token *token, char c, bool nl, t_data *data)
 		"minishell: syntax error near unexpected token `%c'\n", c);
 }
 
+/*
+** Prints an error message for unexpected EOF while parsing quotes.
+** @param state: The current parsing state (STATE_QUOTES or STATE_DQUOTES).
+** @param data: Global data structure (sets exit code to 2).
+*/
 void	eoferr(t_state state, t_data *data)
 {
 	char	c;

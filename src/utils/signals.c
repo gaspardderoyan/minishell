@@ -14,6 +14,11 @@
 
 extern volatile sig_atomic_t	g_status;
 
+/*
+** Signal handler for SIGINT (Ctrl+C).
+** Updates global status and displays a new prompt line.
+** @param signal: The signal number received.
+*/
 static void	signal_handler(int signal)
 {
 	g_status = signal;
@@ -26,6 +31,11 @@ static void	signal_handler(int signal)
 	}
 }
 
+/*
+** Configures signal handlers for the interactive shell.
+** SIGINT (Ctrl+C): handled by signal_handler (new prompt line).
+** SIGQUIT (Ctrl+\): ignored.
+*/
 void	set_signal_action(void)
 {
 	struct sigaction	act;
@@ -41,6 +51,10 @@ void	set_signal_action(void)
 	sigaction(SIGQUIT, &act, NULL);
 }
 
+/*
+** Ignores SIGINT and SIGQUIT signals.
+** Called when waiting for child processes to prevent shell interruption.
+*/
 void	ignore_signals(void)
 {
 	struct sigaction	sa;

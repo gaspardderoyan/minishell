@@ -69,10 +69,10 @@ typedef struct s_token
 ------------------------------------------------------- */
 typedef enum e_redir_type
 {
-	REDIR_IN,     // <   (Input from file)
-	REDIR_OUT,    // >   (Output to file, overwrite)
-	REDIR_APPEND, // >>  (Output to file, append)
-	REDIR_HEREDOC // <<  (Input from terminal until delimiter)
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	REDIR_HEREDOC
 }			t_redir_type;
 
 /* -------------------------------------------------------
@@ -81,10 +81,10 @@ typedef enum e_redir_type
 ------------------------------------------------------- */
 typedef struct s_redir
 {
-	t_redir_type type;    // The type (from the enum above)
-	char *filename;       // The filename (or delimiter for heredoc)
-	struct s_redir *next; // Pointer to the next redirection node
-}			t_redir;
+	t_redir_type	type;
+	char			*filename;
+	struct s_redir	*next;
+}		t_redir;
 
 /* -------------------------------------------------------
    3. COMMAND TABLE
@@ -92,165 +92,152 @@ typedef struct s_redir
 ------------------------------------------------------- */
 typedef struct s_cmd
 {
-	// --- PARSER FIELDS (Filled by You) ---
-	char **args;        // The command and its flags
-	t_redir *redirs;    // Linked list of redirections
-	struct s_cmd *next; // Pointer to the next command (pipe)
-						// --- EXECUTOR FIELDS (Filled by Teammate) ---
-	char *cmd_path;     // /usr/bin/ls (ou NULL si builtin/introuvable)
-	pid_t pid;          // PID du processus fils (-1 si builtin)
-	int fd_in;          // FD final d'entrée (0, fichier, ou pipe_read)
-	int fd_out;         // FD final de sortie (1, fichier, ou pipe_write)
-	int pipefd[2];      // Le pipe vers la commande SUIVANTE
-						// pipe_fd[0] sera lu par cmd->next
-						// pipe_fd[1] sera écrit par cmd actuel
-	char *heredoc_file; // (Optionnel) Nom du fichier temporaire si <<
-						// Utile pour le unlink() lors du cleanup
+	char			*args;
+	t_redir			*redirs;
+	struct s_cmd	*next;
+	char			*cmd_path;
+	pid_t			*pid;
+	int				*fd_in;
+	int				*fd_out;
+	int				*pipefd[2];
+	char			*heredoc_file;
 }			t_cmd;
 
 typedef struct s_data
 {
-	t_cmd	*cmd_list;      // Le début de ta liste chaînée de commandes
-	char	**env;    		// L'environnement converti pour execve
-	t_list	*env_list;      // L'environnement manipulable (export/unset)
-    int		last_exit_code; // Le code de retour de la dernière commande ($?)
-	t_token *tokens;    // The tokens lists
+	t_cmd	*cmd_list;
+	char	**env;
+	t_list	*env_list;
+	int		last_exit_code;
+	t_token	*tokens;
 	char	*line;
 	int		stdin_backup;
 	int		stdout_backup;
-} t_data;
+}	t_data;
 
-/******  builtin_cd.c  ******/
+/******  BUILTINS - builtin_cd.c  ******/
 int			builtin_cd(char **args, t_data *data);
 
-/******  builtin_exit.c  ******/
+/******  BUILTINS - builtin_exit.c  ******/
 int			builtin_exit(char **args, t_data *data);
 
-/******  builtin_export.c  ******/
+/******  BUILTINS - builtin_export.c  ******/
 int			builtin_export(char **args, t_data *data);
 
-/******  builtin_rest.c  ******/
+/******  BUILTINS - builtin_rest.c  ******/
 int			builtin_echo(char **args);
 int			builtin_pwd(void);
 int			builtin_env(t_list *env);
 
-/******  builtin_unset.c  ******/
+/******  BUILTINS - builtin_unset.c  ******/
 int			builtin_unset(char **args, t_data *data);
 
-/******  builtins_dispatch.c  ******/
+/******  BUILTINS - builtins_dispatch.c  ******/
 int			is_builtin(char *cmd);
 int			is_modifier_builtin(char *cmd);
 int			dispatch_builtin(t_cmd *cmd, t_data *data);
 
-/******  builtins_exec.c  ******/
+/******  BUILTINS - builtins_exec.c  ******/
 int			apply_redirections(t_cmd *cmd);
 void		execute_builtin_in_parent(t_cmd *cmd, t_data *data);
 
-/******  sort_export.c  ******/
+/******  BUILTINS - sort_export.c  ******/
 int			print_sorted_env(t_data *data);
 
-/******  env_utils.c  ******/
-char		*get_env_value(t_list *env_list, char *key);
-t_list		*find_env_node(t_list *env, char *key);
-int			update_or_add_env(t_list **env, char *key, char *value);
-void		remove_env_node(t_list **env, char *key);
-
-/******  env.c  ******/
+/******  ENV - env.c  ******/
 t_list		*init_env_list(char **env);
 char		**copy_env(char **env);
 int			sync_env(t_data *data);
 char		**env_list_to_array(t_list *env_list);
 
-/******  child.c  ******/
+/******  EXEC - child.c  ******/
 void		exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 
-/******  cleanup_utils.c  ******/
-void		close_all_pipes(t_cmd *cmd_list);
-void		close_cmd_fds(t_cmd *cmd);
-void		cleanup_heredocs(t_data *data);
-void		cleanup_child(t_data *data);
-void		cleanup_exit(t_data *data);
-
-/******  heredoc.c  ******/
+/******  EXEC - heredoc.c  ******/
 int			check_heredoc(t_data *data);
 
-/******  path.c  ******/
-char		*get_full_path(char *cmd, t_list *env_list);
-void		init_cmd_path(t_cmd *cmd, t_data *data);
-
-/******  pipe_utils.c  ******/
-int			set_pipe(t_cmd *cmd);
-void		handle_redir_fds(t_cmd *cmd);
-void		connect_pipes(t_cmd *cmd, int prev_pipe_read);
-
-/******  pipeline.c  ******/
+/******  EXEC - pipeline.c  ******/
 void		execute_pipeline(t_data *data);
 
-/******  wait.c  ******/
+/******  EXEC - wait.c  ******/
 void		wait_all_children(t_data *data);
 
-/******  signals.c  ******/
-void		ignore_signals(void);
-void		set_signal_action(void);
-void		reset_signals_default(void);
+/******  PARSING - EXPANDER - expander.c  ******/
+int			expander(t_token *tokens, struct s_data *data);
 
-t_cmd		*cmd_new(void);
-t_cmd		*cmd_last(t_cmd *lst);
-void		cmd_add_back(t_cmd **lst, t_cmd *new);
-void		cmd_clear(t_cmd **lst);
-void		free_cycle(t_data *data);
-void		free_data(t_data *data);
+/******  PARSING - EXPANDER - expander_helpers.c  ******/
+int			get_var_len(char *str);
+char		*char_append(char *s, char c);
+char		*get_env_value_tab(char *var, char **env);	
 
-t_redir		*redir_new(t_redir_type type, char *filename);
-t_redir		*redir_last(t_redir *lst);
-void		redir_add_back(t_redir **lst, t_redir *new);
-void		redir_clear(t_redir **lst);
-t_redir		*create_redir(t_token *token, char *filename);
+/******  PARSING - LEXER - lexer.c  ******/
+int			lexer(char *line, t_token **tokens);
 
-/* utils_to_delete.c */
-void		print_cmds(t_cmd *cmds);
-void		print_tokens(t_token *tokens);
-
-/* parser.c */
-t_cmd		*parser(t_token *tokens);
-
-/* token_utils.c */
-t_token		*token_new(char *value, int type);
-t_token		*token_last(t_token *token);
-void		token_add_back(t_token **lst, t_token *new);
-void		token_add_front(t_token **lst, t_token *new);
-int			token_size(t_token *lst);
-void		token_clear(t_token **lst);
-void		token_delete(t_token **lst, t_token *token);
-
-/* lexer_utils.c */
+/******  PARSING - LEXER - lexer_helpers.c  ******/
 bool		is_whitespace(char c);
 bool		is_operator(char c);
 void		skip_whitespace(char *line, int *i);
 
-/* expander_utils.c */
-int			get_var_len(char *str);
-char		*char_append(char *s, char c);
-char		*get_env_value_tab(char *var, char **env);
+/******  PARSING - LEXER - token.c  ******/
+t_token		*token_new(char *value, int type);
+t_token		*token_last(t_token *token);
+void		token_add_back(t_token **lst, t_token *new);
+void		token_clear(t_token **lst);
+void		token_delete(t_token **lst, t_token *token);
 
-int			lexer(char *line, t_token **tokens);
-int			expander(t_token *tokens, struct s_data *data);
+/******  PARSING - PARSER - command.c  ******/
+t_cmd		*cmd_new(void);
+void		cmd_add_back(t_cmd **lst, t_cmd *new);
+void		cmd_clear(t_cmd **lst);
 
-/* parser_utils.c */
-int			ft_arrlen(char **arr);
+/******  PARSING - PARSER - parser_helpers.c  ******/
 char		**ft_append_str(char **arr, char *str);
 
-/* errors.c */
+/******  PARSING - PARSER - parser.c  ******/
+t_cmd		*parser(t_token *tokens);
+
+/******  PARSING - PARSER - redirection.c  ******/
+t_redir		*redir_new(t_redir_type type, char *filename);
+void		redir_add_back(t_redir **lst, t_redir *new);
+void		redir_clear(t_redir **lst);
+
+/******  PARSING - syntax.c  ******/
+void		remove_empty_tokens(t_token **tokens);
+int			check_syntax(t_token *tokens, t_data *data);
+
+/******  PARSING - errors.c  ******/
 void		*ms_error(char *err_msg, void *to_free);
 void		synterr(t_token *token, char c, bool nl, t_data *data);
 void		eoferr(t_state state, t_data *data);
 
-/* check_syntax.c */
-void		remove_empty_tokens(t_token **tokens);
-int			check_syntax(t_token *tokens, t_data *data);
+/******  UTILS - signals.c  ******/
+void		ignore_signals(void);
+void		set_signal_action(void);
+void		reset_signals_default(void);
 
-/******  error_utils.c  ******/
+/******  UTILS - cleanup.c  ******/
+void		close_all_pipes(t_cmd *cmd_list);
+void		cleanup_heredocs(t_data *data);
+void		cleanup_child(t_data *data);
+void		cleanup_exit(t_data *data);
+
+/******  UTILS - env.c  ******/
+char		*get_env_value(t_list *env_list, char *key);
+t_list		*find_env_node(t_list *env, char *key);
+int			update_or_add_env(t_list **env, char *key, char *value);
+void		remove_env_node(t_list **env, char *key);
+
+/******  UTILS - errors.c  ******/
 void		print_error(char *cmd, char *arg, char *msg);
 void		print_error_var(char *cmd, char *arg, char *msg);
+
+/******  UTILS - path.c  ******/
+char		*get_full_path(char *cmd, t_list *env_list);
+void		init_cmd_path(t_cmd *cmd, t_data *data);
+
+/******  UTILS - pipe.c  ******/
+int			set_pipe(t_cmd *cmd);
+void		handle_redir_fds(t_cmd *cmd);
+void		connect_pipes(t_cmd *cmd, int prev_pipe_read);
 
 #endif

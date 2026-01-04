@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   parser_helpers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,7 +13,12 @@
 #include "libft.h"
 #include "minishell.h"
 
-int	ft_arrlen(char **arr)
+/*
+** Calculates the number of elements in a NULL-terminated string array.
+** @param arr: The string array.
+** @return: The number of elements in the array, or 0 if NULL.
+*/
+static int	ft_arrlen(char **arr)
 {
 	int	i;
 
@@ -25,6 +30,13 @@ int	ft_arrlen(char **arr)
 	return (i);
 }
 
+/*
+** Appends a new string to a NULL-terminated string array.
+** Allocates a new array and frees the old one.
+** @param arr: The original string array (can be NULL).
+** @param str: The string to append.
+** @return: The new array with the appended string, or NULL on malloc failure.
+*/
 char	**ft_append_str(char **arr, char *str)
 {
 	char	**new_arr;
@@ -45,17 +57,4 @@ char	**ft_append_str(char **arr, char *str)
 	if (arr)
 		free(arr);
 	return (new_arr);
-}
-
-t_redir	*create_redir(t_token *token, char *filename)
-{
-	if (token->type == TOKEN_APPEND)
-		return (redir_new(REDIR_APPEND, filename));
-	else if (token->type == TOKEN_INPUT)
-		return (redir_new(REDIR_IN, filename));
-	else if (token->type == TOKEN_OUTPUT)
-		return (redir_new(REDIR_OUT, filename));
-	else if (token->type == TOKEN_HEREDOC)
-		return (redir_new(REDIR_HEREDOC, filename));
-	return (NULL);
 }
