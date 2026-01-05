@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_utils.c                                        :+:      :+:    :+:   */
+/*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gaspardderoyan <marvin@42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -37,7 +37,12 @@ t_cmd	*cmd_new(void)
 	return (new_node);
 }
 
-t_cmd	*cmd_last(t_cmd *lst)
+/*
+** Returns the last command node in the linked list.
+** @param lst: The head of the command list.
+** @return: The last command node, or NULL if the list is empty.
+*/
+static t_cmd	*cmd_last(t_cmd *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -46,6 +51,11 @@ t_cmd	*cmd_last(t_cmd *lst)
 	return (lst);
 }
 
+/*
+** Adds a new command node at the end of the list.
+** @param lst: Pointer to the head of the command list.
+** @param new: The new command node to add.
+*/
 void	cmd_add_back(t_cmd **lst, t_cmd *new)
 {
 	t_cmd	*last_node;
@@ -83,6 +93,8 @@ static void	free_args(char **args)
 
 /*
 ** Clears the command list and all nested structures.
+** Frees args, redirections, paths, and heredoc files.
+** @param lst: Pointer to the head of the command list.
 */
 void	cmd_clear(t_cmd **lst)
 {

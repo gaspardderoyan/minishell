@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir_utils.c                                      :+:      :+:    :+:   */
+/*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/*
+** Creates a new redirection node.
+** @param type: The redirection type (REDIR_IN, REDIR_OUT, etc.).
+** @param filename: The filename for the redirection.
+** @return: Pointer to the new redirection, or NULL on allocation failure.
+*/
 t_redir	*redir_new(t_redir_type type, char *filename)
 {
 	t_redir	*new_node;
@@ -25,7 +31,12 @@ t_redir	*redir_new(t_redir_type type, char *filename)
 	return (new_node);
 }
 
-t_redir	*redir_last(t_redir *lst)
+/*
+** Returns the last redirection in the linked list.
+** @param lst: The head of the redirection list.
+** @return: The last redirection, or NULL if the list is empty.
+*/
+static t_redir	*redir_last(t_redir *lst)
 {
 	if (!lst)
 		return (NULL);
@@ -34,6 +45,11 @@ t_redir	*redir_last(t_redir *lst)
 	return (lst);
 }
 
+/*
+** Adds a new redirection at the end of the list.
+** @param lst: Pointer to the head of the redirection list.
+** @param new: The new redirection to add.
+*/
 void	redir_add_back(t_redir **lst, t_redir *new)
 {
 	t_redir	*last_node;
@@ -49,6 +65,10 @@ void	redir_add_back(t_redir **lst, t_redir *new)
 	last_node->next = new;
 }
 
+/*
+** Clears the entire redirection list and frees all allocated memory.
+** @param lst: Pointer to the head of the redirection list.
+*/
 void	redir_clear(t_redir **lst)
 {
 	t_redir	*temp;

@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/*
+** Validates an environment variable key name for unset.
+** Key must start with letter or underscore, followed by alphanumeric or _.
+** @param key: The key string to validate.
+** @return: 1 if valid, 0 otherwise.
+*/
 static int	is_valid_unset_key(char *key)
 {
 	int	i;

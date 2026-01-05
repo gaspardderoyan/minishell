@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+/*
+** Determines the length of an operator token.
+** Handles single-character operators ('|', '>', '<') and
+** double-character operators ('>>', '<<').
+** @param str: Pointer to the start of the potential operator.
+** @return: The length of the operator (1 or 2).
+*/
 static int	get_operator_len(char *str)
 {
 	if ((*str == '>' || *str == '<') && *str == *(str + 1))
@@ -19,6 +26,12 @@ static int	get_operator_len(char *str)
 	return (1);
 }
 
+/*
+** Skips over the content within a quoted section of the input line.
+** Moves the index past the opening quote, content, and closing quote.
+** @param line: The input line string.
+** @param i: Pointer to the current index in the line.
+*/
 static void	skip_quote_content(char *line, int *i)
 {
 	char	quote_char;
@@ -31,6 +44,14 @@ static void	skip_quote_content(char *line, int *i)
 		(*i)++;
 }
 
+/*
+** Calculates the length of a word token.
+** A word is a sequence of characters not separated by whitespace or operators.
+** Handles quoted sections within words.
+** @param line: The input line string.
+** @param start: The starting index of the word.
+** @return: The length of the word.
+*/
 static int	get_word_len(char *line, int start)
 {
 	int	i;
@@ -46,6 +67,11 @@ static int	get_word_len(char *line, int start)
 	return (i - start);
 }
 
+/*
+** Identifies the type of a token based on its string value.
+** @param str: The string value of the token.
+** @return: The corresponding t_token_type enum value.
+*/
 t_token_type	id_token(char *str)
 {
 	if (*str == '|')
@@ -61,6 +87,13 @@ t_token_type	id_token(char *str)
 	return (TOKEN_WORD);
 }
 
+/*
+** Main lexer function. Breaks down the input line into a linked list of tokens.
+** Skips whitespace, identifies operators and words, and creates token nodes.
+** @param line: The input line string.
+** @param tokens: Pointer to the head of the token linked list.
+** @return: SUCCESS (0) on successful tokenization, FAIL (1) on allocation error.
+*/
 int	lexer(char *line, t_token **tokens)
 {
 	int		i;

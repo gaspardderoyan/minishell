@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+/*
+** Retrieves the value of a variable from the environment.
+** Handles special variable "$?" (exit code).
+** @param token: The token string containing the variable.
+** @param i: Index of the '$' character in the token.
+** @param len: Length of the variable name.
+** @param data: Global data structure containing environment and exit code.
+** @return: The variable value, or NULL if not found.
+*/
 static char	*get_var_val(char *token, int i, int len, t_data *data)
 {
 	char	*var_name;
@@ -29,8 +38,13 @@ static char	*get_var_val(char *token, int i, int len, t_data *data)
 }
 
 /*
-** Helper: Handles variable expansion.
-** Returns updated string and advances index i past the variable name.
+** Handles variable expansion in a token.
+** Expands "$VAR" to its value, advances index past the variable name.
+** @param res: The result string being built.
+** @param token: The token string being processed.
+** @param i: Pointer to current index (will be updated).
+** @param data: Global data structure for environment/exit code.
+** @return: Updated result string with expansion, or NULL on error.
 */
 static char	*handle_expansion(char *res, char *token, int *i, t_data *data)
 {
@@ -56,8 +70,10 @@ static char	*handle_expansion(char *res, char *token, int *i, t_data *data)
 }
 
 /*
-** Updates quote state and returns 1 if quote should be removed.
-** Returns 0 if the quote is inside another quote type (preserved).
+** Toggles quote state when encountering quotes.
+** @param c: Current character ('\'' or '"').
+** @param state: Pointer to current quote state.
+** @return: 1 if quote should be removed, 0 if preserved (nested).
 */
 static int	is_quote_toggle(char c, t_state *state)
 {
@@ -80,7 +96,14 @@ static int	is_quote_toggle(char c, t_state *state)
 	return (0);
 }
 
-char	*expand_token(char *tkn, t_data *d)
+/*
+** Expands variables and removes quotes from a token string.
+** Handles quotes, variable expansion, and forbidden characters.
+** @param tkn: The token string to expand.
+** @param d: Global data structure.
+** @return: The expanded string, or NULL on error (syntax/memory).
+*/
+static char	*expand_token(char *tkn, t_data *d)
 {
 	char	*res;
 	int		i;
@@ -108,6 +131,12 @@ char	*expand_token(char *tkn, t_data *d)
 	return (res);
 }
 
+/*
+** Main expander function. Expands all TOKEN_WORD tokens in the list.
+** @param tokens: The head of the token linked list.
+** @param data: Global data structure.
+** @return: SUCCESS (0) on success, FAIL (1) on error.
+*/
 int	expander(t_token *tokens, t_data *data)
 {
 	char	*new;

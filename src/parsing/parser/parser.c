@@ -10,9 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
+/*
+** Handles a pipe token by creating a new command node and linking it.
+** Moves the cursor to the new command node.
+** @param cursor: Pointer to the current command node pointer.
+** @return: The new command node, or NULL on allocation failure.
+*/
 static t_cmd	*handle_pipe(t_cmd **cursor)
 {
 	(*cursor)->next = cmd_new();
@@ -22,6 +27,13 @@ static t_cmd	*handle_pipe(t_cmd **cursor)
 	return (*cursor);
 }
 
+/*
+** Handles a word token by adding its value to the current command's arguments.
+** Duplicates the token value before adding.
+** @param cursor: The current command node.
+** @param token: The word token to handle.
+** @return: 1 on success, 0 on allocation failure.
+*/
 static int	handle_word(t_cmd *cursor, t_token *token)
 {
 	char	*temp;
@@ -35,6 +47,13 @@ static int	handle_word(t_cmd *cursor, t_token *token)
 	return (1);
 }
 
+/*
+** Handles a redirection token by creating a new redirection node.
+** Adds the redirection to the current command's redirection list.
+** @param cursor: The current command node.
+** @param token: The redirection operator token.
+** @return: The token after the redirection (filename), or NULL on error.
+*/
 static t_token	*handle_redir(t_cmd *cursor, t_token *token)
 {
 	t_redir	*redir;
@@ -52,6 +71,13 @@ static t_token	*handle_redir(t_cmd *cursor, t_token *token)
 	return (token->next);
 }
 
+/*
+** Processes a single token, dispatching it to the appropriate handler
+** (pipe, word, or redirection).
+** @param cursor: Pointer to the current command node pointer.
+** @param tokens: Pointer to the current token pointer.
+** @return: 1 on success, 0 on failure.
+*/
 static int	process_token(t_cmd **cursor, t_token **tokens)
 {
 	if ((*tokens)->type == TOKEN_PIPE)
@@ -73,6 +99,13 @@ static int	process_token(t_cmd **cursor, t_token **tokens)
 	return (1);
 }
 
+/*
+** Main parser function. Converts a linked list of tokens into a
+** command pipeline.
+** Creates a new command list and populates it by processing each token.
+** @param tokens: The head of the token linked list.
+** @return: The head of the command linked list, or NULL on error.
+*/
 t_cmd	*parser(t_token *tokens)
 {
 	t_cmd	*cmds;

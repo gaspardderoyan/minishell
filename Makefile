@@ -10,29 +10,6 @@ LIBFT= $(LIBFT_DIR)/libft.a
 NAME = minishell
 
 SRC_FILES = main.c \
-			parsing/token_utils.c \
-			parsing/token_utils_2.c \
-			parsing/lexer.c \
-			parsing/expander.c \
-			parsing/expander_utils.c \
-			parsing/redir_utils.c \
-			parsing/cmd_utils.c \
-			parsing/parser.c \
-			parsing/parser_utils.c \
-			parsing/lexer_utils.c \
-			parsing/errors.c \
-			parsing/check_syntax.c \
-			parsing/signals.c \
-			parsing/utils_to_delete.c \
-			env/env.c \
-			env/env_utils.c \
-			exec/child.c \
-			exec/cleanup_utils.c \
-			exec/heredoc.c \
-			exec/path.c \
-			exec/pipe_utils.c \
-			exec/pipeline.c \
-			exec/wait.c \
 			builtins/builtin_cd.c \
 			builtins/builtin_exit.c \
 			builtins/builtin_export.c \
@@ -41,7 +18,28 @@ SRC_FILES = main.c \
 			builtins/builtins_dispatch.c \
 			builtins/builtins_exec.c \
 			builtins/sort_export.c \
-			utils/error_utils.c
+			env/env.c \
+			exec/child.c \
+			exec/heredoc.c \
+			exec/pipeline.c \
+			exec/wait.c \
+			parsing/expander/expander.c \
+			parsing/expander/expander_helpers.c \
+			parsing/lexer/token.c \
+			parsing/lexer/lexer.c \
+			parsing/lexer/lexer_helpers.c \
+			parsing/parser/parser.c \
+			parsing/parser/parser_helpers.c \
+			parsing/parser/command.c \
+			parsing/parser/redirection.c \
+			parsing/syntax.c \
+			parsing/errors.c \
+			utils/signals.c \
+			utils/cleanup.c \
+			utils/env.c \
+			utils/errors.c \
+			utils/path.c \
+			utils/pipe.c
 
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

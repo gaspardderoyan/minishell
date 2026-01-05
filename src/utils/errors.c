@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_utils.c                                      :+:      :+:    :+:   */
+/*   errors.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -35,6 +35,13 @@ void	print_error(char *cmd, char *arg, char *msg)
 	ft_putendl_fd(msg, STDERR_FILENO);
 }
 
+/*
+** Prints a formatted error message for invalid variable identifiers.
+** Format: "minishell: [cmd: ]`arg': msg\n"
+** @param cmd: Optional command name (can be NULL).
+** @param arg: The invalid argument (e.g., variable name).
+** @param msg: The error message to display.
+*/
 void	print_error_var(char *cmd, char *arg, char *msg)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);

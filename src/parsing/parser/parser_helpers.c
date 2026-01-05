@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   parser_helpers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,10 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
-int	ft_arrlen(char **arr)
+/*
+** Calculates the number of elements in a NULL-terminated string array.
+** @param arr: The string array.
+** @return: The number of elements in the array, or 0 if NULL.
+*/
+static int	ft_arrlen(char **arr)
 {
 	int	i;
 
@@ -25,6 +29,13 @@ int	ft_arrlen(char **arr)
 	return (i);
 }
 
+/*
+** Appends a new string to a NULL-terminated string array.
+** Allocates a new array and frees the old one.
+** @param arr: The original string array (can be NULL).
+** @param str: The string to append.
+** @return: The new array with the appended string, or NULL on malloc failure.
+*/
 char	**ft_append_str(char **arr, char *str)
 {
 	char	**new_arr;
@@ -47,6 +58,12 @@ char	**ft_append_str(char **arr, char *str)
 	return (new_arr);
 }
 
+/*
+** Creates a new redirection node based on the token type and filename.
+** @param token: The token representing the redirection operator.
+** @param filename: The filename associated with the redirection.
+** @return: A new t_redir node, or NULL on error.
+*/
 t_redir	*create_redir(t_token *token, char *filename)
 {
 	if (token->type == TOKEN_APPEND)
