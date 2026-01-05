@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 14:50:13 by mgregoir          #+#    #+#             */
-/*   Updated: 2026/01/05 12:35:14 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/05 17:01:38 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	cleanup_exit(t_data *data)
 		free(data->line);
 	if (data->tokens)
 		token_clear(&data->tokens);
-	//rl_clear_history();
 	if (data->stdin_backup != -1)
 		close(data->stdin_backup);
 	if (data->stdout_backup != -1)
