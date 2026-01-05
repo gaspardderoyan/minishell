@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/26 14:00:13 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/05 12:10:33 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,14 @@ typedef struct s_redir
 ------------------------------------------------------- */
 typedef struct s_cmd
 {
-	char			*args;
+	char			**args;
 	t_redir			*redirs;
 	struct s_cmd	*next;
 	char			*cmd_path;
-	pid_t			*pid;
-	int				*fd_in;
-	int				*fd_out;
-	int				*pipefd[2];
+	pid_t			pid;
+	int				fd_in;
+	int				fd_out;
+	int				pipefd[2];
 	char			*heredoc_file;
 }			t_cmd;
 
