@@ -61,7 +61,8 @@ static void	shell_loop(t_data *data)
 		}
 		if (data->line[0])
 		{
-			add_history(data->line);
+			if (isatty(STDIN_FILENO))
+				add_history(data->line);
 			if (process_line(data) == SUCCESS)
 				execute_pipeline(data);
 		}
