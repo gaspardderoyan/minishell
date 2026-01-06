@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern volatile sig_atomic_t	g_status;
-
 /*
 ** Signal handler for SIGINT (Ctrl+C).
 ** Updates global status and displays a new prompt line.

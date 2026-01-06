@@ -94,6 +94,7 @@ void	cleanup_exit(t_data *data)
 		free(data->line);
 	if (data->tokens)
 		token_clear(&data->tokens);
+	rl_clear_history();
 	if (data->stdin_backup != -1)
 		close(data->stdin_backup);
 	if (data->stdout_backup != -1)

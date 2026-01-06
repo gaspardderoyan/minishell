@@ -38,6 +38,8 @@
 # define SUCCESS 0
 # define FAIL 1
 
+extern volatile sig_atomic_t	g_status;
+
 typedef enum e_state
 {
 	STATE_IDLE,
