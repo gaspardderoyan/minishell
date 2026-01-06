@@ -243,4 +243,9 @@ int			set_pipe(t_cmd *cmd);
 void		handle_redir_fds(t_cmd *cmd);
 void		connect_pipes(t_cmd *cmd, int prev_pipe_read);
 
+/******  UTILS - memory.c  ******/
+void		init_data(t_data *data, char **env, int *ac, char ***av);
+void		free_cycle(t_data *data);
+void		free_data(t_data *data);
+
 #endif

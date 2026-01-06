@@ -39,7 +39,8 @@ SRC_FILES = main.c \
 			utils/env.c \
 			utils/errors.c \
 			utils/path.c \
-			utils/pipe.c
+			utils/pipe.c \
+			utils/memory.c
 
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
