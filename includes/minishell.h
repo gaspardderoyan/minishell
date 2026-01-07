@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2026/01/07 19:17:15 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/07 19:22:35 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,10 +211,12 @@ void		*ms_error(char *err_msg, void *to_free);
 void		synterr(t_token *token, char c, bool nl, t_data *data);
 void		eoferr(t_state state, t_data *data);
 
-/******  UTILS - signals.c  ******/
+/******  SIGNALS - signals.c  ******/
 void		ignore_signals(void);
 void		set_signal_action(void);
 void		reset_signals_default(void);
+
+/******  SIGNALS - signals_heredoc.c  ******/
 
 /******  UTILS - cleanup.c  ******/
 void		close_all_pipes(t_cmd *cmd_list);
