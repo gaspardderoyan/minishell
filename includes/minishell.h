@@ -116,6 +116,7 @@ typedef struct s_data
 	int		stdin_backup;
 	int		stdout_backup;
 	int		line_count;
+	int		heredoc_line;
 }	t_data;
 
 /******  BUILTINS - builtin_cd.c  ******/

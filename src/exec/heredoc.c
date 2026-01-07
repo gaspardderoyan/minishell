@@ -50,10 +50,10 @@ static int	handle_eof_warning(char *delimiter, int line_count)
 ** Writes input to the given file descriptor.
 ** @param fd: The file descriptor to write to.
 ** @param delimiter: The string that terminates input.
-** @param line_count: The line number where heredoc started.
+** @param data: Global data structure for line counts.
 ** @return: 0 on success, -1 on interruption/error.
 */
-static int	fill_heredoc(int fd, char *delimiter, int line_count)
+static int	fill_heredoc(int fd, char *delimiter, t_data *data)
 {
 	char	*line;
 	int		len;
@@ -64,10 +64,11 @@ static int	fill_heredoc(int fd, char *delimiter, int line_count)
 		line = readline("> ");
 		if (!line)
 		{
-			if (handle_eof_warning(delimiter, line_count) == -1)
+			if (handle_eof_warning(delimiter, data->heredoc_line) == -1)
 				return (-1);
 			break ;
 		}
+		data->line_count++;
 		if (ft_strncmp(line, delimiter, len) == 0 && line[len] == '\0')
 		{
 			free(line);
@@ -84,10 +85,10 @@ static int	fill_heredoc(int fd, char *delimiter, int line_count)
 ** Handles opening, error checking, filling, and cleanup on failure.
 ** @param filename: Path to the temporary file.
 ** @param delimiter: The heredoc delimiter.
-** @param line_count: The line number where heredoc started.
+** @param data: Global data structure.
 ** @return: 0 on success, -1 on error.
 */
-static int	open_heredoc_file(char *filename, char *delimiter, int line_count)
+static int	open_heredoc_file(char *filename, char *delimiter, t_data *data)
 {
 	int	fd;
 	int	ret;
@@ -98,7 +99,7 @@ static int	open_heredoc_file(char *filename, char *delimiter, int line_count)
 		perror("minishell: heredoc");
 		return (-1);
 	}
-	ret = fill_heredoc(fd, delimiter, line_count);
+	ret = fill_heredoc(fd, delimiter, data);
 	close(fd);
 	if (ret == -1)
 	{
@@ -114,17 +115,17 @@ static int	open_heredoc_file(char *filename, char *delimiter, int line_count)
 ** @param cmd: The command associated with the heredoc.
 ** @param redir: The redirection node containing the delimiter.
 ** @param unique_id: Counter to ensure unique filenames.
-** @param line_count: The line number where heredoc started.
+** @param data: Global data structure.
 ** @return: 0 on success, -1 on error.
 */
-static int	process_one_heredoc(t_cmd *cmd, t_redir *rdir, int id, int line_cnt)
+static int	process_one_heredoc(t_cmd *cmd, t_redir *redir, int id, t_data *d)
 {
 	char	*filename;
 
 	filename = generate_heredoc_name(id);
 	if (!filename)
 		return (-1);
-	if (open_heredoc_file(filename, rdir->filename, line_cnt) == -1)
+	if (open_heredoc_file(filename, redir->filename, d) == -1)
 	{
 		free(filename);
 		return (-1);
@@ -156,13 +157,14 @@ int	check_heredoc(t_data *data)
 	set_signal_heredoc();
 	cmd = data->cmd_list;
 	i = 0;
+	data->heredoc_line = data->line_count;
 	while (cmd)
 	{
 		redir = cmd->redirs;
 		while (redir)
 		{
 			if (redir->type == REDIR_HEREDOC)
-				if (process_one_heredoc(cmd, redir, i++, data->line_count) < 0)
+				if (process_one_heredoc(cmd, redir, i++, data) < 0)
 					return (handle_heredoc_interrupt(data, bkp));
 			redir = redir->next;
 		}
