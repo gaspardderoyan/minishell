@@ -24,6 +24,7 @@ void	init_data(t_data *data, char **env, int *ac, char ***av)
 	data->line = NULL;
 	data->stdin_backup = -1;
 	data->stdout_backup = -1;
+	data->line_count = 0;
 	g_status = 0;
 	set_signal_action();
 }

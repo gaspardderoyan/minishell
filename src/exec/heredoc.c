@@ -6,51 +6,69 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 14:54:47 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/22 18:07:14 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/07 10:25:14 by gderoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
-** Generates a unique heredoc temporary filename.
-** @param i: Unique identifier number.
-** @return: Allocated filename string (e.g., ".heredoc_tmp_0"),
-** or NULL on error.
+** Handles the warning message when EOF (Ctrl+D) is encountered
+** during heredoc input.
+** Checks if interruption was by signal (Ctrl+C) first.
+** @param delimiter: The expected delimiter string.
+** @param line_count: The line number where heredoc started.
+** @return: -1 if interrupted by signal, 0 if true EOF.
 */
-static char	*generate_heredoc_name(int i)
+static int	handle_eof_warning(char *delimiter, int line_count)
 {
-	char	*num;
-	char	*name;
+	char	*s_cnt;
+	char	*msg;
+	char	*tmp;
 
-	num = ft_itoa(i);
-	if (!num)
-		return (NULL);
-	name = ft_strjoin(".heredoc_tmp_", num);
-	free(num);
-	return (name);
+	if (g_status == 130)
+		return (-1);
+	s_cnt = ft_itoa(line_count);
+	msg = ft_strjoin("minishell: warning: here-document at line ", s_cnt);
+	free(s_cnt);
+	tmp = msg;
+	msg = ft_strjoin(msg, " delimited by end-of-file (wanted `");
+	free(tmp);
+	tmp = msg;
+	msg = ft_strjoin(msg, delimiter);
+	free(tmp);
+	tmp = msg;
+	msg = ft_strjoin(msg, "')\n");
+	free(tmp);
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+	free(msg);
+	return (0);
 }
 
 /*
-** Reads lines from stdin until delimiter is found or EOF (Ctrl+D).
-** Each line is written to the given file descriptor.
-** @param fd: File descriptor to write lines to.
-** @param delimiter: The heredoc delimiter string.
-** @return: 0 on success, -1 if interrupted (Ctrl+D).
+** Reads lines from stdin until delimiter is found or EOF.
+** Writes input to the given file descriptor.
+** @param fd: The file descriptor to write to.
+** @param delimiter: The string that terminates input.
+** @param line_count: The line number where heredoc started.
+** @return: 0 on success, -1 on interruption/error.
 */
-static int	fill_heredoc(int fd, char *delimiter)
+static int	fill_heredoc(int fd, char *delimiter, int line_count)
 {
 	char	*line;
-	int		delimiter_len;
+	int		len;
 
-	delimiter_len = ft_strlen(delimiter);
+	len = ft_strlen(delimiter);
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
-			return (-1);
-		if (ft_strncmp(line, delimiter, delimiter_len) == 0
-			&& line[delimiter_len] == '\0')
+		{
+			if (handle_eof_warning(delimiter, line_count) == -1)
+				return (-1);
+			break ;
+		}
+		if (ft_strncmp(line, delimiter, len) == 0 && line[len] == '\0')
 		{
 			free(line);
 			break ;
@@ -62,12 +80,14 @@ static int	fill_heredoc(int fd, char *delimiter)
 }
 
 /*
-** Opens a heredoc file and fills it with user input until delimiter.
-** @param filename: The temporary file path to create.
-** @param delimiter: The heredoc delimiter string.
-** @return: 0 on success, -1 on error (file is unlinked on failure).
+** Opens the temporary heredoc file and initiates filling it.
+** Handles opening, error checking, filling, and cleanup on failure.
+** @param filename: Path to the temporary file.
+** @param delimiter: The heredoc delimiter.
+** @param line_count: The line number where heredoc started.
+** @return: 0 on success, -1 on error.
 */
-static int	open_and_fill_heredoc(char *filename, char *delimiter)
+static int	open_heredoc_file(char *filename, char *delimiter, int line_count)
 {
 	int	fd;
 	int	ret;
@@ -78,7 +98,7 @@ static int	open_and_fill_heredoc(char *filename, char *delimiter)
 		perror("minishell: heredoc");
 		return (-1);
 	}
-	ret = fill_heredoc(fd, delimiter);
+	ret = fill_heredoc(fd, delimiter, line_count);
 	close(fd);
 	if (ret == -1)
 	{
@@ -89,21 +109,22 @@ static int	open_and_fill_heredoc(char *filename, char *delimiter)
 }
 
 /*
-** Processes a single heredoc redirection for a command.
-** Creates temporary file, prompts user for input, stores filename in cmd.
-** @param cmd: The command structure to attach heredoc file to.
-** @param redir: The redirection containing the delimiter.
-** @param unique_id: Unique identifier for the heredoc file.
+** Coordinates the creation of a single heredoc file.
+** Generates filename, opens file, and updates command structure.
+** @param cmd: The command associated with the heredoc.
+** @param redir: The redirection node containing the delimiter.
+** @param unique_id: Counter to ensure unique filenames.
+** @param line_count: The line number where heredoc started.
 ** @return: 0 on success, -1 on error.
 */
-static int	process_one_heredoc(t_cmd *cmd, t_redir *redir, int unique_id)
+static int	process_one_heredoc(t_cmd *cmd, t_redir *rdir, int id, int line_cnt)
 {
 	char	*filename;
 
-	filename = generate_heredoc_name(unique_id);
+	filename = generate_heredoc_name(id);
 	if (!filename)
 		return (-1);
-	if (open_and_fill_heredoc(filename, redir->filename) == -1)
+	if (open_heredoc_file(filename, rdir->filename, line_cnt) == -1)
 	{
 		free(filename);
 		return (-1);
@@ -118,17 +139,21 @@ static int	process_one_heredoc(t_cmd *cmd, t_redir *redir, int unique_id)
 }
 
 /*
-** Processes all heredoc redirections in the command list.
-** Called before pipeline execution to create all heredoc temporary files.
-** @param data: Global data structure containing cmd_list.
-** @return: 0 on success, 1 on error.
+** Main entry point for processing all heredocs in the pipeline.
+** Iterates through all commands and their redirections.
+** Sets up special signal handling for the duration.
+** @param data: Global data structure containing the command list.
+** @return: 0 on success, 1 on interruption/error.
 */
 int	check_heredoc(t_data *data)
 {
 	t_cmd	*cmd;
 	t_redir	*redir;
 	int		i;
+	int		bkp;
 
+	bkp = dup(STDIN_FILENO);
+	set_signal_heredoc();
 	cmd = data->cmd_list;
 	i = 0;
 	while (cmd)
@@ -137,13 +162,13 @@ int	check_heredoc(t_data *data)
 		while (redir)
 		{
 			if (redir->type == REDIR_HEREDOC)
-			{
-				if (process_one_heredoc(cmd, redir, i++) == -1)
-					return (1);
-			}
+				if (process_one_heredoc(cmd, redir, i++, data->line_count) < 0)
+					return (handle_heredoc_interrupt(data, bkp));
 			redir = redir->next;
 		}
 		cmd = cmd->next;
 	}
+	close(bkp);
+	set_signal_action();
 	return (0);
 }

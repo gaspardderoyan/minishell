@@ -50,6 +50,7 @@ static void	shell_loop(t_data *data)
 	while (1)
 	{
 		g_status = 0;
+		data->line_count++;
 		data->line = read_input();
 		if (g_status == SIGINT)
 			data->last_exit_code = 130;

@@ -21,6 +21,7 @@ SRC_FILES = main.c \
 			env/env.c \
 			exec/child.c \
 			exec/heredoc.c \
+			exec/heredoc_utils.c \
 			exec/pipeline.c \
 			exec/wait.c \
 			parsing/expander/expander.c \
@@ -35,6 +36,7 @@ SRC_FILES = main.c \
 			parsing/syntax.c \
 			parsing/errors.c \
 			utils/signals.c \
+			utils/signals_heredoc.c \
 			utils/cleanup.c \
 			utils/env.c \
 			utils/errors.c \

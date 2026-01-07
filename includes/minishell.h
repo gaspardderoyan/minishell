@@ -115,6 +115,7 @@ typedef struct s_data
 	char	*line;
 	int		stdin_backup;
 	int		stdout_backup;
+	int		line_count;
 }	t_data;
 
 /******  BUILTINS - builtin_cd.c  ******/
@@ -157,6 +158,8 @@ void		exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 
 /******  EXEC - heredoc.c  ******/
 int			check_heredoc(t_data *data);
+char		*generate_heredoc_name(int i);
+int			handle_heredoc_interrupt(t_data *data, int stdin_backup);
 
 /******  EXEC - pipeline.c  ******/
 void		execute_pipeline(t_data *data);
@@ -217,6 +220,7 @@ void		eoferr(t_state state, t_data *data);
 void		ignore_signals(void);
 void		set_signal_action(void);
 void		reset_signals_default(void);
+void		set_signal_heredoc(void);
 
 /******  UTILS - cleanup.c  ******/
 void		close_all_pipes(t_cmd *cmd_list);
