@@ -120,8 +120,6 @@ static char	*expand_token(char *tkn, t_data *d)
 			;
 		else if (tkn[i] == '$' && state != STATE_QUOTES)
 			res = handle_expansion(res, tkn, &i, d);
-		else if (ft_strchr("\\;&", tkn[i]) && state == STATE_IDLE)
-			return (synterr(NULL, tkn[i], 0, d), free(res), NULL);
 		else
 			res = char_append(res, tkn[i]);
 		i++;
