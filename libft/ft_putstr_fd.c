@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:58:50 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/05/06 14:17:52 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/07 14:31:33 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@
  */
 void	ft_putstr_fd(char *s, int fd)
 {
-	while (*s)
-	{
-		ft_putchar_fd(*s, fd);
-		s++;
-	}
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
 }

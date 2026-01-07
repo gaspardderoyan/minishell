@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 14:40:37 by mgregoir          #+#    #+#             */
-/*   Updated: 2026/01/05 16:58:58 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/07 17:04:57 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,32 +41,45 @@ static int	setup_redir(char *file, int flags, int target_fd)
 }
 
 /*
+** Processes a single redirection based on its type.
+** Handles input (<), heredoc (<<), output (>), and append (>>).
+** @param cmd: The command structure (for heredoc file).
+** @param cur: The current redirection to process.
+** @return: 0 on success, -1 on error.
+*/
+static int	process_single_redir(t_cmd *cmd, t_redir *cur)
+{
+	int	flags;
+
+	if (cur->type == REDIR_IN)
+		return (setup_redir(cur->filename, O_RDONLY, STDIN_FILENO));
+	if (cur->type == REDIR_HEREDOC)
+	{
+		if (cmd->heredoc_file)
+			return (setup_redir(cmd->heredoc_file, O_RDONLY, STDIN_FILENO));
+		return (-1);
+	}
+	if (cur->type == REDIR_OUT)
+		flags = O_WRONLY | O_CREAT | O_TRUNC;
+	else
+		flags = O_WRONLY | O_CREAT | O_APPEND;
+	return (setup_redir(cur->filename, flags, STDOUT_FILENO));
+}
+
+/*
 ** Applies all redirections for a builtin command.
+** Iterates through the redirection list and processes each one.
 ** @param cmd: The command structure containing redirections.
 ** @return: 0 on success, -1 on error.
 */
 int	apply_redirections(t_cmd *cmd)
 {
 	t_redir	*cur;
-	int		flags;
-	int		ret;
 
 	cur = cmd->redirs;
 	while (cur)
 	{
-		if (cur->type == REDIR_IN || cur->type == REDIR_HEREDOC)
-			ret = setup_redir(cur->filename, O_RDONLY, STDIN_FILENO);
-		else if (cur->type == REDIR_OUT)
-		{
-			flags = O_WRONLY | O_CREAT | O_TRUNC;
-			ret = setup_redir(cur->filename, flags, STDOUT_FILENO);
-		}
-		else
-		{
-			flags = O_WRONLY | O_CREAT | O_APPEND;
-			ret = setup_redir(cur->filename, flags, STDOUT_FILENO);
-		}
-		if (ret == -1)
+		if (process_single_redir(cmd, cur) == -1)
 			return (-1);
 		cur = cur->next;
 	}
@@ -74,9 +87,9 @@ int	apply_redirections(t_cmd *cmd)
 }
 
 /*
-** Restores stdin/stdout from backups and closes backup fds.
-** Checks dup2() return values and prints error if it fails.
-** @param data: Global data structure containing fd backups.
+** Restores standard input and output to their original state.
+** Uses backed-up file descriptors and closes them after restoration.
+** @param data: Global data structure containing stdin/stdout backups.
 */
 static void	restore_stdio(t_data *data)
 {
@@ -92,7 +105,8 @@ static void	restore_stdio(t_data *data)
 
 /*
 ** Executes a builtin command in the parent process.
-** Saves and restores stdin/stdout around redirections.
+** Saves stdin/stdout, applies redirections, executes builtin,
+** then restores.
 ** @param cmd: The command to execute.
 ** @param data: Global data structure.
 */
