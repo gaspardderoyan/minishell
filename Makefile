@@ -35,14 +35,14 @@ SRC_FILES = main.c \
 			parsing/parser/redirection.c \
 			parsing/syntax.c \
 			parsing/errors.c \
-			utils/signals.c \
-			utils/signals_heredoc.c \
 			utils/cleanup.c \
 			utils/env.c \
 			utils/errors.c \
 			utils/path.c \
 			utils/pipe.c \
-			utils/memory.c
+			utils/memory.c \
+			signals/signals.c \
+			signals/signals_heredoc.c \
 
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
@@ -59,6 +59,16 @@ all: $(NAME)
 # Build the main executable
 $(NAME): $(OBJS) $(LIBFT) 
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
+	@printf '\033[1;36m'
+	@printf ' __  __ _____ _   _ _____  _____ _    _ ______ _      _      \n'
+	@printf '|  \\/  |_   _| \\ | |_   _|/ ____| |  | |  ____| |    | |     \n'
+	@printf '| \\  / | | | |  \\| | | | | (___ | |__| | |__  | |    | |     \n'
+	@printf '| |\\/| | | | | . ` | | |  \\___ \\|  __  |  __| | |    | |     \n'
+	@printf '| |  | |_| |_| |\\  |_| |_ ____) | |  | | |____| |____| |____ \n'
+	@printf '|_|  |_|_____|_| \\_|_____|_____/|_|  |_|______|______|______| \n'
+	@printf '                                                             \n'
+	@printf '            Du bocal et du shell                             \n'
+	@printf '\033[0m'
 	@echo "$(NAME) is ready !"
 
 # Compile the object files for main sources
