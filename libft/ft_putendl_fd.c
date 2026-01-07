@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:14:15 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/05/02 17:36:02 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/07 14:31:44 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
  */
 void	ft_putendl_fd(char *s, int fd)
 {
+	if (!s)
+		return ;
 	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
+	write(fd, "\n", 1);
 }

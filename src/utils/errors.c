@@ -12,6 +12,19 @@
 
 #include "minishell.h"
 
+static char	*str_append(char *s1, char *s2)
+{
+	char	*new_str;
+
+	if (!s1)
+		return (NULL);
+	if (!s2)
+		return (s1);
+	new_str = ft_strjoin(s1, s2);
+	free(s1);
+	return (new_str);
+}
+
 /*
 ** Prints a formatted error message to stderr.
 ** Format: "minishell: [cmd: ][arg: ]msg\n"
@@ -21,18 +34,28 @@
 */
 void	print_error(char *cmd, char *arg, char *msg)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	char	*str;
+
+	str = ft_strdup("minishell: ");
+	if (!str)
+		return ;
 	if (cmd)
 	{
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
+		str = str_append(str, cmd);
+		str = str_append(str, ": ");
 	}
 	if (arg)
 	{
-		ft_putstr_fd(arg, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
+		str = str_append(str, arg);
+		str = str_append(str, ": ");
 	}
-	ft_putendl_fd(msg, STDERR_FILENO);
+	str = str_append(str, msg);
+	str = str_append(str, "\n");
+	if (str)
+	{
+		ft_putstr_fd(str, STDERR_FILENO);
+		free(str);
+	}
 }
 
 /*
@@ -44,18 +67,27 @@ void	print_error(char *cmd, char *arg, char *msg)
 */
 void	print_error_var(char *cmd, char *arg, char *msg)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	char	*str;
+
+	str = ft_strdup("minishell: ");
+	if (!str)
+		return ;
 	if (cmd)
 	{
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
+		str = str_append(str, cmd);
+		str = str_append(str, ": ");
 	}
 	if (arg)
 	{
-		ft_putstr_fd("`", STDERR_FILENO);
-		ft_putstr_fd(arg, STDERR_FILENO);
-		ft_putstr_fd("'", STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
+		str = str_append(str, "`");
+		str = str_append(str, arg);
+		str = str_append(str, "': ");
 	}
-	ft_putendl_fd(msg, STDERR_FILENO);
+	str = str_append(str, msg);
+	str = str_append(str, "\n");
+	if (str)
+	{
+		ft_putstr_fd(str, STDERR_FILENO);
+		free(str);
+	}
 }

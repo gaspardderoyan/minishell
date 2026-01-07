@@ -57,11 +57,17 @@ all: $(NAME)
 # Build the main executable
 $(NAME): $(OBJS) $(LIBFT) 
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
+	@echo "$(NAME) is ready !"
 
 # Compile the object files for main sources
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@) # @ so not printed
-	$(CC) $(CFLAGS)  -c $< -o $@
+	@mkdir -p $(dir $@)
+# printf plus puissant que echo format du texte propre
+# %s : on insere une chaine de caracteres (string)
+# 30 : reserve un espace fixe de 30 caracteres
+# - : Aligne le texte a gauche (sans le moins, il s'aligne a droite)
+	@printf "Compiling: %-30s\r" $(notdir $<)
+	@$(CC) $(CFLAGS)  -c $< -o $@
 
 ################################################################################
 # Helper Targets (clean, fclean, re)
