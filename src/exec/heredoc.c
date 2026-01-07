@@ -17,16 +17,31 @@
 ** during heredoc input.
 ** Checks if interruption was by signal (Ctrl+C) first.
 ** @param delimiter: The expected delimiter string.
+** @param line_count: The line number where heredoc started.
 ** @return: -1 if interrupted by signal, 0 if true EOF.
 */
-static int	handle_eof_warning(char *delimiter)
+static int	handle_eof_warning(char *delimiter, int line_count)
 {
+	char	*s_cnt;
+	char	*msg;
+	char	*tmp;
+
 	if (g_status == 130)
 		return (-1);
-	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
-	ft_putstr_fd("end-of-file (wanted `", 2);
-	ft_putstr_fd(delimiter, 2);
-	ft_putendl_fd("')", 2);
+	s_cnt = ft_itoa(line_count);
+	msg = ft_strjoin("minishell: warning: here-document at line ", s_cnt);
+	free(s_cnt);
+	tmp = msg;
+	msg = ft_strjoin(msg, " delimited by end-of-file (wanted `");
+	free(tmp);
+	tmp = msg;
+	msg = ft_strjoin(msg, delimiter);
+	free(tmp);
+	tmp = msg;
+	msg = ft_strjoin(msg, "')\n");
+	free(tmp);
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+	free(msg);
 	return (0);
 }
 
@@ -35,9 +50,10 @@ static int	handle_eof_warning(char *delimiter)
 ** Writes input to the given file descriptor.
 ** @param fd: The file descriptor to write to.
 ** @param delimiter: The string that terminates input.
+** @param line_count: The line number where heredoc started.
 ** @return: 0 on success, -1 on interruption/error.
 */
-static int	fill_heredoc(int fd, char *delimiter)
+static int	fill_heredoc(int fd, char *delimiter, int line_count)
 {
 	char	*line;
 	int		len;
@@ -48,7 +64,7 @@ static int	fill_heredoc(int fd, char *delimiter)
 		line = readline("> ");
 		if (!line)
 		{
-			if (handle_eof_warning(delimiter) == -1)
+			if (handle_eof_warning(delimiter, line_count) == -1)
 				return (-1);
 			break ;
 		}
@@ -68,9 +84,10 @@ static int	fill_heredoc(int fd, char *delimiter)
 ** Handles opening, error checking, filling, and cleanup on failure.
 ** @param filename: Path to the temporary file.
 ** @param delimiter: The heredoc delimiter.
+** @param line_count: The line number where heredoc started.
 ** @return: 0 on success, -1 on error.
 */
-static int	open_heredoc_file(char *filename, char *delimiter)
+static int	open_heredoc_file(char *filename, char *delimiter, int line_count)
 {
 	int	fd;
 	int	ret;
@@ -81,7 +98,7 @@ static int	open_heredoc_file(char *filename, char *delimiter)
 		perror("minishell: heredoc");
 		return (-1);
 	}
-	ret = fill_heredoc(fd, delimiter);
+	ret = fill_heredoc(fd, delimiter, line_count);
 	close(fd);
 	if (ret == -1)
 	{
@@ -97,16 +114,17 @@ static int	open_heredoc_file(char *filename, char *delimiter)
 ** @param cmd: The command associated with the heredoc.
 ** @param redir: The redirection node containing the delimiter.
 ** @param unique_id: Counter to ensure unique filenames.
+** @param line_count: The line number where heredoc started.
 ** @return: 0 on success, -1 on error.
 */
-static int	process_one_heredoc(t_cmd *cmd, t_redir *redir, int unique_id)
+static int	process_one_heredoc(t_cmd *cmd, t_redir *rdir, int id, int line_cnt)
 {
 	char	*filename;
 
-	filename = generate_heredoc_name(unique_id);
+	filename = generate_heredoc_name(id);
 	if (!filename)
 		return (-1);
-	if (open_heredoc_file(filename, redir->filename) == -1)
+	if (open_heredoc_file(filename, rdir->filename, line_cnt) == -1)
 	{
 		free(filename);
 		return (-1);
@@ -144,7 +162,7 @@ int	check_heredoc(t_data *data)
 		while (redir)
 		{
 			if (redir->type == REDIR_HEREDOC)
-				if (process_one_heredoc(cmd, redir, i++) == -1)
+				if (process_one_heredoc(cmd, redir, i++, data->line_count) < 0)
 					return (handle_heredoc_interrupt(data, bkp));
 			redir = redir->next;
 		}
