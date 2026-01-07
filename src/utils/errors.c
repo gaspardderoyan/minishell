@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                       :+:      :+:    :+:   */
+/*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -120,7 +120,10 @@ int	print_eof_warning(char *delim, int line_count)
 	msg = str_append(msg, " delimited by end-of-file (wanted `");
 	msg = str_append(msg, delim);
 	msg = str_append(msg, "')\n");
-	write(STDERR_FILENO, msg, ft_strlen(msg));
-	free(msg);
+	if (msg)
+	{
+		ft_putstr_fd(msg, STDERR_FILENO);
+		free(msg);
+	}
 	return (0);
 }
