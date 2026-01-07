@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2026/01/05 12:10:33 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/07 19:17:15 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@
 
 # define SUCCESS 0
 # define FAIL 1
-
-extern volatile sig_atomic_t	g_status;
 
 typedef enum e_state
 {
@@ -115,8 +113,6 @@ typedef struct s_data
 	char	*line;
 	int		stdin_backup;
 	int		stdout_backup;
-	int		line_count;
-	int		heredoc_line;
 }	t_data;
 
 /******  BUILTINS - builtin_cd.c  ******/
@@ -159,8 +155,6 @@ void		exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 
 /******  EXEC - heredoc.c  ******/
 int			check_heredoc(t_data *data);
-char		*generate_heredoc_name(int i);
-int			handle_heredoc_interrupt(t_data *data, int stdin_backup);
 
 /******  EXEC - pipeline.c  ******/
 void		execute_pipeline(t_data *data);
@@ -221,7 +215,6 @@ void		eoferr(t_state state, t_data *data);
 void		ignore_signals(void);
 void		set_signal_action(void);
 void		reset_signals_default(void);
-void		set_signal_heredoc(void);
 
 /******  UTILS - cleanup.c  ******/
 void		close_all_pipes(t_cmd *cmd_list);
@@ -238,7 +231,6 @@ void		remove_env_node(t_list **env, char *key);
 /******  UTILS - errors.c  ******/
 void		print_error(char *cmd, char *arg, char *msg);
 void		print_error_var(char *cmd, char *arg, char *msg);
-int			print_eof_warning(char *delim, int line_count);
 
 /******  UTILS - path.c  ******/
 char		*get_full_path(char *cmd, t_list *env_list);
@@ -248,10 +240,5 @@ void		init_cmd_path(t_cmd *cmd, t_data *data);
 int			set_pipe(t_cmd *cmd);
 void		handle_redir_fds(t_cmd *cmd);
 void		connect_pipes(t_cmd *cmd, int prev_pipe_read);
-
-/******  UTILS - memory.c  ******/
-void		init_data(t_data *data, char **env, int *ac, char ***av);
-void		free_cycle(t_data *data);
-void		free_data(t_data *data);
 
 #endif
