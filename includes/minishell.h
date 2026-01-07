@@ -238,6 +238,7 @@ void		remove_env_node(t_list **env, char *key);
 /******  UTILS - errors.c  ******/
 void		print_error(char *cmd, char *arg, char *msg);
 void		print_error_var(char *cmd, char *arg, char *msg);
+int			print_eof_warning(char *delim, int line_count);
 
 /******  UTILS - path.c  ******/
 char		*get_full_path(char *cmd, t_list *env_list);

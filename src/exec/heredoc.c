@@ -13,39 +13,6 @@
 #include "minishell.h"
 
 /*
-** Handles the warning message when EOF (Ctrl+D) is encountered
-** during heredoc input.
-** Checks if interruption was by signal (Ctrl+C) first.
-** @param delimiter: The expected delimiter string.
-** @param line_count: The line number where heredoc started.
-** @return: -1 if interrupted by signal, 0 if true EOF.
-*/
-static int	handle_eof_warning(char *delimiter, int line_count)
-{
-	char	*s_cnt;
-	char	*msg;
-	char	*tmp;
-
-	if (g_status == 130)
-		return (-1);
-	s_cnt = ft_itoa(line_count);
-	msg = ft_strjoin("minishell: warning: here-document at line ", s_cnt);
-	free(s_cnt);
-	tmp = msg;
-	msg = ft_strjoin(msg, " delimited by end-of-file (wanted `");
-	free(tmp);
-	tmp = msg;
-	msg = ft_strjoin(msg, delimiter);
-	free(tmp);
-	tmp = msg;
-	msg = ft_strjoin(msg, "')\n");
-	free(tmp);
-	write(STDERR_FILENO, msg, ft_strlen(msg));
-	free(msg);
-	return (0);
-}
-
-/*
 ** Reads lines from stdin until delimiter is found or EOF.
 ** Writes input to the given file descriptor.
 ** @param fd: The file descriptor to write to.
@@ -64,7 +31,7 @@ static int	fill_heredoc(int fd, char *delimiter, t_data *data)
 		line = readline("> ");
 		if (!line)
 		{
-			if (handle_eof_warning(delimiter, data->heredoc_line) == -1)
+			if (print_eof_warning(delimiter, data->heredoc_line) == -1)
 				return (-1);
 			break ;
 		}
