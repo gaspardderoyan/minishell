@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 14:49:11 by gderoyan          #+#    #+#             */
-/*   Updated: 2026/01/08 12:45:24 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/08 18:20:09 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 /*
 ** Initializes the global data structure at program start.
-** Sets up environment, signals, and ensures PWD is correctly set.
 ** @param data: The global data structure to initialize.
 ** @param env: The environment array from main.
 ** @param ac: Pointer to argc (unused).

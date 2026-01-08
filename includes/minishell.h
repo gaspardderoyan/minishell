@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2026/01/08 12:54:11 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/08 17:06:24 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,12 @@ char		**copy_env(char **env);
 int			sync_env(t_data *data);
 char		**env_list_to_array(t_list *env_list);
 
+/******  ENV - env_helpers.c  ******/
+char		*get_env_value(t_list *env_list, char *key);
+t_list		*find_env_node(t_list *env, char *key);
+int			update_or_add_env(t_list **env, char *key, char *value);
+void		remove_env_node(t_list **env, char *key);
+
 /******  EXEC - child.c  ******/
 void		exec_child(t_cmd *cmd, t_data *data, int prev_read_fd);
 
@@ -233,12 +239,6 @@ void		close_all_pipes(t_cmd *cmd_list);
 void		cleanup_heredocs(t_data *data);
 void		cleanup_child(t_data *data);
 void		cleanup_exit(t_data *data);
-
-/******  UTILS - env.c  ******/
-char		*get_env_value(t_list *env_list, char *key);
-t_list		*find_env_node(t_list *env, char *key);
-int			update_or_add_env(t_list **env, char *key, char *value);
-void		remove_env_node(t_list **env, char *key);
 
 /******  UTILS - errors.c  ******/
 void		print_error(char *cmd, char *arg, char *msg);

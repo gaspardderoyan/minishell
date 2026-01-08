@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 20:00:00 by mgregoir          #+#    #+#             */
-/*   Updated: 2025/12/26 13:14:59 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/08 18:06:51 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 #include "minishell.h"
 #include <unistd.h>
 
+/*
+** Appends s2 to s1 and automatically frees s1.
+** Useful for building strings dynamically without leaks.
+** @param s1: The accumulator string (will be freed).
+** @param s2: The string to append.
+** @return: The new concatenated string.
+*/
 static char	*str_append(char *s1, char *s2)
 {
 	char	*new_str;

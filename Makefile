@@ -19,6 +19,7 @@ SRC_FILES = main.c \
 			builtins/builtins_exec.c \
 			builtins/sort_export.c \
 			env/env.c \
+			env/env_helpers.c \
 			exec/child.c \
 			exec/heredoc.c \
 			exec/pipeline.c \
@@ -37,7 +38,6 @@ SRC_FILES = main.c \
 			signals/signals.c \
 			signals/signals_heredoc.c \
 			utils/cleanup.c \
-			utils/env.c \
 			utils/errors.c \
 			utils/heredoc.c \
 			utils/path.c \
