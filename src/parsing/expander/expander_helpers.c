@@ -77,3 +77,24 @@ char	*get_env_value_tab(char *var, char **env)
 	}
 	return (ft_strdup(""));
 }
+
+/*
+** Checks for brace expansion and updates indices.
+** @param tkn: Token string.
+** @param idx: Pointer to current index in token (after $).
+** @param i: Pointer to main index (to be adjusted).
+** @return: Length of variable name, or 0 if invalid.
+*/
+int	check_brace(char *tkn, int *idx, int *i)
+{
+	int	len;
+
+	len = get_var_len(&tkn[*idx + 1]);
+	if (tkn[*idx + 1 + len] == '}')
+	{
+		(*idx)++;
+		*i += 2;
+		return (len);
+	}
+	return (0);
+}

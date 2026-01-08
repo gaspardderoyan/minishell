@@ -16,17 +16,17 @@
 ** Retrieves the value of a variable from the environment.
 ** Handles special variable "$?" (exit code).
 ** @param token: The token string containing the variable.
-** @param i: Index of the '$' character in the token.
+** @param idx: Index of the start of the variable name in the token.
 ** @param len: Length of the variable name.
 ** @param data: Global data structure containing environment and exit code.
 ** @return: The variable value, or NULL if not found.
 */
-static char	*get_var_val(char *token, int i, int len, t_data *data)
+static char	*get_var_val(char *token, int idx, int len, t_data *data)
 {
 	char	*var_name;
 	char	*var_val;
 
-	var_name = ft_substr(token, i + 1, len);
+	var_name = ft_substr(token, idx, len);
 	if (!var_name)
 		return (NULL);
 	if (ft_strncmp(var_name, "?", 2) == 0)
@@ -51,8 +51,13 @@ static char	*handle_expansion(char *res, char *token, int *i, t_data *data)
 	char	*var;
 	char	*temp;
 	int		len;
+	int		idx;
 
-	len = get_var_len(&token[*i + 1]);
+	idx = *i + 1;
+	if (token[idx] == '{')
+		len = check_brace(token, &idx, i);
+	else
+		len = get_var_len(&token[idx]);
 	if (len == 0)
 	{
 		res = char_append(res, '$');
@@ -60,7 +65,7 @@ static char	*handle_expansion(char *res, char *token, int *i, t_data *data)
 			return (NULL);
 		return (res);
 	}
-	var = get_var_val(token, *i, len, data);
+	var = get_var_val(token, idx, len, data);
 	temp = res;
 	res = ft_strjoin(res, var);
 	if (!res)

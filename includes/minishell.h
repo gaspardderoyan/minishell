@@ -175,6 +175,7 @@ int			expander(t_token *tokens, struct s_data *data);
 int			get_var_len(char *str);
 char		*char_append(char *s, char c);
 char		*get_env_value_tab(char *var, char **env);	
+int			check_brace(char *tkn, int *idx, int *i);
 
 /******  PARSING - LEXER - lexer.c  ******/
 int			lexer(char *line, t_token **tokens);
