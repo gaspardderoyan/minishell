@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2026/01/08 17:06:24 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/08 18:32:11 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,6 @@ void		remove_empty_tokens(t_token **tokens);
 int			check_syntax(t_token *tokens, t_data *data);
 
 /******  PARSING - errors.c  ******/
-void		*ms_error(char *err_msg, void *to_free);
 void		synterr(t_token *token, char c, bool nl, t_data *data);
 void		eoferr(t_state state, t_data *data);
 

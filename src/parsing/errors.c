@@ -6,25 +6,11 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 18:29:58 by gderoyan          #+#    #+#             */
-/*   Updated: 2026/01/07 17:37:20 by gderoyan         ###   ########.fr       */
+/*   Updated: 2026/01/08 18:32:42 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-** Prints an error message and frees the provided pointer.
-** @param err_msg: The error message to display.
-** @param to_free: Pointer to free (can be NULL).
-** @return: Always returns NULL (for convenient error propagation).
-*/
-void	*ms_error(char *err_msg, void *to_free)
-{
-	if (to_free)
-		free(to_free);
-	print_error(NULL, NULL, err_msg);
-	return (NULL);
-}
 
 /*
 ** Prints a syntax error message to stderr.
