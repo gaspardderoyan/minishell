@@ -21,7 +21,6 @@ SRC_FILES = main.c \
 			env/env.c \
 			exec/child.c \
 			exec/heredoc.c \
-			utils/heredoc_utils.c \
 			exec/pipeline.c \
 			exec/wait.c \
 			parsing/expander/expander.c \
@@ -35,14 +34,15 @@ SRC_FILES = main.c \
 			parsing/parser/redirection.c \
 			parsing/syntax.c \
 			parsing/errors.c \
+			signals/signals.c \
+			signals/signals_heredoc.c \
 			utils/cleanup.c \
 			utils/env.c \
 			utils/errors.c \
+			utils/heredoc.c \
 			utils/path.c \
 			utils/pipe.c \
-			utils/memory.c \
-			signals/signals.c \
-			signals/signals_heredoc.c \
+			utils/memory.c
 
 SRCS= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
@@ -69,7 +69,6 @@ $(NAME): $(OBJS) $(LIBFT)
 	@printf '                                                             \n'
 	@printf '            Du bocal et du shell                             \n'
 	@printf '\033[0m'
-	@echo "$(NAME) is ready !"
 
 # Compile the object files for main sources
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c

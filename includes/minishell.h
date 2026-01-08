@@ -38,6 +38,8 @@
 # define SUCCESS 0
 # define FAIL 1
 
+extern volatile sig_atomic_t	g_status;
+
 typedef enum e_state
 {
 	STATE_IDLE,
@@ -113,6 +115,8 @@ typedef struct s_data
 	char	*line;
 	int		stdin_backup;
 	int		stdout_backup;
+	int		line_count;
+	int		heredoc_line;
 }	t_data;
 
 /******  BUILTINS - builtin_cd.c  ******/
@@ -217,6 +221,7 @@ void		set_signal_action(void);
 void		reset_signals_default(void);
 
 /******  SIGNALS - signals_heredoc.c  ******/
+void		set_signal_heredoc(void);
 
 /******  UTILS - cleanup.c  ******/
 void		close_all_pipes(t_cmd *cmd_list);
@@ -233,6 +238,16 @@ void		remove_env_node(t_list **env, char *key);
 /******  UTILS - errors.c  ******/
 void		print_error(char *cmd, char *arg, char *msg);
 void		print_error_var(char *cmd, char *arg, char *msg);
+int			print_eof_warning(char *delim, int line_count);
+
+/******  UTILS - heredoc.c  ******/
+char		*generate_heredoc_name(int i);
+int			handle_heredoc_interrupt(t_data *data, int stdin_backup);
+
+/******  UTILS - memory.c  ******/
+void		init_data(t_data *data, char **env, int *ac, char ***av);
+void		free_cycle(t_data *data);
+void		free_data(t_data *data);
 
 /******  UTILS - path.c  ******/
 char		*get_full_path(char *cmd, t_list *env_list);
