@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 14:49:11 by gderoyan          #+#    #+#             */
-/*   Updated: 2026/01/06 14:49:12 by gderoyan         ###   ########.fr       */
+/*   Updated: 2026/01/08 12:45:24 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+** Initializes the global data structure at program start.
+** Sets up environment, signals, and ensures PWD is correctly set.
+** @param data: The global data structure to initialize.
+** @param env: The environment array from main.
+** @param ac: Pointer to argc (unused).
+** @param av: Pointer to argv (unused).
+*/
 void	init_data(t_data *data, char **env, int *ac, char ***av)
 {
 	(void)ac;
@@ -30,6 +38,11 @@ void	init_data(t_data *data, char **env, int *ac, char ***av)
 	set_signal_action();
 }
 
+/*
+** Frees resources allocated during one command cycle.
+** Called after each command execution to clean up temporary data.
+** @param data: The global data structure.
+*/
 void	free_cycle(t_data *data)
 {
 	if (data->tokens)
@@ -43,6 +56,11 @@ void	free_cycle(t_data *data)
 	data->line = NULL;
 }
 
+/*
+** Frees all resources at program termination.
+** Clears environment, history, and all persistent data.
+** @param data: The global data structure.
+*/
 void	free_data(t_data *data)
 {
 	if (data->env)

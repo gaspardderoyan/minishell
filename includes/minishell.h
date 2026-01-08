@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2026/01/07 19:29:17 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/08 12:54:11 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ extern volatile sig_atomic_t	g_status;
 
 # define SUCCESS 0
 # define FAIL 1
+
+extern volatile sig_atomic_t	g_status;
 
 typedef enum e_state
 {
@@ -240,9 +242,14 @@ void		print_error(char *cmd, char *arg, char *msg);
 void		print_error_var(char *cmd, char *arg, char *msg);
 int			print_eof_warning(char *delim, int line_count);
 
-/******  UTILS - heredoc_utils.c  ******/
+/******  UTILS - heredoc.c  ******/
 char		*generate_heredoc_name(int i);
 int			handle_heredoc_interrupt(t_data *data, int stdin_backup);
+
+/******  UTILS - memory.c  ******/
+void		init_data(t_data *data, char **env, int *ac, char ***av);
+void		free_cycle(t_data *data);
+void		free_data(t_data *data);
 
 /******  UTILS - path.c  ******/
 char		*get_full_path(char *cmd, t_list *env_list);
