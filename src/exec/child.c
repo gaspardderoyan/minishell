@@ -108,7 +108,7 @@ void	exec_child(t_cmd *cmd, t_data *data, int prev_read_fd)
 
 	reset_signals_default();
 	connect_pipes(cmd, prev_read_fd);
-	handle_redir_fds(cmd);
+	handle_redir_fds(cmd, data);
 	close_all_pipes(data->cmd_list);
 	if (cmd->args && is_builtin(cmd->args[0]))
 	{

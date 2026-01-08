@@ -261,7 +261,7 @@ void		init_cmd_path(t_cmd *cmd, t_data *data);
 
 /******  UTILS - pipe.c  ******/
 int			set_pipe(t_cmd *cmd);
-void		handle_redir_fds(t_cmd *cmd);
+void		handle_redir_fds(t_cmd *cmd, t_data *data);
 void		connect_pipes(t_cmd *cmd, int prev_pipe_read);
 
 /******  UTILS - memory.c  ******/

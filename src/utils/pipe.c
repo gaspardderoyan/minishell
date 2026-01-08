@@ -86,7 +86,7 @@ static void	dup_and_close(int fd, t_redir_type type)
 ** Opens each redirection file and redirects stdin/stdout accordingly.
 ** @param cmd: The command structure containing the redirection list.
 */
-void	handle_redir_fds(t_cmd *cmd)
+void	handle_redir_fds(t_cmd *cmd, t_data *data)
 {
 	t_redir	*tmp;
 	int		fd;
@@ -99,6 +99,7 @@ void	handle_redir_fds(t_cmd *cmd)
 		{
 			ft_putstr_fd("minishell: ", STDERR_FILENO);
 			perror(tmp->filename);
+			free_data(data);
 			exit(1);
 		}
 		dup_and_close(fd, tmp->type);
