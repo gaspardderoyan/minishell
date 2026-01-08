@@ -99,6 +99,7 @@ void	handle_redir_fds(t_cmd *cmd, t_data *data)
 		{
 			ft_putstr_fd("minishell: ", STDERR_FILENO);
 			perror(tmp->filename);
+			free_cycle(data);
 			free_data(data);
 			exit(1);
 		}
