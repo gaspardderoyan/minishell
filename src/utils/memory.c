@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gderoyan <gderoyan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 14:49:11 by gderoyan          #+#    #+#             */
-/*   Updated: 2026/01/06 14:49:12 by gderoyan         ###   ########.fr       */
+/*   Updated: 2026/01/08 12:45:24 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 */
 void	init_data(t_data *data, char **env, int *ac, char ***av)
 {
-	char	cwd[PATH_MAX];
-
 	(void)ac;
 	(void)av;
 	data->cmd_list = NULL;
@@ -37,9 +35,6 @@ void	init_data(t_data *data, char **env, int *ac, char ***av)
 	data->line_count = 0;
 	data->heredoc_line = 0;
 	g_status = 0;
-	if (getcwd(cwd, sizeof(cwd)))
-		update_or_add_env(&data->env_list, "PWD", cwd);
-	sync_env(data);
 	set_signal_action();
 }
 
