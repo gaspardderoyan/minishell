@@ -64,7 +64,7 @@ static t_token	*handle_redir(t_cmd *cursor, t_token *token)
 	temp = ft_strdup_safe(token->next->value);
 	if (!temp)
 		return (NULL);
-	redir = create_redir(token, temp);
+	redir = create_redir(token, temp, token->next->quoted);
 	if (!redir)
 		return (NULL);
 	redir_add_back(&cursor->redirs, redir);

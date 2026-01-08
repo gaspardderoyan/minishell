@@ -27,6 +27,7 @@ t_token	*token_new(char *value, int type)
 		return (NULL);
 	new_node->value = value;
 	new_node->type = type;
+	new_node->quoted = 0;
 	new_node->next = NULL;
 	new_node->prev = NULL;
 	return (new_node);

@@ -64,8 +64,11 @@ char	**ft_append_str(char **arr, char *str)
 ** @param filename: The filename associated with the redirection.
 ** @return: A new t_redir node, or NULL on error.
 */
-t_redir	*create_redir(t_token *token, char *filename)
+t_redir	*create_redir(t_token *token, char *filename, int quoted)
 {
+	t_redir	*node;
+
+	node = NULL;
 	if (token->type == TOKEN_APPEND)
 		return (redir_new(REDIR_APPEND, filename));
 	else if (token->type == TOKEN_INPUT)
@@ -73,6 +76,11 @@ t_redir	*create_redir(t_token *token, char *filename)
 	else if (token->type == TOKEN_OUTPUT)
 		return (redir_new(REDIR_OUT, filename));
 	else if (token->type == TOKEN_HEREDOC)
-		return (redir_new(REDIR_HEREDOC, filename));
+	{
+		node = redir_new(REDIR_HEREDOC, filename);
+		if (node)
+			node->heredoc_quotes = quoted;
+		return (node);
+	}
 	return (NULL);
 }

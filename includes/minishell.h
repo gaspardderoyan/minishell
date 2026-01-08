@@ -63,6 +63,7 @@ typedef struct s_token
 {
 	char			*value;
 	t_token_type	type;
+	int				quoted;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
@@ -87,6 +88,7 @@ typedef struct s_redir
 {
 	t_redir_type	type;
 	char			*filename;
+	int				heredoc_quotes;
 	struct s_redir	*next;
 }		t_redir;
 
@@ -175,6 +177,7 @@ int			expander(t_token *tokens, struct s_data *data);
 int			get_var_len(char *str);
 char		*char_append(char *s, char c);
 char		*get_env_value_tab(char *var, char **env);	
+int			check_brace(char *tkn, int *idx, int *i);
 
 /******  PARSING - LEXER - lexer.c  ******/
 int			lexer(char *line, t_token **tokens);
@@ -198,7 +201,7 @@ void		cmd_clear(t_cmd **lst);
 
 /******  PARSING - PARSER - parser_helpers.c  ******/
 char		**ft_append_str(char **arr, char *str);
-t_redir		*create_redir(t_token *token, char *filename);
+t_redir		*create_redir(t_token *token, char *filename, int quoted);
 
 /******  PARSING - PARSER - parser.c  ******/
 t_cmd		*parser(t_token *tokens);
@@ -245,6 +248,7 @@ int			print_eof_warning(char *delim, int line_count);
 /******  UTILS - heredoc.c  ******/
 char		*generate_heredoc_name(int i);
 int			handle_heredoc_interrupt(t_data *data, int stdin_backup);
+char		*expand_heredoc_line(char *line, t_data *data);
 
 /******  UTILS - memory.c  ******/
 void		init_data(t_data *data, char **env, int *ac, char ***av);
