@@ -12,6 +12,10 @@
 
 #include "minishell.h"
 
+/*
+** If the heredoc delim wasn't quoted, apply expansion on the line
+** Else, just append the line to the temp file
+*/
 static void	process_line(int fd, char *line, int quoted, t_data *data)
 {
 	char	*expanded;
