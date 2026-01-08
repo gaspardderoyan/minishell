@@ -103,13 +103,15 @@ static int	is_quote_toggle(char c, t_state *state)
 ** @param d: Global data structure.
 ** @return: The expanded string, or NULL on error (syntax/memory).
 */
-static char	*expand_token(char *tkn, t_data *d)
+static char	*expand_token(t_token *token, t_data *d)
 {
 	char	*res;
 	int		i;
 	t_state	state;
+	char	*tkn;
 
 	i = 0;
+	tkn = token->value;
 	state = STATE_IDLE;
 	res = ft_strdup("");
 	if (!res)
@@ -117,7 +119,7 @@ static char	*expand_token(char *tkn, t_data *d)
 	while (tkn[i])
 	{
 		if (is_quote_toggle(tkn[i], &state))
-			;
+			token->quoted = 1;
 		else if (tkn[i] == '$' && state != STATE_QUOTES)
 			res = handle_expansion(res, tkn, &i, d);
 		else
@@ -143,7 +145,7 @@ int	expander(t_token *tokens, t_data *data)
 	{
 		if (tokens->type == TOKEN_WORD)
 		{
-			new = expand_token(tokens->value, data);
+			new = expand_token(tokens, data);
 			free(tokens->value);
 			tokens->value = NULL;
 			if (!new)
