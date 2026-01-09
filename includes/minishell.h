@@ -6,7 +6,7 @@
 /*   By: mgregoir <mgregoir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:58:43 by mgregoir          #+#    #+#             */
-/*   Updated: 2026/01/08 18:32:11 by mgregoir         ###   ########.fr       */
+/*   Updated: 2026/01/09 11:33:23 by mgregoir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@
 # include <signal.h>
 # include <sys/stat.h>
 # include <errno.h>
-
-extern volatile sig_atomic_t	g_status;
 
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
